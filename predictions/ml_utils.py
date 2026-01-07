@@ -10,7 +10,8 @@ from functools import lru_cache
 from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 
-from django.conf import settings
+# Get BASE_DIR without requiring Django settings to be configured
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 logger = logging.getLogger(__name__)
 
@@ -32,7 +33,7 @@ def get_model_path(file_path: str) -> Path:
     """Get absolute path for model file"""
     if os.path.isabs(file_path):
         return Path(file_path)
-    return Path(settings.BASE_DIR) / file_path
+    return BASE_DIR / file_path
 
 
 def detect_model_format(file_path: str) -> str:
