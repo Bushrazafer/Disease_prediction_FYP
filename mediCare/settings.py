@@ -28,9 +28,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-_e&x*5twipivm%h+9s3v34b+k0$yjeoh=yw%qxh%ako3!aflr0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'MediCarePrediction.pythonanywhere.com', 'medicareprediction.pythonanywhere.com']
 
 
 # Application definition
