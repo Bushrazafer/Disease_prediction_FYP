@@ -1,0 +1,1033 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Breast Cancer Cell Analysis - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- CRITICAL: Clinician-Only Warning Banner -->
+    <div class="alert alert-danger border-danger mb-4 shadow" id="clinicianWarningBanner">
+        <div class="d-flex align-items-start">
+            <div class="me-3">
+                <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
+            </div>
+            <div>
+                <h5 class="alert-heading mb-2">
+                    <i class="fas fa-user-md me-2"></i>Healthcare Professional Use Only
+                </h5>
+                <p class="mb-2">
+                    <strong>This tool analyzes Fine Needle Aspiration (FNA) biopsy cell measurements from pathology lab
+                        reports.</strong>
+                </p>
+                <p class="mb-2">
+                    The cell measurements required (radius, texture, perimeter, area, concavity, etc.) are
+                    <strong>imaging-derived features from microscopic cell analysis</strong> and are
+                    <strong>NOT patient-providable values</strong>.
+                </p>
+                <hr>
+                <p class="mb-2"><strong>This tool requires:</strong></p>
+                <ul class="mb-2">
+                    <li>FNA biopsy results from a certified pathology laboratory</li>
+                    <li>Cell nucleus measurements (mean, SE, and worst values)</li>
+                    <li>Professional interpretation by qualified oncologist or pathologist</li>
+                </ul>
+                <p class="mb-0 text-danger">
+                    <strong><i class="fas fa-ban me-1"></i>This tool is NOT for patient self-diagnosis.</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Form Section -->
+        <div class="col-lg-8">
+            <div class="prediction-form-card breast-cancer-form">
+                <div class="form-header">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="form-icon breast-cancer me-3">
+                            <i class="fas fa-ribbon"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1">Breast Cancer Cell Analysis</h2>
+                            <p class="text-muted mb-0">FNA Biopsy Cell Measurement Analysis (Clinician Tool)</p>
+                        </div>
+                    </div>
+
+                    <!-- Learn More Links -->
+                    <div class="learn-more-section breast-cancer-info alert border-0 shadow-sm"
+                        style="background: linear-gradient(135deg, #fce7f3, #fbcfe8);">
+                        <h6 class="mb-3"><i class="fas fa-book-medical me-2"></i>Learn More About Breast Cancer:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'breast_cancer_info' %}" class="btn btn-sm btn-outline-pink"
+                                target="_blank">
+                                <i class="fas fa-info-circle me-1"></i>Disease Information
+                            </a>
+                            <a href="{% url 'breast_cancer_prevention' %}" class="btn btn-sm btn-outline-success"
+                                target="_blank">
+                                <i class="fas fa-shield-alt me-1"></i>Prevention Guidelines
+                            </a>
+                            <a href="{% url 'breast_cancer_treatment' %}" class="btn btn-sm btn-outline-primary"
+                                target="_blank">
+                                <i class="fas fa-pills me-1"></i>Treatment Options
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Progress Tracker -->
+                {% include 'predictions/partials/input_progress.html' %}
+
+                <form id="breastCancerForm" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Mean Features -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-microscope me-2"></i>Cell Nucleus Mean Values
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">From FNA pathology
+                                report</small>
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="radius_mean" class="form-label">Radius Mean *</label>
+                                <input type="number" step="0.01" class="form-control" id="radius_mean"
+                                    name="radius_mean" placeholder="e.g., 14.13" required>
+                                <small class="text-muted">Mean of distances (6-28 μm)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="texture_mean" class="form-label">Texture Mean *</label>
+                                <input type="number" step="0.01" class="form-control" id="texture_mean"
+                                    name="texture_mean" placeholder="e.g., 19.29" required>
+                                <small class="text-muted">Std dev of gray-scale (9-40)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="perimeter_mean" class="form-label">Perimeter Mean *</label>
+                                <input type="number" step="0.01" class="form-control" id="perimeter_mean"
+                                    name="perimeter_mean" placeholder="e.g., 91.97" required>
+                                <small class="text-muted">Mean size (43-189 μm)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="area_mean" class="form-label">Area Mean *</label>
+                                <input type="number" step="0.01" class="form-control" id="area_mean" name="area_mean"
+                                    placeholder="e.g., 654.89" required>
+                                <small class="text-muted">Mean area (143-2501 μm²)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="smoothness_mean" class="form-label">Smoothness Mean *</label>
+                                <input type="number" step="0.0001" class="form-control" id="smoothness_mean"
+                                    name="smoothness_mean" placeholder="e.g., 0.0964" required>
+                                <small class="text-muted">Local variation (0.05-0.16)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="compactness_mean" class="form-label">Compactness Mean *</label>
+                                <input type="number" step="0.0001" class="form-control" id="compactness_mean"
+                                    name="compactness_mean" placeholder="e.g., 0.1040" required>
+                                <small class="text-muted">Perimeter²/area (0.02-0.35)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="concavity_mean" class="form-label">Concavity Mean *</label>
+                                <input type="number" step="0.0001" class="form-control" id="concavity_mean"
+                                    name="concavity_mean" placeholder="e.g., 0.0888" required>
+                                <small class="text-muted">Severity of concave (0-0.43)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="concave_points_mean" class="form-label">Concave Points Mean *</label>
+                                <input type="number" step="0.0001" class="form-control" id="concave_points_mean"
+                                    name="concave_points_mean" placeholder="e.g., 0.0489" required>
+                                <small class="text-muted">Number of concave (0-0.20)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="symmetry_mean" class="form-label">Symmetry Mean *</label>
+                                <input type="number" step="0.0001" class="form-control" id="symmetry_mean"
+                                    name="symmetry_mean" placeholder="e.g., 0.1812" required>
+                                <small class="text-muted">Symmetry (0.1-0.3)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fractal_dimension_mean" class="form-label">Fractal Dimension Mean *</label>
+                                <input type="number" step="0.0001" class="form-control" id="fractal_dimension_mean"
+                                    name="fractal_dimension_mean" placeholder="e.g., 0.0628" required>
+                                <small class="text-muted">Coastline approx (0.05-0.1)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SE Features -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-chart-line me-2"></i>Standard Error Values
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Measurement variability
+                                from pathology report</small>
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="radius_se" class="form-label">Radius SE *</label>
+                                <input type="number" step="0.001" class="form-control" id="radius_se" name="radius_se"
+                                    placeholder="e.g., 0.405" required>
+                                <small class="text-muted">SE of radius (0.1-2.9)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="texture_se" class="form-label">Texture SE *</label>
+                                <input type="number" step="0.001" class="form-control" id="texture_se" name="texture_se"
+                                    placeholder="e.g., 1.216" required>
+                                <small class="text-muted">SE of texture (0.4-4.9)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="perimeter_se" class="form-label">Perimeter SE *</label>
+                                <input type="number" step="0.001" class="form-control" id="perimeter_se"
+                                    name="perimeter_se" placeholder="e.g., 2.866" required>
+                                <small class="text-muted">SE of perimeter (0.8-22)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="area_se" class="form-label">Area SE *</label>
+                                <input type="number" step="0.01" class="form-control" id="area_se" name="area_se"
+                                    placeholder="e.g., 40.34" required>
+                                <small class="text-muted">SE of area (6-542)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="smoothness_se" class="form-label">Smoothness SE *</label>
+                                <input type="number" step="0.0001" class="form-control" id="smoothness_se"
+                                    name="smoothness_se" placeholder="e.g., 0.0071" required>
+                                <small class="text-muted">SE of smoothness (0.002-0.03)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="compactness_se" class="form-label">Compactness SE *</label>
+                                <input type="number" step="0.0001" class="form-control" id="compactness_se"
+                                    name="compactness_se" placeholder="e.g., 0.0255" required>
+                                <small class="text-muted">SE of compactness (0.002-0.14)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="concavity_se" class="form-label">Concavity SE *</label>
+                                <input type="number" step="0.0001" class="form-control" id="concavity_se"
+                                    name="concavity_se" placeholder="e.g., 0.0318" required>
+                                <small class="text-muted">SE of concavity (0-0.4)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="concave_points_se" class="form-label">Concave Points SE *</label>
+                                <input type="number" step="0.0001" class="form-control" id="concave_points_se"
+                                    name="concave_points_se" placeholder="e.g., 0.0147" required>
+                                <small class="text-muted">SE of concave pts (0.003-0.05)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="symmetry_se" class="form-label">Symmetry SE *</label>
+                                <input type="number" step="0.0001" class="form-control" id="symmetry_se"
+                                    name="symmetry_se" placeholder="e.g., 0.0183" required>
+                                <small class="text-muted">SE of symmetry (0.008-0.08)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fractal_dimension_se" class="form-label">Fractal Dimension SE *</label>
+                                <input type="number" step="0.0001" class="form-control" id="fractal_dimension_se"
+                                    name="fractal_dimension_se" placeholder="e.g., 0.0030" required>
+                                <small class="text-muted">SE of fractal dim (0.001-0.03)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Worst Features -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Worst (Largest) Values
+                            <small class="text-muted d-block mt-1" style="font-size: 0.75rem;">Largest/most severe
+                                measurements from cell nuclei</small>
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="radius_worst" class="form-label">Radius Worst *</label>
+                                <input type="number" step="0.01" class="form-control" id="radius_worst"
+                                    name="radius_worst" placeholder="e.g., 17.33" required>
+                                <small class="text-muted">Largest radius (7-36 μm)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="texture_worst" class="form-label">Texture Worst *</label>
+                                <input type="number" step="0.01" class="form-control" id="texture_worst"
+                                    name="texture_worst" placeholder="e.g., 25.53" required>
+                                <small class="text-muted">Worst texture (12-50)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="perimeter_worst" class="form-label">Perimeter Worst *</label>
+                                <input type="number" step="0.01" class="form-control" id="perimeter_worst"
+                                    name="perimeter_worst" placeholder="e.g., 114.6" required>
+                                <small class="text-muted">Largest perimeter (50-252 μm)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="area_worst" class="form-label">Area Worst *</label>
+                                <input type="number" step="0.01" class="form-control" id="area_worst" name="area_worst"
+                                    placeholder="e.g., 897.0" required>
+                                <small class="text-muted">Largest area (185-4254 μm²)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="smoothness_worst" class="form-label">Smoothness Worst *</label>
+                                <input type="number" step="0.0001" class="form-control" id="smoothness_worst"
+                                    name="smoothness_worst" placeholder="e.g., 0.1622" required>
+                                <small class="text-muted">Worst smoothness (0.07-0.22)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="compactness_worst" class="form-label">Compactness Worst *</label>
+                                <input type="number" step="0.0001" class="form-control" id="compactness_worst"
+                                    name="compactness_worst" placeholder="e.g., 0.2654" required>
+                                <small class="text-muted">Worst compactness (0.03-1.06)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="concavity_worst" class="form-label">Concavity Worst *</label>
+                                <input type="number" step="0.0001" class="form-control" id="concavity_worst"
+                                    name="concavity_worst" placeholder="e.g., 0.3130" required>
+                                <small class="text-muted">Worst concavity (0-1.25)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="concave_points_worst" class="form-label">Concave Points Worst *</label>
+                                <input type="number" step="0.0001" class="form-control" id="concave_points_worst"
+                                    name="concave_points_worst" placeholder="e.g., 0.1460" required>
+                                <small class="text-muted">Worst concave pts (0-0.29)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="symmetry_worst" class="form-label">Symmetry Worst *</label>
+                                <input type="number" step="0.0001" class="form-control" id="symmetry_worst"
+                                    name="symmetry_worst" placeholder="e.g., 0.2871" required>
+                                <small class="text-muted">Worst symmetry (0.16-0.66)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fractal_dimension_worst" class="form-label">Fractal Dimension Worst
+                                    *</label>
+                                <input type="number" step="0.0001" class="form-control" id="fractal_dimension_worst"
+                                    name="fractal_dimension_worst" placeholder="e.g., 0.0800" required>
+                                <small class="text-muted">Worst fractal dim (0.06-0.21)</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-pink btn-lg px-5" id="predictBtn">
+                            <i class="fas fa-ribbon me-2"></i>
+                            <span class="btn-text">Analyze Cell Sample</span>
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="col-lg-4">
+            <div class="results-card sticky-top">
+                <h4 class="mb-4">
+                    <i class="fas fa-chart-pie me-2"></i>Cell Analysis Results
+                </h4>
+
+                <!-- Placeholder -->
+                <div class="result-placeholder text-center py-5">
+                    <i class="fas fa-ribbon fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Complete the form to see your breast cancer risk assessment</p>
+                </div>
+
+                <!-- Results Content -->
+                <div class="result-content d-none">
+                    <div class="risk-meter mb-4">
+                        <div class="risk-circle breast-cancer">
+                            <div class="risk-percentage">
+                                <span class="probability">0%</span>
+                                <small>Malignancy</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="risk-details">
+                        <div class="risk-badge-container text-center mb-3">
+                            <span class="risk-badge diagnosis-badge">Benign</span>
+                        </div>
+
+                        <div class="recommendation-box">
+                            <h6><i class="fas fa-lightbulb me-2"></i>Recommendation</h6>
+                            <p class="recommendation text-sm">
+                                Regular screening and follow-up recommended.
+                            </p>
+                        </div>
+
+                        <div class="risk-factors mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Key Indicators</h6>
+                            <ul class="risk-factor-list">
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Cell Size</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Concavity</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Texture</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Symmetry</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="next-steps mt-4">
+                            <h6><i class="fas fa-clipboard-check me-2"></i>Next Steps</h6>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-pink btn-sm" onclick="downloadBreastCancerReport()">
+                                    <i class="fas fa-download me-2"></i>Download Report
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#doctorModal">
+                                    <i class="fas fa-user-md me-2"></i>Consult Oncologist
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Feature Importance (SHAP-like) -->
+                        {% include 'predictions/partials/shap_explanation.html' %}
+
+                        <!-- Health Insights -->
+                        {% include 'predictions/partials/health_insights.html' %}
+
+                        <!-- Doctor Links -->
+                        <div class="doctor-links mt-4">
+                            <h6><i class="fas fa-stethoscope me-2"></i>Consult Cancer Specialists</h6>
+                            <div class="doctor-list">
+                                <a href="https://www.practo.com/consult/oncologist" target="_blank" class="doctor-link">
+                                    <i class="fas fa-video me-2"></i>Practo - Online Oncologist
+                                </a>
+                                <a href="https://www.apollo247.com/specialties/oncology" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-hospital me-2"></i>Apollo 247 - Oncology
+                                </a>
+                                <a href="https://oladoc.com/pakistan/lahore/oncologist" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-user-md me-2"></i>Oladoc - Oncologists
+                                </a>
+                                <a href="https://www.cancer.org/cancer/breast-cancer.html" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-ribbon me-2"></i>American Cancer Society
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Doctor Consultation Modal -->
+<div class="modal fade" id="doctorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                <h5 class="modal-title text-white">
+                    <i class="fas fa-user-md me-2"></i>Consult Cancer Specialists
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4">Connect with certified oncologists and breast cancer specialists:</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-stethoscope text-primary"></i>
+                                <h6>Practo</h6>
+                            </div>
+                            <p class="small text-muted">India's largest healthcare platform</p>
+                            <a href="https://www.practo.com/consult/oncologist" target="_blank"
+                                class="btn btn-sm btn-outline-primary w-100">
+                                <i class="fas fa-video me-1"></i>Consult Oncologist
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-hospital text-danger"></i>
+                                <h6>Apollo 247</h6>
+                            </div>
+                            <p class="small text-muted">24/7 cancer care consultations</p>
+                            <a href="https://www.apollo247.com/specialties/oncology" target="_blank"
+                                class="btn btn-sm btn-outline-danger w-100">
+                                <i class="fas fa-calendar-check me-1"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-user-md text-success"></i>
+                                <h6>Oladoc (Pakistan)</h6>
+                            </div>
+                            <p class="small text-muted">Pakistan's top healthcare platform</p>
+                            <a href="https://oladoc.com/pakistan/lahore/oncologist" target="_blank"
+                                class="btn btn-sm btn-outline-success w-100">
+                                <i class="fas fa-search me-1"></i>Find Oncologists
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-ribbon" style="color: #ec4899;"></i>
+                                <h6>Breast Cancer Support</h6>
+                            </div>
+                            <p class="small text-muted">American Cancer Society resources</p>
+                            <a href="https://www.cancer.org/cancer/breast-cancer.html" target="_blank"
+                                class="btn btn-sm btn-outline-pink w-100">
+                                <i class="fas fa-info-circle me-1"></i>Learn More
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger mt-4 mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Important:</strong> If you notice any breast lumps, changes in breast shape, or unusual
+                    discharge,
+                    please consult a healthcare professional immediately for proper examination.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medical Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>Medical Disclaimer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Important:</strong> This prediction tool analyzes Fine Needle Aspiration (FNA) cell sample
+                    data
+                    and is for educational purposes only.</p>
+                <ul>
+                    <li>Results are based on cell nucleus characteristics from biopsy samples</li>
+                    <li>This tool should NOT replace professional pathological diagnosis</li>
+                    <li>Always consult with oncologists for proper diagnosis and treatment</li>
+                    <li>Regular mammograms and self-examinations are recommended</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-pink" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prediction-form-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .form-icon.breast-cancer {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #ec4899, #db2777);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .section-title {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .results-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        top: 100px;
+    }
+
+    .risk-circle.breast-cancer {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(#22c55e 0deg, #eab308 120deg, #ec4899 240deg, #22c55e 360deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .risk-circle.breast-cancer::before {
+        content: '';
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .risk-percentage {
+        text-align: center;
+        z-index: 2;
+        position: relative;
+    }
+
+    .risk-percentage .probability {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .risk-badge,
+    .diagnosis-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .diagnosis-badge.benign {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .diagnosis-badge.uncertain {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .diagnosis-badge.malignant {
+        background: #fce7f3;
+        color: #9d174d;
+    }
+
+    .recommendation-box {
+        background: #f8f9fa;
+        border-left: 4px solid #ec4899;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+
+    .risk-factor-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .risk-factor-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .factor-status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .factor-status.normal {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .factor-status.elevated {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .factor-status.high {
+        background: #fce7f3;
+        color: #9d174d;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #ec4899;
+        box-shadow: 0 0 0 0.2rem rgba(236, 72, 153, 0.25);
+    }
+
+    .btn-pink {
+        background: linear-gradient(45deg, #ec4899, #db2777);
+        border: none;
+        color: white;
+    }
+
+    .btn-pink:hover {
+        background: linear-gradient(45deg, #db2777, #ec4899);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-outline-pink {
+        border-color: #ec4899;
+        color: #ec4899;
+    }
+
+    .btn-outline-pink:hover {
+        background: #ec4899;
+        color: white;
+    }
+
+    .doctor-links {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .doctor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .doctor-link {
+        display: block;
+        padding: 0.6rem 0.8rem;
+        background: white;
+        border-radius: 8px;
+        color: #495057;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-link:hover {
+        background: linear-gradient(45deg, #ec4899, #db2777);
+        color: white;
+        transform: translateX(5px);
+        border-color: transparent;
+    }
+
+    .doctor-link i {
+        color: #ec4899;
+        transition: color 0.3s ease;
+    }
+
+    .doctor-link:hover i {
+        color: white;
+    }
+
+    .doctor-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .doctor-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .doctor-card h6 {
+        margin: 0;
+        color: #495057;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize form progress tracker
+        if (typeof initFormProgressTracker === 'function') {
+            initFormProgressTracker('breastCancerForm', 'breast_cancer');
+        }
+
+        // Initialize real-time validation
+        if (typeof initRealTimeValidation === 'function') {
+            initRealTimeValidation('breastCancerForm');
+        }
+
+        const disclaimerModal = new bootstrap.Modal(document.getElementById('disclaimerModal'));
+        disclaimerModal.show();
+
+        document.getElementById('breastCancerForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (this.checkValidity()) {
+                submitBreastCancerPrediction();
+            } else {
+                this.classList.add('was-validated');
+            }
+        });
+    });
+
+    function submitBreastCancerPrediction() {
+        const btn = document.getElementById('predictBtn');
+        const btnText = btn.querySelector('.btn-text');
+        const spinner = btn.querySelector('.spinner-border');
+
+        btn.disabled = true;
+        btnText.textContent = 'Analyzing...';
+        spinner.classList.remove('d-none');
+
+        const fields = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean',
+            'compactness_mean', 'concavity_mean', 'concave_points_mean', 'symmetry_mean', 'fractal_dimension_mean',
+            'radius_se', 'texture_se', 'perimeter_se', 'area_se', 'smoothness_se',
+            'compactness_se', 'concavity_se', 'concave_points_se', 'symmetry_se', 'fractal_dimension_se',
+            'radius_worst', 'texture_worst', 'perimeter_worst', 'area_worst', 'smoothness_worst',
+            'compactness_worst', 'concavity_worst', 'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst'];
+
+        const data = {};
+        fields.forEach(field => {
+            data[field] = parseFloat(document.getElementById(field).value) || 0;
+        });
+
+        fetch('{% url "api_breast_cancer" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    displayBreastCancerResult(result);
+
+                    // Display feature importance
+                    if (typeof displayFeatureImportance === 'function') {
+                        displayFeatureImportance(result, data, 'breast_cancer');
+                    }
+
+                    // Generate health insights
+                    if (typeof generateHealthInsights === 'function') {
+                        generateHealthInsights(data, result, 'breast_cancer');
+                    }
+
+                    showNotification('Analysis completed successfully!', 'success');
+                } else {
+                    showNotification(result.error || 'Analysis failed', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again.', 'error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btnText.textContent = 'Analyze Cell Sample';
+                spinner.classList.add('d-none');
+            });
+    }
+
+    function displayBreastCancerResult(result) {
+        const resultContent = document.querySelector('.result-content');
+        const placeholder = document.querySelector('.result-placeholder');
+        const probability = document.querySelector('.probability');
+        const recommendation = document.querySelector('.recommendation');
+        const diagnosisBadge = document.querySelector('.diagnosis-badge');
+
+        placeholder?.classList.add('d-none');
+        resultContent?.classList.remove('d-none');
+
+        if (probability) animateCounter(probability, 0, result.probability, 1500);
+
+        if (result.risk_level === 'low') {
+            diagnosisBadge.textContent = 'Benign';
+            diagnosisBadge.className = 'risk-badge diagnosis-badge benign';
+            recommendation.innerHTML = `<strong>Good news!</strong> The cell sample analysis suggests benign characteristics.
+                <br><small class="text-muted mt-2 d-block"><i class="fas fa-check-circle me-1"></i>
+                Continue regular screenings and self-examinations.</small>`;
+        } else if (result.risk_level === 'medium') {
+            diagnosisBadge.textContent = 'Uncertain';
+            diagnosisBadge.className = 'risk-badge diagnosis-badge uncertain';
+            recommendation.innerHTML = `<strong>Further evaluation needed.</strong> The analysis shows some concerning features.
+                <br><small class="text-muted mt-2 d-block"><i class="fas fa-user-md me-1"></i>
+                Please consult an oncologist for additional testing.</small>`;
+        } else {
+            diagnosisBadge.textContent = 'Malignant';
+            diagnosisBadge.className = 'risk-badge diagnosis-badge malignant';
+            recommendation.innerHTML = `<strong>Immediate attention required.</strong> The cell analysis indicates malignant characteristics.
+                <br><small class="text-muted mt-2 d-block"><i class="fas fa-exclamation-triangle me-1"></i>
+                Please consult an oncologist immediately for proper diagnosis and treatment planning.</small>`;
+        }
+
+        updateBreastCancerIndicators();
+    }
+
+    function updateBreastCancerIndicators() {
+        const radiusWorst = parseFloat(document.getElementById('radius_worst').value) || 0;
+        const concavityWorst = parseFloat(document.getElementById('concavity_worst').value) || 0;
+        const textureWorst = parseFloat(document.getElementById('texture_worst').value) || 0;
+        const symmetryWorst = parseFloat(document.getElementById('symmetry_worst').value) || 0;
+
+        const indicators = [
+            { name: 'Cell Size', value: radiusWorst, thresholds: [18, 22] },
+            { name: 'Concavity', value: concavityWorst, thresholds: [0.2, 0.35] },
+            { name: 'Texture', value: textureWorst, thresholds: [25, 32] },
+            { name: 'Symmetry', value: symmetryWorst, thresholds: [0.25, 0.35] }
+        ];
+
+        const factorItems = document.querySelectorAll('.risk-factor-item');
+        factorItems.forEach((item, index) => {
+            if (indicators[index]) {
+                const factorStatus = item.querySelector('.factor-status');
+                const ind = indicators[index];
+                let status = 'normal', statusText = 'Normal';
+
+                if (ind.value > ind.thresholds[1]) {
+                    status = 'high'; statusText = 'Abnormal';
+                } else if (ind.value > ind.thresholds[0]) {
+                    status = 'elevated'; statusText = 'Elevated';
+                }
+
+                factorStatus.className = `factor-status ${status}`;
+                factorStatus.textContent = statusText;
+            }
+        });
+    }
+
+    function animateCounter(element, start, end, duration) {
+        const range = end - start;
+        const increment = range / (duration / 16);
+        let current = start;
+        const timer = setInterval(() => {
+            current += increment;
+            if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                current = end;
+                clearInterval(timer);
+            }
+            element.textContent = Math.round(current) + '%';
+        }, 16);
+    }
+
+    function downloadBreastCancerReport() {
+        const fields = ['radius_mean', 'texture_mean', 'perimeter_mean', 'area_mean', 'smoothness_mean',
+            'compactness_mean', 'concavity_mean', 'concave_points_mean', 'symmetry_mean', 'fractal_dimension_mean',
+            'radius_worst', 'texture_worst', 'perimeter_worst', 'area_worst', 'smoothness_worst',
+            'compactness_worst', 'concavity_worst', 'concave_points_worst', 'symmetry_worst', 'fractal_dimension_worst'];
+
+        const formData = {};
+        fields.forEach(field => {
+            formData[field] = document.getElementById(field)?.value || 'N/A';
+        });
+
+        const probability = document.querySelector('.probability')?.textContent || '0%';
+        const diagnosis = document.querySelector('.diagnosis-badge')?.textContent || 'Unknown';
+        const recommendation = document.querySelector('.recommendation')?.textContent || '';
+        const currentDate = new Date().toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        const reportContent = `
+================================================================================
+              MEDICARE AI - BREAST CANCER RISK ASSESSMENT REPORT
+                    Fine Needle Aspiration (FNA) Analysis
+================================================================================
+
+Report Generated: ${currentDate}
+Report ID: BC-${Date.now()}
+
+--------------------------------------------------------------------------------
+                         CELL NUCLEUS MEAN VALUES
+--------------------------------------------------------------------------------
+
+Radius Mean:              ${formData.radius_mean}
+Texture Mean:             ${formData.texture_mean}
+Perimeter Mean:           ${formData.perimeter_mean}
+Area Mean:                ${formData.area_mean}
+Smoothness Mean:          ${formData.smoothness_mean}
+Compactness Mean:         ${formData.compactness_mean}
+Concavity Mean:           ${formData.concavity_mean}
+Concave Points Mean:      ${formData.concave_points_mean}
+Symmetry Mean:            ${formData.symmetry_mean}
+Fractal Dimension Mean:   ${formData.fractal_dimension_mean}
+
+--------------------------------------------------------------------------------
+                         WORST (LARGEST) VALUES
+--------------------------------------------------------------------------------
+
+Radius Worst:             ${formData.radius_worst}
+Texture Worst:            ${formData.texture_worst}
+Perimeter Worst:          ${formData.perimeter_worst}
+Area Worst:               ${formData.area_worst}
+Smoothness Worst:         ${formData.smoothness_worst}
+Compactness Worst:        ${formData.compactness_worst}
+Concavity Worst:          ${formData.concavity_worst}
+Concave Points Worst:     ${formData.concave_points_worst}
+Symmetry Worst:           ${formData.symmetry_worst}
+Fractal Dimension Worst:  ${formData.fractal_dimension_worst}
+
+--------------------------------------------------------------------------------
+                         DIAGNOSIS RESULTS
+--------------------------------------------------------------------------------
+
+MALIGNANCY PROBABILITY:   ${probability}
+DIAGNOSIS:                ${diagnosis.toUpperCase()}
+
+--------------------------------------------------------------------------------
+                         RECOMMENDATION
+--------------------------------------------------------------------------------
+
+${recommendation.replace(/<[^>]*>/g, '').trim()}
+
+--------------------------------------------------------------------------------
+                         CONSULT SPECIALISTS
+--------------------------------------------------------------------------------
+
+• Practo - Online Oncologist: https://www.practo.com/consult/oncologist
+• Apollo 247 - Oncology: https://www.apollo247.com/specialties/oncology
+• American Cancer Society: https://www.cancer.org/cancer/breast-cancer.html
+
+================================================================================
+                         MEDICAL DISCLAIMER
+================================================================================
+
+This report analyzes Fine Needle Aspiration (FNA) cell sample data.
+Results are for educational purposes only and should NOT replace
+professional pathological diagnosis. Always consult oncologists.
+Model Accuracy: 98.25% | AUC-ROC: 0.9987
+
+================================================================================
+                © ${new Date().getFullYear()} MediCare AI - All Rights Reserved
+================================================================================
+`;
+
+        const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Breast_Cancer_Report_${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        showNotification('Report downloaded successfully!', 'success');
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,193 @@
+{
+    "disease_name": "diabetes",
+    "display_name": "Type 2 Diabetes",
+    "description": "Type 2 Diabetes risk assessment based on metabolic indicators",
+    "clinician_only": false,
+    "features": {
+        "age": {
+            "display_name": "Age",
+            "description": "Age in years",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 1,
+            "max_value": 120,
+            "medical_min": 18,
+            "medical_max": 100,
+            "unit": "years",
+            "high_signal": false,
+            "help_text": "Your current age"
+        },
+        "pregnancies": {
+            "display_name": "Number of Pregnancies",
+            "description": "Number of times pregnant (for females)",
+            "type": "numeric",
+            "required": false,
+            "tier": "screening",
+            "min_value": 0,
+            "max_value": 20,
+            "medical_min": 0,
+            "medical_max": 17,
+            "unit": "count",
+            "high_signal": false,
+            "help_text": "Total number of pregnancies (enter 0 if male or never pregnant)"
+        },
+        "glucose": {
+            "display_name": "Fasting Blood Glucose",
+            "description": "Fasting plasma glucose level",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 500,
+            "medical_min": 50,
+            "medical_max": 400,
+            "unit": "mg/dL",
+            "high_signal": true,
+            "help_text": "Blood glucose level after 8+ hours of fasting",
+            "warning_low": 70,
+            "warning_high": 126
+        },
+        "blood_pressure": {
+            "display_name": "Diastolic Blood Pressure",
+            "description": "Diastolic blood pressure (the bottom number)",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 0,
+            "max_value": 200,
+            "medical_min": 40,
+            "medical_max": 150,
+            "unit": "mmHg",
+            "high_signal": false,
+            "help_text": "The bottom number of your blood pressure reading"
+        },
+        "skin_thickness": {
+            "display_name": "Skin Fold Thickness",
+            "description": "Triceps skin fold thickness",
+            "type": "numeric",
+            "required": false,
+            "tier": "confirmation",
+            "min_value": 0,
+            "max_value": 100,
+            "medical_min": 0,
+            "medical_max": 99,
+            "unit": "mm",
+            "high_signal": false,
+            "default": 20,
+            "help_text": "Triceps skin fold thickness measurement (optional)"
+        },
+        "insulin": {
+            "display_name": "Insulin Level",
+            "description": "2-Hour serum insulin",
+            "type": "numeric",
+            "required": false,
+            "tier": "confirmation",
+            "min_value": 0,
+            "max_value": 900,
+            "medical_min": 0,
+            "medical_max": 600,
+            "unit": "μU/mL",
+            "high_signal": true,
+            "default": 80,
+            "help_text": "Serum insulin level from lab test (optional but improves accuracy)"
+        },
+        "bmi": {
+            "display_name": "Body Mass Index (BMI)",
+            "description": "Weight in kg divided by height in meters squared",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 10,
+            "max_value": 70,
+            "medical_min": 15,
+            "medical_max": 60,
+            "unit": "kg/m²",
+            "high_signal": true,
+            "help_text": "BMI = weight(kg) / height(m)². Normal range: 18.5-24.9"
+        },
+        "diabetes_pedigree": {
+            "display_name": "Family History Score",
+            "description": "Diabetes pedigree function - indicates genetic predisposition based on family history",
+            "type": "numeric",
+            "required": false,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 2.5,
+            "medical_min": 0,
+            "medical_max": 2.5,
+            "default": 0.3,
+            "high_signal": true,
+            "help_text": "Score based on family history of diabetes. Higher values indicate stronger family history. If unknown, use 0.3 (average)."
+        }
+    },
+    "feature_order": [
+        "pregnancies",
+        "glucose",
+        "blood_pressure",
+        "skin_thickness",
+        "insulin",
+        "bmi",
+        "diabetes_pedigree",
+        "age"
+    ],
+    "tiers": {
+        "screening": {
+            "required_features": [
+                "age",
+                "bmi"
+            ],
+            "optional_features": [
+                "blood_pressure",
+                "pregnancies"
+            ],
+            "min_confidence": 40,
+            "max_confidence": 60,
+            "description": "Basic screening based on demographics and BMI",
+            "disclaimer": "This is a basic screening. Blood glucose testing is strongly recommended for accurate diabetes risk assessment."
+        },
+        "standard": {
+            "required_features": [
+                "age",
+                "bmi",
+                "glucose",
+                "blood_pressure"
+            ],
+            "optional_features": [
+                "diabetes_pedigree",
+                "pregnancies"
+            ],
+            "min_confidence": 60,
+            "max_confidence": 80,
+            "description": "Standard assessment with fasting glucose data",
+            "disclaimer": "Results based on standard metabolic indicators. HbA1c testing recommended for confirmation."
+        },
+        "confirmation": {
+            "required_features": [
+                "age",
+                "bmi",
+                "glucose",
+                "blood_pressure",
+                "insulin"
+            ],
+            "optional_features": [
+                "diabetes_pedigree",
+                "skin_thickness",
+                "pregnancies"
+            ],
+            "min_confidence": 80,
+            "max_confidence": 95,
+            "description": "Comprehensive assessment with full metabolic panel",
+            "disclaimer": "High-confidence assessment based on complete lab data. Consult your doctor for diagnosis."
+        }
+    },
+    "thresholds": {
+        "low_max": 30,
+        "medium_max": 60,
+        "high_max": 85,
+        "screening_threshold": 0.3,
+        "confirmation_threshold": 0.5
+    },
+    "general_disclaimer": "This tool provides diabetes risk estimates only and is NOT a medical diagnosis. Risk factors include family history, obesity, physical inactivity, and age. Always consult a healthcare provider for proper testing (HbA1c, fasting glucose) and evaluation.",
+    "result_disclaimer": "This is a risk assessment, not a medical diagnosis. If your risk is elevated, please consult your doctor for proper HbA1c testing and evaluation. Early detection and lifestyle changes can significantly reduce diabetes risk."
+}

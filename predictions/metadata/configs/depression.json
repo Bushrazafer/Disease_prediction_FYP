@@ -1,0 +1,287 @@
+{
+    "disease_name": "depression",
+    "display_name": "Depression Risk Assessment",
+    "description": "Mental health risk screening based on validated psychological and lifestyle indicators",
+    "clinician_only": false,
+    "features": {
+        "age": {
+            "display_name": "Age",
+            "description": "Age in years",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 15,
+            "max_value": 80,
+            "medical_min": 15,
+            "medical_max": 80,
+            "unit": "years",
+            "high_signal": false,
+            "help_text": "Your current age (15-80)"
+        },
+        "gender": {
+            "display_name": "Gender",
+            "description": "Biological sex",
+            "type": "categorical",
+            "required": true,
+            "tier": "screening",
+            "options": [
+                {
+                    "value": "male",
+                    "label": "Male"
+                },
+                {
+                    "value": "female",
+                    "label": "Female"
+                }
+            ],
+            "high_signal": false
+        },
+        "sleep_duration": {
+            "display_name": "Sleep Duration",
+            "description": "Average hours of sleep per night",
+            "type": "categorical",
+            "required": true,
+            "tier": "screening",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Less than 5 hours"
+                },
+                {
+                    "value": 1,
+                    "label": "5-6 hours"
+                },
+                {
+                    "value": 2,
+                    "label": "7-8 hours"
+                },
+                {
+                    "value": 3,
+                    "label": "More than 8 hours"
+                }
+            ],
+            "high_signal": true,
+            "help_text": "How many hours do you typically sleep per night?"
+        },
+        "academic_pressure": {
+            "display_name": "Academic Pressure",
+            "description": "Level of academic stress (1-5 scale)",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 1,
+            "max_value": 5,
+            "high_signal": true,
+            "help_text": "1 = Very Low, 5 = Very High"
+        },
+        "work_pressure": {
+            "display_name": "Work Pressure",
+            "description": "Level of work-related stress (0-5 scale)",
+            "type": "numeric",
+            "required": false,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 5,
+            "default": 0,
+            "high_signal": false,
+            "help_text": "0 if not working, 1-5 otherwise"
+        },
+        "financial_stress": {
+            "display_name": "Financial Stress",
+            "description": "Level of financial worry (1-5 scale)",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 1,
+            "max_value": 5,
+            "high_signal": true,
+            "help_text": "1 = Very Low, 5 = Very High"
+        },
+        "work_study_hours": {
+            "display_name": "Work/Study Hours",
+            "description": "Hours spent working or studying per day",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 16,
+            "high_signal": false,
+            "help_text": "Average hours per day"
+        },
+        "family_history": {
+            "display_name": "Family History of Mental Illness",
+            "description": "Whether there is a family history of mental health conditions",
+            "type": "boolean",
+            "required": true,
+            "tier": "confirmation",
+            "high_signal": true,
+            "help_text": "Do any close family members have a history of depression or other mental health conditions?"
+        },
+        "suicidal_thoughts": {
+            "display_name": "Thoughts of Self-Harm",
+            "description": "Whether you have experienced thoughts of self-harm",
+            "type": "boolean",
+            "required": true,
+            "tier": "confirmation",
+            "high_signal": true,
+            "help_text": "Have you ever had thoughts of harming yourself? (If yes, please seek professional help)",
+            "warning_text": "If you are currently experiencing thoughts of self-harm, please contact a crisis helpline immediately."
+        },
+        "dietary_habits": {
+            "display_name": "Dietary Habits",
+            "description": "Quality of eating habits",
+            "type": "categorical",
+            "required": false,
+            "tier": "standard",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Unhealthy"
+                },
+                {
+                    "value": 1,
+                    "label": "Moderate"
+                },
+                {
+                    "value": 2,
+                    "label": "Healthy"
+                }
+            ],
+            "high_signal": false
+        },
+        "cgpa": {
+            "display_name": "Academic Performance (GPA)",
+            "description": "Current GPA or academic performance score",
+            "type": "numeric",
+            "required": false,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 10,
+            "high_signal": false,
+            "help_text": "Your current GPA on a 0-10 scale"
+        },
+        "study_satisfaction": {
+            "display_name": "Study Satisfaction",
+            "description": "Satisfaction with academic life (1-5 scale)",
+            "type": "numeric",
+            "required": false,
+            "tier": "standard",
+            "min_value": 1,
+            "max_value": 5,
+            "high_signal": false,
+            "help_text": "1 = Very Unsatisfied, 5 = Very Satisfied"
+        },
+        "job_satisfaction": {
+            "display_name": "Job Satisfaction",
+            "description": "Satisfaction with work life (0-5 scale)",
+            "type": "numeric",
+            "required": false,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 5,
+            "default": 0,
+            "high_signal": false,
+            "help_text": "0 if not working, 1-5 otherwise"
+        }
+    },
+    "tiers": {
+        "screening": {
+            "required_features": [
+                "age",
+                "gender",
+                "sleep_duration"
+            ],
+            "optional_features": [
+                "dietary_habits"
+            ],
+            "min_confidence": 40,
+            "max_confidence": 60,
+            "description": "Basic mental health screening",
+            "disclaimer": "This is a basic screening only. Professional mental health evaluation is strongly recommended."
+        },
+        "standard": {
+            "required_features": [
+                "age",
+                "gender",
+                "sleep_duration",
+                "academic_pressure",
+                "work_study_hours",
+                "financial_stress"
+            ],
+            "optional_features": [
+                "dietary_habits",
+                "cgpa",
+                "study_satisfaction",
+                "job_satisfaction"
+            ],
+            "min_confidence": 60,
+            "max_confidence": 78,
+            "description": "Standard mental health assessment",
+            "disclaimer": "This assessment provides a risk estimate. Clinical evaluation is recommended for high-risk results."
+        },
+        "confirmation": {
+            "required_features": [
+                "age",
+                "gender",
+                "sleep_duration",
+                "academic_pressure",
+                "work_study_hours",
+                "financial_stress",
+                "family_history",
+                "suicidal_thoughts"
+            ],
+            "optional_features": [
+                "dietary_habits",
+                "cgpa",
+                "study_satisfaction",
+                "job_satisfaction",
+                "work_pressure"
+            ],
+            "min_confidence": 78,
+            "max_confidence": 90,
+            "description": "Comprehensive mental health assessment",
+            "disclaimer": "This is a comprehensive screening. Always consult a mental health professional for proper diagnosis and treatment."
+        }
+    },
+    "thresholds": {
+        "low_max": 30,
+        "medium_max": 55,
+        "high_max": 80,
+        "screening_threshold": 0.25,
+        "confirmation_threshold": 0.45
+    },
+    "crisis_resources": [
+        {
+            "name": "National Helpline (India)",
+            "number": "1800-599-0019",
+            "available": "24/7"
+        },
+        {
+            "name": "iCall",
+            "number": "9152987821",
+            "available": "Mon-Sat, 8am-10pm"
+        },
+        {
+            "name": "Vandrevala Foundation",
+            "number": "1860-2662-345",
+            "available": "24/7"
+        },
+        {
+            "name": "National Suicide Prevention Lifeline (US)",
+            "number": "988",
+            "available": "24/7"
+        },
+        {
+            "name": "Crisis Text Line (US)",
+            "number": "Text HOME to 741741",
+            "available": "24/7"
+        },
+        {
+            "name": "Samaritans (UK)",
+            "number": "116 123",
+            "available": "24/7"
+        }
+    ],
+    "general_disclaimer": "⚠️ IMPORTANT: This is a mental health screening tool, NOT a clinical diagnosis.\n\nThis assessment is designed to identify potential risk factors for depression and is NOT a substitute for professional mental health evaluation.\n\nIf you are experiencing:\n• Persistent feelings of sadness or hopelessness\n• Thoughts of self-harm or suicide\n• Significant changes in sleep, appetite, or energy\n\nPlease seek help from a qualified mental health professional immediately.\n\nIf you are in crisis, please contact one of the crisis resources listed on this page.",
+    "result_disclaimer": "This assessment provides a risk estimate based on the information you provided. It is NOT a medical diagnosis.\n\nRegardless of your result:\n• If you scored HIGH risk, please consult a mental health professional within the next few days\n• If you are experiencing thoughts of self-harm, please contact a crisis helpline immediately\n• Regular mental health check-ins with a professional are recommended\n\nRemember: Seeking help is a sign of strength, not weakness."
+}

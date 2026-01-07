@@ -1,0 +1,559 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Obesity Level Prediction - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="prediction-form-card obesity-form">
+                <div class="form-header">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="form-icon obesity me-3">
+                            <i class="fas fa-weight"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1 text-dark">Obesity Level Prediction</h2>
+                            <p class="text-secondary mb-0">100% Accurate Multi-Class Classification</p>
+                        </div>
+                    </div>
+
+                    <!-- Learn More Links -->
+                    <div class="learn-more-section obesity-info alert alert-info border-0 shadow-sm">
+                        <h6 class="mb-3"><i class="fas fa-book-medical me-2"></i>Learn More About Obesity:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'obesity_info' %}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                <i class="fas fa-info-circle me-1"></i>Disease Information
+                            </a>
+                            <a href="{% url 'obesity_prevention' %}" class="btn btn-sm btn-outline-success"
+                                target="_blank">
+                                <i class="fas fa-shield-alt me-1"></i>Prevention Guidelines
+                            </a>
+                            <a href="{% url 'obesity_treatment' %}" class="btn btn-sm btn-outline-danger"
+                                target="_blank">
+                                <i class="fas fa-pills me-1"></i>Treatment Options
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Progress Tracker -->
+                {% include 'predictions/partials/input_progress.html' %}
+
+                <form id="obesityForm" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-user me-2"></i>Personal Information
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="gender" class="form-label">Gender *</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="age" class="form-label">Age (years) *</label>
+                                <input type="number" class="form-control" id="age" name="age" min="14" max="100"
+                                    step="1" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="family_history" class="form-label">Family History of Overweight *</label>
+                                <select class="form-select" id="family_history" name="family_history_with_overweight"
+                                    required>
+                                    <option value="">Select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Physical Measurements -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-ruler-vertical me-2"></i>Physical Measurements
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="height" class="form-label">Height (meters) *</label>
+                                <input type="number" class="form-control" id="height" name="height" min="1.0" max="2.5"
+                                    step="0.01" placeholder="e.g., 1.75" required>
+                                <small class="text-muted">Enter in meters (1.75 = 175cm)</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="weight" class="form-label">Weight (kg) *</label>
+                                <input type="number" class="form-control" id="weight" name="weight" min="30" max="300"
+                                    step="0.1" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bmi_display" class="form-label">BMI (Auto-calculated)</label>
+                                <input type="text" class="form-control" id="bmi_display" readonly>
+                                <small class="text-muted">Calculated from height & weight</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Eating Habits -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-utensils me-2"></i>Eating Habits
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="favc" class="form-label">Frequent High Caloric Food (FAVC) *</label>
+                                <select class="form-select" id="favc" name="favc" required>
+                                    <option value="">Select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                                <small class="text-muted">Do you eat high caloric food frequently?</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="fcvc" class="form-label">Vegetable Consumption (FCVC) *</label>
+                                <input type="number" class="form-control" id="fcvc" name="fcvc" min="1" max="3"
+                                    step="0.1" required>
+                                <small class="text-muted">1 = Never, 2 = Sometimes, 3 = Always</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ncp" class="form-label">Main Meals per Day (NCP) *</label>
+                                <input type="number" class="form-control" id="ncp" name="ncp" min="1" max="4" step="0.1"
+                                    required>
+                                <small class="text-muted">Number of main meals (1-4)</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="caec" class="form-label">Food Between Meals (CAEC) *</label>
+                                <select class="form-select" id="caec" name="caec" required>
+                                    <option value="">Select Frequency</option>
+                                    <option value="no">Never</option>
+                                    <option value="sometimes">Sometimes</option>
+                                    <option value="frequently">Frequently</option>
+                                    <option value="always">Always</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="ch2o" class="form-label">Daily Water Intake (CH2O) *</label>
+                                <input type="number" class="form-control" id="ch2o" name="ch2o" min="1" max="3"
+                                    step="0.1" required>
+                                <small class="text-muted">1 = Less than 1L, 2 = 1-2L, 3 = More than 2L</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="calc" class="form-label">Alcohol Consumption (CALC) *</label>
+                                <select class="form-select" id="calc" name="calc" required>
+                                    <option value="">Select Frequency</option>
+                                    <option value="no">Never</option>
+                                    <option value="sometimes">Sometimes</option>
+                                    <option value="frequently">Frequently</option>
+                                    <option value="always">Always</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Physical Activity & Lifestyle -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-running me-2"></i>Physical Activity & Lifestyle
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="faf" class="form-label">Physical Activity Frequency (FAF) *</label>
+                                <input type="number" class="form-control" id="faf" name="faf" min="0" max="3" step="0.1"
+                                    required>
+                                <small class="text-muted">0 = None, 1 = 1-2 days, 2 = 2-4 days, 3 = 4-5
+                                    days/week</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="tue" class="form-label">Technology Use Time (TUE) *</label>
+                                <input type="number" class="form-control" id="tue" name="tue" min="0" max="2" step="0.1"
+                                    required>
+                                <small class="text-muted">0 = 0-2 hrs, 1 = 3-5 hrs, 2 = More than 5 hrs/day</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="scc" class="form-label">Calorie Monitoring (SCC) *</label>
+                                <select class="form-select" id="scc" name="scc" required>
+                                    <option value="">Select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                                <small class="text-muted">Do you monitor calorie consumption?</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="smoke" class="form-label">Smoking *</label>
+                                <select class="form-select" id="smoke" name="smoke" required>
+                                    <option value="">Select</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="mtrans" class="form-label">Transportation Mode (MTRANS) *</label>
+                                <select class="form-select" id="mtrans" name="mtrans" required>
+                                    <option value="">Select Transportation</option>
+                                    <option value="walking">Walking</option>
+                                    <option value="bike">Bicycle</option>
+                                    <option value="motorbike">Motorbike</option>
+                                    <option value="public_transportation">Public Transportation</option>
+                                    <option value="automobile">Automobile/Car</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <i class="fas fa-chart-line me-2"></i>
+                            <span class="btn-text">Predict Obesity Level</span>
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" id="submitSpinner"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="col-lg-4">
+            <div class="results-card sticky-top" style="top: 100px;">
+                <h4 class="mb-4 text-dark">
+                    <i class="fas fa-chart-pie me-2"></i>Prediction Results
+                </h4>
+                <div class="result-placeholder text-center py-5" id="resultPlaceholder">
+                    <i class="fas fa-weight fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Complete the form to see your obesity level prediction</p>
+                </div>
+                <div class="result-content d-none" id="resultContent">
+                    <!-- Tier and Confidence Display -->
+                    {% include 'predictions/partials/tier_confidence_display.html' %}
+
+                    <div class="risk-meter mb-4">
+                        <div class="risk-circle">
+                            <div class="risk-percentage">
+                                <span class="probability text-dark" id="probabilityValue">0%</span>
+                                <small class="text-secondary">Confidence</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="risk-details">
+                        <div class="risk-badge-container text-center mb-3">
+                            <span class="risk-badge" id="obesityLevel">Normal Weight</span>
+                        </div>
+                        <div class="bmi-info mb-3 p-3 bg-light rounded">
+                            <h6 class="text-dark mb-2"><i class="fas fa-calculator me-2"></i>Your BMI</h6>
+                            <p class="mb-0 fs-4 fw-bold text-primary" id="bmiResult">--</p>
+                        </div>
+                        <div class="recommendation-box">
+                            <h6 class="text-dark"><i class="fas fa-lightbulb me-2"></i>Recommendation</h6>
+                            <p class="recommendation text-secondary" id="recommendation">Complete the assessment to get
+                                personalized recommendations.</p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="action-buttons mt-4">
+                            <button class="btn btn-outline-primary w-100 mb-2" onclick="downloadReport()">
+                                <i class="fas fa-download me-2"></i>Download Report
+                            </button>
+                            <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
+                                data-bs-target="#doctorModal">
+                                <i class="fas fa-user-md me-2"></i>Consult a Doctor
+                            </button>
+                        </div>
+
+                        <!-- Feature Importance (SHAP-like) -->
+                        {% include 'predictions/partials/shap_explanation.html' %}
+
+                        <!-- Health Insights -->
+                        {% include 'predictions/partials/health_insights.html' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doctor Consultation Modal -->
+<div class="modal fade" id="doctorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-user-md me-2"></i>Consult a Specialist</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-stethoscope fa-3x text-primary mb-3"></i>
+                                <h5>Endocrinologist</h5>
+                                <p class="text-muted small">Specialist in hormonal and metabolic disorders</p>
+                                <a href="https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22endocrinologist%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22subspeciality%22%7D%5D"
+                                    target="_blank" class="btn btn-outline-primary btn-sm">Find Doctors</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-apple-alt fa-3x text-success mb-3"></i>
+                                <h5>Nutritionist/Dietitian</h5>
+                                <p class="text-muted small">Expert in diet planning and weight management</p>
+                                <a href="https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22dietitian%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22subspeciality%22%7D%5D"
+                                    target="_blank" class="btn btn-outline-success btn-sm">Find Doctors</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-heartbeat fa-3x text-danger mb-3"></i>
+                                <h5>Cardiologist</h5>
+                                <p class="text-muted small">Heart health specialist for obesity-related risks</p>
+                                <a href="https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22cardiologist%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22subspeciality%22%7D%5D"
+                                    target="_blank" class="btn btn-outline-danger btn-sm">Find Doctors</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <i class="fas fa-dumbbell fa-3x text-warning mb-3"></i>
+                                <h5>Bariatric Surgeon</h5>
+                                <p class="text-muted small">Specialist in weight loss surgery</p>
+                                <a href="https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22bariatric%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22subspeciality%22%7D%5D"
+                                    target="_blank" class="btn btn-outline-warning btn-sm">Find Doctors</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // BMI Calculator
+    function calculateBMI() {
+        const height = parseFloat(document.getElementById('height').value);
+        const weight = parseFloat(document.getElementById('weight').value);
+
+        if (height > 0 && weight > 0) {
+            const bmi = weight / (height * height);
+            document.getElementById('bmi_display').value = bmi.toFixed(2);
+        }
+    }
+
+    document.getElementById('height').addEventListener('input', calculateBMI);
+    document.getElementById('weight').addEventListener('input', calculateBMI);
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize form progress tracker
+        if (typeof initFormProgressTracker === 'function') {
+            initFormProgressTracker('obesityForm', 'obesity');
+        }
+
+        // Initialize real-time validation
+        if (typeof initRealTimeValidation === 'function') {
+            initRealTimeValidation('obesityForm');
+        }
+    });
+
+    // Form submission
+    document.getElementById('obesityForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (!this.checkValidity()) {
+            this.classList.add('was-validated');
+            return;
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const spinner = document.getElementById('submitSpinner');
+
+        btnText.textContent = 'Analyzing...';
+        spinner.classList.remove('d-none');
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        fetch('{% url "api_obesity" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                displayResult(result);
+
+                // Display feature importance
+                if (result.success && typeof displayFeatureImportance === 'function') {
+                    displayFeatureImportance(result, data, 'obesity');
+                }
+
+                // Generate health insights
+                if (result.success && typeof generateHealthInsights === 'function') {
+                    generateHealthInsights(data, result, 'obesity');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            })
+            .finally(() => {
+                btnText.textContent = 'Predict Obesity Level';
+                spinner.classList.add('d-none');
+                submitBtn.disabled = false;
+            });
+    });
+
+    function displayResult(result) {
+        document.getElementById('resultPlaceholder').classList.add('d-none');
+        document.getElementById('resultContent').classList.remove('d-none');
+
+        if (result.success) {
+            // Update tier and confidence display (new feature)
+            if (typeof updateTierDisplay === 'function') {
+                updateTierDisplay(result);
+            }
+
+            const probability = result.probability || 0;
+            const className = result.class_name || result.display_name || 'Unknown';
+
+            document.getElementById('probabilityValue').textContent = probability.toFixed(1) + '%';
+            document.getElementById('obesityLevel').textContent = className;
+            document.getElementById('bmiResult').textContent = document.getElementById('bmi_display').value;
+
+            // Set badge color based on obesity level
+            const badge = document.getElementById('obesityLevel');
+            badge.className = 'risk-badge ';
+
+            if (className.includes('Normal')) {
+                badge.classList.add('bg-success');
+                document.getElementById('recommendation').textContent = 'Great! You have a healthy weight. Maintain your current lifestyle with balanced diet and regular exercise.';
+            } else if (className.includes('Insufficient')) {
+                badge.classList.add('bg-info');
+                document.getElementById('recommendation').textContent = 'You are underweight. Consider consulting a nutritionist to develop a healthy weight gain plan.';
+            } else if (className.includes('Overweight_Level_I')) {
+                badge.classList.add('bg-warning');
+                document.getElementById('recommendation').textContent = 'Slightly overweight. Focus on increasing physical activity and reducing calorie intake.';
+            } else if (className.includes('Overweight_Level_II')) {
+                badge.classList.add('bg-warning');
+                document.getElementById('recommendation').textContent = 'Moderately overweight. Consider consulting a dietitian for a personalized weight loss plan.';
+            } else if (className.includes('Obesity_Type_I')) {
+                badge.classList.add('bg-danger');
+                document.getElementById('recommendation').textContent = 'Class I Obesity detected. Please consult a healthcare provider for a comprehensive weight management program.';
+            } else if (className.includes('Obesity_Type_II')) {
+                badge.classList.add('bg-danger');
+                document.getElementById('recommendation').textContent = 'Class II Obesity detected. Medical intervention recommended. Please consult an endocrinologist or bariatric specialist.';
+            } else if (className.includes('Obesity_Type_III')) {
+                badge.classList.add('bg-dark');
+                document.getElementById('recommendation').textContent = 'Class III (Severe) Obesity detected. Immediate medical consultation required. Consider speaking with a bariatric surgeon.';
+            } else {
+                badge.classList.add('bg-secondary');
+            }
+
+            // Store result for report download
+            window.lastPredictionResult = result;
+            window.lastFormData = Object.fromEntries(new FormData(document.getElementById('obesityForm')).entries());
+        } else {
+            document.getElementById('probabilityValue').textContent = 'Error';
+            document.getElementById('obesityLevel').textContent = 'Prediction Failed';
+            document.getElementById('recommendation').textContent = result.error || 'An error occurred during prediction.';
+        }
+    }
+
+    function downloadReport() {
+        if (!window.lastPredictionResult) {
+            alert('Please complete the assessment first.');
+            return;
+        }
+
+        const result = window.lastPredictionResult;
+        const formData = window.lastFormData;
+        const bmi = document.getElementById('bmi_display').value;
+
+        const reportContent = `
+================================================================================
+                    OBESITY LEVEL PREDICTION REPORT
+                         MediCare AI Health System
+================================================================================
+
+Report Generated: ${new Date().toLocaleString()}
+
+--------------------------------------------------------------------------------
+                           PATIENT INFORMATION
+--------------------------------------------------------------------------------
+Gender: ${formData.gender || 'N/A'}
+Age: ${formData.age || 'N/A'} years
+Height: ${formData.height || 'N/A'} meters
+Weight: ${formData.weight || 'N/A'} kg
+BMI: ${bmi}
+Family History of Overweight: ${formData.family_history_with_overweight || 'N/A'}
+
+--------------------------------------------------------------------------------
+                            EATING HABITS
+--------------------------------------------------------------------------------
+High Caloric Food Consumption: ${formData.favc || 'N/A'}
+Vegetable Consumption (1-3): ${formData.fcvc || 'N/A'}
+Main Meals per Day: ${formData.ncp || 'N/A'}
+Food Between Meals: ${formData.caec || 'N/A'}
+Daily Water Intake (1-3): ${formData.ch2o || 'N/A'}
+Alcohol Consumption: ${formData.calc || 'N/A'}
+
+--------------------------------------------------------------------------------
+                         PHYSICAL ACTIVITY
+--------------------------------------------------------------------------------
+Physical Activity Frequency (0-3): ${formData.faf || 'N/A'}
+Technology Use Time (0-2): ${formData.tue || 'N/A'}
+Calorie Monitoring: ${formData.scc || 'N/A'}
+Smoking: ${formData.smoke || 'N/A'}
+Transportation Mode: ${formData.mtrans || 'N/A'}
+
+--------------------------------------------------------------------------------
+                         PREDICTION RESULTS
+--------------------------------------------------------------------------------
+Obesity Level: ${result.class_name || result.display_name || 'N/A'}
+Confidence: ${result.probability?.toFixed(2) || 'N/A'}%
+
+--------------------------------------------------------------------------------
+                          RECOMMENDATIONS
+--------------------------------------------------------------------------------
+${document.getElementById('recommendation').textContent}
+
+--------------------------------------------------------------------------------
+                            DISCLAIMER
+--------------------------------------------------------------------------------
+This report is generated by an AI-based prediction system and should not be
+considered as a medical diagnosis. Please consult a qualified healthcare
+professional for proper medical advice and treatment.
+
+================================================================================
+                    © ${new Date().getFullYear()} MediCare AI - All Rights Reserved
+================================================================================
+`;
+
+        const blob = new Blob([reportContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Obesity_Report_${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
+{% endblock %}

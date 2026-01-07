@@ -1,0 +1,27 @@
+{% comment %}
+Partial template for rendering a single form field
+Used by render_form_field template tag
+{% endcomment %}
+
+<div class="form-group">
+    <label for="{{ feature }}" class="form-label">{{ feature_name }} *</label>
+
+    {% if is_categorical %}
+    <select class="form-select" id="{{ feature }}" name="{{ feature }}" required>
+        <option value="">Select {{ feature_name }}</option>
+        {% for option in options %}
+        <option value="{{ option }}">{{ option|title }}</option>
+        {% endfor %}
+    </select>
+    {% elif is_boolean %}
+    <select class="form-select" id="{{ feature }}" name="{{ feature }}" required>
+        <option value="">Select</option>
+        <option value="1">Yes</option>
+        <option value="0">No</option>
+    </select>
+    {% else %}
+    <input type="number" class="form-control" id="{{ feature }}" name="{{ feature }}" step="any" required>
+    {% endif %}
+
+    <div class="invalid-feedback">Please enter {{ feature_name }}</div>
+</div>

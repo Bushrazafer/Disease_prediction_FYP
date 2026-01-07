@@ -1,0 +1,725 @@
+/* ========================================
+   MediCare AI - Professional Disease Form Styles
+   Professional Colors & Animations for Each Disease
+   ======================================== */
+
+/* ========================================
+   Disease Color Schemes
+   ======================================== */
+:root {
+    /* Diabetes - Warm Red/Orange */
+    --diabetes-primary: #e74c3c;
+    --diabetes-secondary: #c0392b;
+    --diabetes-light: #fadbd8;
+    --diabetes-gradient: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    --diabetes-glow: rgba(231, 76, 60, 0.4);
+    
+    /* Cardiovascular - Deep Red */
+    --cardio-primary: #dc3545;
+    --cardio-secondary: #a71d2a;
+    --cardio-light: #f8d7da;
+    --cardio-gradient: linear-gradient(135deg, #dc3545 0%, #a71d2a 100%);
+    --cardio-glow: rgba(220, 53, 69, 0.4);
+    
+    /* Kidney - Amber/Orange */
+    --kidney-primary: #f39c12;
+    --kidney-secondary: #d68910;
+    --kidney-light: #fdebd0;
+    --kidney-gradient: linear-gradient(135deg, #f39c12 0%, #d68910 100%);
+    --kidney-glow: rgba(243, 156, 18, 0.4);
+    
+    /* Breast Cancer - Pink */
+    --breast-primary: #e91e63;
+    --breast-secondary: #ad1457;
+    --breast-light: #fce4ec;
+    --breast-gradient: linear-gradient(135deg, #e91e63 0%, #ad1457 100%);
+    --breast-glow: rgba(233, 30, 99, 0.4);
+    
+    /* Depression - Calming Blue */
+    --depression-primary: #3498db;
+    --depression-secondary: #2980b9;
+    --depression-light: #d6eaf8;
+    --depression-gradient: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    --depression-glow: rgba(52, 152, 219, 0.4);
+    
+    /* Obesity - Fresh Green */
+    --obesity-primary: #27ae60;
+    --obesity-secondary: #1e8449;
+    --obesity-light: #d5f5e3;
+    --obesity-gradient: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+    --obesity-glow: rgba(39, 174, 96, 0.4);
+}
+
+/* Dark Theme Disease Colors */
+[data-theme="dark"] {
+    --diabetes-light: rgba(231, 76, 60, 0.15);
+    --cardio-light: rgba(220, 53, 69, 0.15);
+    --kidney-light: rgba(243, 156, 18, 0.15);
+    --breast-light: rgba(233, 30, 99, 0.15);
+    --depression-light: rgba(52, 152, 219, 0.15);
+    --obesity-light: rgba(39, 174, 96, 0.15);
+}
+
+/* ========================================
+   Form Icon Styles with Animations
+   ======================================== */
+.form-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    position: relative;
+    overflow: hidden;
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+.form-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+    transform: rotate(45deg);
+    animation: iconShine 3s ease-in-out infinite;
+}
+
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes iconShine {
+    0% { transform: translateX(-100%) rotate(45deg); }
+    50%, 100% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* Disease-specific Form Icons */
+.form-icon.diabetes {
+    background: var(--diabetes-gradient);
+    box-shadow: 0 8px 25px var(--diabetes-glow);
+}
+
+.form-icon.cardiovascular {
+    background: var(--cardio-gradient);
+    box-shadow: 0 8px 25px var(--cardio-glow);
+    animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    14% { transform: scale(1.1); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+}
+
+.form-icon.kidney {
+    background: var(--kidney-gradient);
+    box-shadow: 0 8px 25px var(--kidney-glow);
+}
+
+.form-icon.breast-cancer {
+    background: var(--breast-gradient);
+    box-shadow: 0 8px 25px var(--breast-glow);
+}
+
+.form-icon.depression {
+    background: var(--depression-gradient);
+    box-shadow: 0 8px 25px var(--depression-glow);
+    animation: calmPulse 4s ease-in-out infinite;
+}
+
+@keyframes calmPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+.form-icon.obesity {
+    background: var(--obesity-gradient);
+    box-shadow: 0 8px 25px var(--obesity-glow);
+}
+
+/* ========================================
+   Form Card Styles per Disease
+   ======================================== */
+.prediction-form-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.prediction-form-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    transition: all 0.3s ease;
+}
+
+/* Disease-specific top borders */
+.prediction-form-card.diabetes-form::before {
+    background: var(--diabetes-gradient);
+}
+
+.prediction-form-card.cardiovascular-form::before {
+    background: var(--cardio-gradient);
+}
+
+.prediction-form-card.kidney-form::before {
+    background: var(--kidney-gradient);
+}
+
+.prediction-form-card.breast-cancer-form::before {
+    background: var(--breast-gradient);
+}
+
+.prediction-form-card.depression-form::before {
+    background: var(--depression-gradient);
+}
+
+.prediction-form-card.obesity-form::before {
+    background: var(--obesity-gradient);
+}
+
+/* ========================================
+   Form Section Animations
+   ======================================== */
+.form-section {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: sectionFadeIn 0.6s ease forwards;
+}
+
+.form-section:nth-child(1) { animation-delay: 0.1s; }
+.form-section:nth-child(2) { animation-delay: 0.2s; }
+.form-section:nth-child(3) { animation-delay: 0.3s; }
+.form-section:nth-child(4) { animation-delay: 0.4s; }
+.form-section:nth-child(5) { animation-delay: 0.5s; }
+.form-section:nth-child(6) { animation-delay: 0.6s; }
+
+@keyframes sectionFadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   Section Title Styles per Disease
+   ======================================== */
+.section-title {
+    position: relative;
+    padding-left: 15px;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 70%;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* Disease-specific section title accents */
+.diabetes-form .section-title::before { background: var(--diabetes-gradient); }
+.cardiovascular-form .section-title::before { background: var(--cardio-gradient); }
+.kidney-form .section-title::before { background: var(--kidney-gradient); }
+.breast-cancer-form .section-title::before { background: var(--breast-gradient); }
+.depression-form .section-title::before { background: var(--depression-gradient); }
+.obesity-form .section-title::before { background: var(--obesity-gradient); }
+
+/* ========================================
+   Input Focus States per Disease
+   ======================================== */
+.diabetes-form .form-control:focus,
+.diabetes-form .form-select:focus {
+    border-color: var(--diabetes-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(231, 76, 60, 0.15) !important;
+}
+
+.cardiovascular-form .form-control:focus,
+.cardiovascular-form .form-select:focus {
+    border-color: var(--cardio-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.15) !important;
+}
+
+.kidney-form .form-control:focus,
+.kidney-form .form-select:focus {
+    border-color: var(--kidney-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(243, 156, 18, 0.15) !important;
+}
+
+.breast-cancer-form .form-control:focus,
+.breast-cancer-form .form-select:focus {
+    border-color: var(--breast-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(233, 30, 99, 0.15) !important;
+}
+
+.depression-form .form-control:focus,
+.depression-form .form-select:focus {
+    border-color: var(--depression-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.15) !important;
+}
+
+.obesity-form .form-control:focus,
+.obesity-form .form-select:focus {
+    border-color: var(--obesity-primary) !important;
+    box-shadow: 0 0 0 0.25rem rgba(39, 174, 96, 0.15) !important;
+}
+
+/* ========================================
+   Form Input Styles - Light Theme
+   ======================================== */
+.prediction-form-card .form-control,
+.prediction-form-card .form-select {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    border: 2px solid #e9ecef !important;
+}
+
+.prediction-form-card .form-control::placeholder {
+    color: #6c757d !important;
+}
+
+.prediction-form-card .form-select option {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+/* ========================================
+   Form Input Styles - Dark Theme
+   ======================================== */
+[data-theme="dark"] .prediction-form-card .form-control,
+[data-theme="dark"] .prediction-form-card .form-select {
+    background-color: #1c2128 !important;
+    color: #e6edf3 !important;
+    border: 2px solid #373e47 !important;
+}
+
+[data-theme="dark"] .prediction-form-card .form-control::placeholder {
+    color: #7d8590 !important;
+}
+
+[data-theme="dark"] .prediction-form-card .form-select option {
+    background-color: #1c2128;
+    color: #e6edf3;
+}
+
+[data-theme="dark"] .prediction-form-card .form-control:focus,
+[data-theme="dark"] .prediction-form-card .form-select:focus {
+    background-color: #1c2128 !important;
+    color: #e6edf3 !important;
+}
+
+/* ========================================
+   Submit Button Styles per Disease
+   ======================================== */
+.btn-diabetes {
+    background: var(--diabetes-gradient);
+    box-shadow: 0 4px 15px var(--diabetes-glow);
+}
+
+.btn-diabetes:hover {
+    box-shadow: 0 8px 25px var(--diabetes-glow);
+    transform: translateY(-3px);
+}
+
+.btn-cardiovascular {
+    background: var(--cardio-gradient);
+    box-shadow: 0 4px 15px var(--cardio-glow);
+}
+
+.btn-cardiovascular:hover {
+    box-shadow: 0 8px 25px var(--cardio-glow);
+    transform: translateY(-3px);
+}
+
+.btn-kidney {
+    background: var(--kidney-gradient);
+    box-shadow: 0 4px 15px var(--kidney-glow);
+}
+
+.btn-kidney:hover {
+    box-shadow: 0 8px 25px var(--kidney-glow);
+    transform: translateY(-3px);
+}
+
+.btn-breast-cancer {
+    background: var(--breast-gradient);
+    box-shadow: 0 4px 15px var(--breast-glow);
+}
+
+.btn-breast-cancer:hover {
+    box-shadow: 0 8px 25px var(--breast-glow);
+    transform: translateY(-3px);
+}
+
+.btn-depression {
+    background: var(--depression-gradient);
+    box-shadow: 0 4px 15px var(--depression-glow);
+}
+
+.btn-depression:hover {
+    box-shadow: 0 8px 25px var(--depression-glow);
+    transform: translateY(-3px);
+}
+
+.btn-obesity {
+    background: var(--obesity-gradient);
+    box-shadow: 0 4px 15px var(--obesity-glow);
+}
+
+.btn-obesity:hover {
+    box-shadow: 0 8px 25px var(--obesity-glow);
+    transform: translateY(-3px);
+}
+
+/* ========================================
+   Results Card Styles per Disease
+   ======================================== */
+.results-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.results-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    opacity: 0.1;
+    transform: translate(30%, -30%);
+    transition: all 0.3s ease;
+}
+
+.results-card.diabetes-results::before { background: var(--diabetes-gradient); }
+.results-card.cardiovascular-results::before { background: var(--cardio-gradient); }
+.results-card.kidney-results::before { background: var(--kidney-gradient); }
+.results-card.breast-cancer-results::before { background: var(--breast-gradient); }
+.results-card.depression-results::before { background: var(--depression-gradient); }
+.results-card.obesity-results::before { background: var(--obesity-gradient); }
+
+/* ========================================
+   Risk Circle Styles per Disease
+   ======================================== */
+.risk-circle.diabetes {
+    background: conic-gradient(
+        var(--diabetes-primary) 0deg,
+        var(--diabetes-secondary) 120deg,
+        var(--diabetes-light) 120deg
+    );
+}
+
+.risk-circle.cardiovascular {
+    background: conic-gradient(
+        var(--cardio-primary) 0deg,
+        var(--cardio-secondary) 120deg,
+        var(--cardio-light) 120deg
+    );
+}
+
+.risk-circle.kidney {
+    background: conic-gradient(
+        var(--kidney-primary) 0deg,
+        var(--kidney-secondary) 120deg,
+        var(--kidney-light) 120deg
+    );
+}
+
+.risk-circle.breast-cancer {
+    background: conic-gradient(
+        var(--breast-primary) 0deg,
+        var(--breast-secondary) 120deg,
+        var(--breast-light) 120deg
+    );
+}
+
+.risk-circle.depression {
+    background: conic-gradient(
+        var(--depression-primary) 0deg,
+        var(--depression-secondary) 120deg,
+        var(--depression-light) 120deg
+    );
+}
+
+.risk-circle.obesity {
+    background: conic-gradient(
+        var(--obesity-primary) 0deg,
+        var(--obesity-secondary) 120deg,
+        var(--obesity-light) 120deg
+    );
+}
+
+/* ========================================
+   Learn More Section Styles per Disease
+   ======================================== */
+.learn-more-section.diabetes-info {
+    background: linear-gradient(135deg, var(--diabetes-light), rgba(231, 76, 60, 0.1)) !important;
+    border-left: 4px solid var(--diabetes-primary);
+}
+
+.learn-more-section.cardiovascular-info {
+    background: linear-gradient(135deg, var(--cardio-light), rgba(220, 53, 69, 0.1)) !important;
+    border-left: 4px solid var(--cardio-primary);
+}
+
+.learn-more-section.kidney-info {
+    background: linear-gradient(135deg, var(--kidney-light), rgba(243, 156, 18, 0.1)) !important;
+    border-left: 4px solid var(--kidney-primary);
+}
+
+.learn-more-section.breast-cancer-info {
+    background: linear-gradient(135deg, var(--breast-light), rgba(233, 30, 99, 0.1)) !important;
+    border-left: 4px solid var(--breast-primary);
+}
+
+.learn-more-section.depression-info {
+    background: linear-gradient(135deg, var(--depression-light), rgba(52, 152, 219, 0.1)) !important;
+    border-left: 4px solid var(--depression-primary);
+}
+
+.learn-more-section.obesity-info {
+    background: linear-gradient(135deg, var(--obesity-light), rgba(39, 174, 96, 0.1)) !important;
+    border-left: 4px solid var(--obesity-primary);
+}
+
+/* ========================================
+   Input Field Animations
+   ======================================== */
+.form-control,
+.form-select {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-control:focus,
+.form-select:focus {
+    transform: translateY(-2px);
+}
+
+/* Input validation animations */
+.form-control.is-valid {
+    animation: validPulse 0.5s ease;
+}
+
+.form-control.is-invalid {
+    animation: invalidShake 0.5s ease;
+}
+
+@keyframes validPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); }
+    50% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); }
+}
+
+@keyframes invalidShake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
+/* ========================================
+   Loading Button Animation
+   ======================================== */
+.btn-loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.btn-loading .btn-text {
+    opacity: 0;
+}
+
+.btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: buttonSpin 0.8s linear infinite;
+}
+
+@keyframes buttonSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Progress Bar Animations per Disease
+   ======================================== */
+.progress-bar.diabetes-progress { background: var(--diabetes-gradient); }
+.progress-bar.cardiovascular-progress { background: var(--cardio-gradient); }
+.progress-bar.kidney-progress { background: var(--kidney-gradient); }
+.progress-bar.breast-cancer-progress { background: var(--breast-gradient); }
+.progress-bar.depression-progress { background: var(--depression-gradient); }
+.progress-bar.obesity-progress { background: var(--obesity-gradient); }
+
+/* ========================================
+   Card Hover Effects
+   ======================================== */
+.prediction-form-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--theme-shadow-lg);
+}
+
+.results-card:hover {
+    transform: translateY(-3px);
+}
+
+/* ========================================
+   Responsive Animations
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    .form-icon,
+    .form-section,
+    .form-control,
+    .form-select,
+    .btn {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ========================================
+   Mobile Optimizations
+   ======================================== */
+@media (max-width: 768px) {
+    .form-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .prediction-form-card::before {
+        height: 4px;
+    }
+    
+    .section-title::before {
+        width: 3px;
+    }
+}
+
+/* ========================================
+   Dark Theme Adjustments for Disease Forms
+   ======================================== */
+[data-theme="dark"] .prediction-form-card {
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border-color);
+}
+
+[data-theme="dark"] .results-card {
+    background: var(--theme-bg-card);
+    border: 1px solid var(--theme-border-color);
+}
+
+[data-theme="dark"] .form-section {
+    border-bottom-color: var(--theme-border-color);
+}
+
+[data-theme="dark"] .learn-more-section {
+    border: 1px solid var(--theme-border-color);
+}
+
+[data-theme="dark"] .risk-circle::before {
+    background: var(--theme-bg-card);
+}
+
+/* ========================================
+   Tooltip Styles
+   ======================================== */
+.form-tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+    cursor: help;
+}
+
+.form-tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--theme-bg-tertiary);
+    color: var(--theme-text-primary);
+    text-align: center;
+    border-radius: 8px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    transform: translateY(10px);
+    box-shadow: var(--theme-shadow-md);
+    font-size: 0.85rem;
+    font-weight: normal;
+}
+
+.form-tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ========================================
+   Input Group Animations
+   ======================================== */
+.input-group {
+    position: relative;
+}
+
+.input-group .form-control {
+    transition: all 0.3s ease;
+}
+
+.input-group:focus-within {
+    transform: translateY(-2px);
+}
+
+.input-group:focus-within .input-group-text {
+    border-color: var(--theme-border-focus);
+}
+
+/* ========================================
+   Checkbox & Radio Styles
+   ======================================== */
+.form-check-input {
+    width: 1.2em;
+    height: 1.2em;
+    transition: all 0.2s ease;
+}
+
+.form-check-input:checked {
+    animation: checkPop 0.3s ease;
+}
+
+@keyframes checkPop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Disease-specific checkbox colors */
+.diabetes-form .form-check-input:checked { background-color: var(--diabetes-primary); border-color: var(--diabetes-primary); }
+.cardiovascular-form .form-check-input:checked { background-color: var(--cardio-primary); border-color: var(--cardio-primary); }
+.kidney-form .form-check-input:checked { background-color: var(--kidney-primary); border-color: var(--kidney-primary); }
+.breast-cancer-form .form-check-input:checked { background-color: var(--breast-primary); border-color: var(--breast-primary); }
+.depression-form .form-check-input:checked { background-color: var(--depression-primary); border-color: var(--depression-primary); }
+.obesity-form .form-check-input:checked { background-color: var(--obesity-primary); border-color: var(--obesity-primary); }

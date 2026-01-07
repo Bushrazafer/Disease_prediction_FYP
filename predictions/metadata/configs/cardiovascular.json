@@ -1,0 +1,260 @@
+{
+    "disease_name": "cardiovascular",
+    "display_name": "Cardiovascular Disease",
+    "description": "Heart disease risk assessment based on cardiac symptoms, vital signs, and lab results",
+    "clinician_only": false,
+    "features": {
+        "age": {
+            "display_name": "Age",
+            "description": "Age in years",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 18,
+            "max_value": 100,
+            "unit": "years",
+            "high_signal": false
+        },
+        "sex": {
+            "display_name": "Gender",
+            "description": "Biological sex",
+            "type": "categorical",
+            "required": true,
+            "tier": "screening",
+            "options": [
+                {
+                    "value": 1,
+                    "label": "Male"
+                },
+                {
+                    "value": 0,
+                    "label": "Female"
+                }
+            ],
+            "high_signal": false
+        },
+        "chest_pain_type": {
+            "display_name": "Chest Pain Type",
+            "description": "Type of chest pain experienced",
+            "type": "categorical",
+            "required": true,
+            "tier": "screening",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Typical Angina (TA)"
+                },
+                {
+                    "value": 1,
+                    "label": "Atypical Angina (ATA)"
+                },
+                {
+                    "value": 2,
+                    "label": "Non-Anginal Pain (NAP)"
+                },
+                {
+                    "value": 3,
+                    "label": "Asymptomatic (ASY)"
+                }
+            ],
+            "high_signal": true,
+            "help_text": "TA: Classic heart-related chest pain. ATA: Unusual chest pain. NAP: Non-heart related. ASY: No symptoms."
+        },
+        "resting_bp": {
+            "display_name": "Resting Blood Pressure",
+            "description": "Blood pressure at rest",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 80,
+            "max_value": 200,
+            "medical_min": 90,
+            "medical_max": 180,
+            "unit": "mmHg",
+            "high_signal": false,
+            "help_text": "Normal: 90-120 mmHg"
+        },
+        "cholesterol": {
+            "display_name": "Total Cholesterol",
+            "description": "Total cholesterol level",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 100,
+            "max_value": 600,
+            "medical_min": 100,
+            "medical_max": 400,
+            "unit": "mg/dL",
+            "high_signal": true,
+            "help_text": "Desirable: <200 mg/dL, Borderline: 200-239, High: ≥240"
+        },
+        "max_hr": {
+            "display_name": "Maximum Heart Rate",
+            "description": "Maximum heart rate achieved during exercise",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 60,
+            "max_value": 220,
+            "medical_min": 70,
+            "medical_max": 210,
+            "unit": "bpm",
+            "high_signal": true,
+            "help_text": "Maximum heart rate during exercise stress test"
+        },
+        "exercise_angina": {
+            "display_name": "Exercise-Induced Chest Pain",
+            "description": "Whether chest pain occurs during exercise",
+            "type": "boolean",
+            "required": true,
+            "tier": "standard",
+            "high_signal": true,
+            "help_text": "Do you experience chest pain or discomfort during physical activity?"
+        },
+        "oldpeak": {
+            "display_name": "ST Depression (Exercise ECG)",
+            "description": "ST segment depression induced by exercise relative to rest",
+            "type": "numeric",
+            "required": true,
+            "tier": "confirmation",
+            "min_value": -2,
+            "max_value": 6,
+            "medical_min": -1,
+            "medical_max": 5,
+            "unit": "mm",
+            "high_signal": true,
+            "help_text": "From stress test ECG: measures how much the ST segment drops during exercise. Higher values indicate more ischemia."
+        },
+        "st_slope": {
+            "display_name": "ST Segment Slope",
+            "description": "Slope of the peak exercise ST segment",
+            "type": "categorical",
+            "required": true,
+            "tier": "confirmation",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Upsloping (Normal)"
+                },
+                {
+                    "value": 1,
+                    "label": "Flat (Borderline)"
+                },
+                {
+                    "value": 2,
+                    "label": "Downsloping (Abnormal)"
+                }
+            ],
+            "high_signal": true,
+            "help_text": "From stress test ECG: Upsloping is normal, Flat is borderline, Downsloping suggests ischemia."
+        },
+        "resting_ecg": {
+            "display_name": "Resting ECG Result",
+            "description": "Resting electrocardiogram results",
+            "type": "categorical",
+            "required": true,
+            "tier": "standard",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Normal"
+                },
+                {
+                    "value": 1,
+                    "label": "ST-T Wave Abnormality"
+                },
+                {
+                    "value": 2,
+                    "label": "Left Ventricular Hypertrophy (LVH)"
+                }
+            ],
+            "high_signal": true,
+            "help_text": "Results from resting ECG test"
+        },
+        "fasting_bs": {
+            "display_name": "Fasting Blood Sugar > 120 mg/dL",
+            "description": "Whether fasting blood sugar exceeds 120 mg/dL",
+            "type": "boolean",
+            "required": true,
+            "tier": "standard",
+            "high_signal": false,
+            "help_text": "Is your fasting blood sugar above 120 mg/dL?"
+        }
+    },
+    "tiers": {
+        "screening": {
+            "required_features": [
+                "age",
+                "sex",
+                "chest_pain_type",
+                "resting_bp"
+            ],
+            "optional_features": [
+                "bmi",
+                "smoking",
+                "family_history"
+            ],
+            "min_confidence": 35,
+            "max_confidence": 55,
+            "description": "Basic cardiac risk screening",
+            "disclaimer": "Basic screening only. ECG and blood tests are strongly recommended for accurate assessment."
+        },
+        "standard": {
+            "required_features": [
+                "age",
+                "sex",
+                "chest_pain_type",
+                "resting_bp",
+                "cholesterol",
+                "max_hr",
+                "exercise_angina",
+                "resting_ecg",
+                "fasting_bs"
+            ],
+            "optional_features": [
+                "bmi",
+                "triglycerides",
+                "hdl",
+                "ldl"
+            ],
+            "min_confidence": 55,
+            "max_confidence": 75,
+            "description": "Standard cardiac assessment with basic tests",
+            "disclaimer": "Standard assessment. Stress test with ECG recommended for confirmation."
+        },
+        "confirmation": {
+            "required_features": [
+                "age",
+                "sex",
+                "chest_pain_type",
+                "resting_bp",
+                "cholesterol",
+                "max_hr",
+                "exercise_angina",
+                "resting_ecg",
+                "fasting_bs",
+                "oldpeak",
+                "st_slope"
+            ],
+            "optional_features": [
+                "ejection_fraction",
+                "triglycerides",
+                "hdl",
+                "ldl"
+            ],
+            "min_confidence": 75,
+            "max_confidence": 92,
+            "description": "Comprehensive cardiac assessment with stress test ECG",
+            "disclaimer": "High-confidence assessment based on clinical and ECG data. Consult cardiologist for diagnosis."
+        }
+    },
+    "thresholds": {
+        "low_max": 30,
+        "medium_max": 55,
+        "high_max": 80,
+        "screening_threshold": 0.3,
+        "confirmation_threshold": 0.5
+    },
+    "general_disclaimer": "This tool provides cardiovascular risk estimates only and is NOT a medical diagnosis.\n\nSome inputs (ST Depression, ST Slope) require professional ECG stress test results. If you don't have these values, the assessment will be less accurate.\n\nIf you experience chest pain, shortness of breath, or other cardiac symptoms, seek immediate medical attention.",
+    "result_disclaimer": "This is a risk assessment, not a diagnosis. Cardiovascular disease requires professional evaluation including:\n• Physical examination\n• ECG/EKG\n• Blood tests (lipid panel)\n• Possibly stress test or imaging\n\nPlease consult a cardiologist for proper evaluation, especially if your risk is elevated."
+}

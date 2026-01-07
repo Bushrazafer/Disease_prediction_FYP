@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms & Conditions - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5" style="margin-top: 80px;">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="mb-4">Terms & Conditions</h1>
+
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h5>1. Acceptance of Terms</h5>
+                    <p class="text-muted">By accessing and using MediCare AI, you accept and agree to be bound by the
+                        terms and provision of this agreement.</p>
+
+                    <h5 class="mt-4">2. Medical Disclaimer</h5>
+                    <p class="text-muted">MediCare AI provides health predictions for educational purposes only. The
+                        information provided should not be considered as medical advice. Always consult with qualified
+                        healthcare professionals for medical decisions.</p>
+
+                    <h5 class="mt-4">3. User Responsibilities</h5>
+                    <p class="text-muted">Users are responsible for maintaining the confidentiality of their account
+                        information and for all activities that occur under their account.</p>
+
+                    <h5 class="mt-4">4. Privacy Policy</h5>
+                    <p class="text-muted">Your privacy is important to us. We collect and use your information in
+                        accordance with our Privacy Policy to provide and improve our services.</p>
+
+                    <h5 class="mt-4">5. Limitation of Liability</h5>
+                    <p class="text-muted">MediCare AI shall not be liable for any indirect, incidental, special,
+                        consequential, or punitive damages resulting from your use of the service.</p>
+
+                    <h5 class="mt-4">6. Changes to Terms</h5>
+                    <p class="text-muted">We reserve the right to modify these terms at any time. Continued use of the
+                        service after changes constitutes acceptance of the new terms.</p>
+
+                    <div class="mt-4 pt-3 border-top">
+                        <p class="text-muted mb-0"><small>Last updated: January 2026</small></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{% url 'signup' %}" class="btn btn-primary">Back to Sign Up</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

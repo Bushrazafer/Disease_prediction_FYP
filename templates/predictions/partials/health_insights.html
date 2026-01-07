@@ -1,0 +1,158 @@
+<!-- Health Insights Panel Partial -->
+<!-- Shows personalized health insights based on input values -->
+
+<div class="health-insights-panel mt-4" id="healthInsightsPanel" style="display: none;">
+    <h6 class="mb-3">
+        <i class="fas fa-lightbulb text-warning me-2"></i>Personalized Health Insights
+    </h6>
+
+    <div class="insights-list" id="insightsList">
+        <!-- Insights will be dynamically inserted here -->
+    </div>
+
+    <!-- Comparison with Normal Ranges -->
+    <div class="normal-ranges-comparison mt-3" id="normalRangesComparison">
+        <h6 class="mb-2">
+            <i class="fas fa-balance-scale me-2"></i>Your Values vs Normal Ranges
+        </h6>
+        <div class="ranges-chart" id="rangesChart">
+            <!-- Range bars will be inserted here -->
+        </div>
+    </div>
+</div>
+
+<style>
+    .health-insights-panel {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 12px;
+        padding: 1.25rem;
+        border-left: 4px solid #667eea;
+    }
+
+    .insight-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 0.75rem;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .insight-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0.75rem;
+        flex-shrink: 0;
+    }
+
+    .insight-icon.good {
+        background: #d4edda;
+        color: #28a745;
+    }
+
+    .insight-icon.warning {
+        background: #fff3cd;
+        color: #ffc107;
+    }
+
+    .insight-icon.danger {
+        background: #f8d7da;
+        color: #dc3545;
+    }
+
+    .insight-icon.info {
+        background: #d1ecf1;
+        color: #17a2b8;
+    }
+
+    .insight-content {
+        flex: 1;
+    }
+
+    .insight-title {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #495057;
+        margin-bottom: 0.25rem;
+    }
+
+    .insight-description {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    /* Range comparison bars */
+    .range-item {
+        margin-bottom: 1rem;
+    }
+
+    .range-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .range-name {
+        font-weight: 500;
+    }
+
+    .range-value {
+        color: #6c757d;
+    }
+
+    .range-bar-container {
+        position: relative;
+        height: 20px;
+        background: #e9ecef;
+        border-radius: 10px;
+        overflow: visible;
+    }
+
+    .range-normal-zone {
+        position: absolute;
+        height: 100%;
+        background: rgba(40, 167, 69, 0.2);
+        border-radius: 10px;
+    }
+
+    .range-marker {
+        position: absolute;
+        width: 4px;
+        height: 28px;
+        top: -4px;
+        border-radius: 2px;
+        transform: translateX(-50%);
+        transition: left 0.5s ease;
+    }
+
+    .range-marker.normal {
+        background: #28a745;
+    }
+
+    .range-marker.elevated {
+        background: #ffc107;
+    }
+
+    .range-marker.high {
+        background: #dc3545;
+    }
+
+    .range-marker.low {
+        background: #17a2b8;
+    }
+
+    .range-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: #adb5bd;
+        margin-top: 0.25rem;
+    }
+</style>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+
+<body>
+    <h1>Welcome to the HomePage</h1>
+    <p>This is a simple HTML template rendered by Django.</p>
+    Name is Mr./Mrs. :{{name}}
+    <br>
+    <b>Age</b>is :- {{age}} <br> <b>City</b> is :- {{city}} <br><b>Hobbies:- </b> are {{hobbies}} <br>
+
+    {% for i in fruits %}
+    <div>
+        <ol>{{forloop.counter}}{{i}}</ol>
+    </div>
+    {% endfor %}
+
+    <h3>Skills:</h3>
+    <ul>
+        {% for key, value in skills.items %}
+        <li><b>{{ key|title }}:</b> {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Numbers:</h3>
+    <ul>
+        {% for num in number %}
+        {% if num|divisibleby:2 %}
+        <li><b>{{ num }} is Even</b></li>
+        {% else %}
+        <li>{{ num }} is Odd</li>
+        {% endif %}
+        {% endfor %}
+
+</body>
+
+</html>

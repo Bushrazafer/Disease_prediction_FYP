@@ -1,0 +1,1926 @@
+/* ========================================
+   MediCare AI - Professional 3D Animated Styles
+   ======================================== */
+
+:root {
+    --primary-color: #667eea;
+    --secondary-color: #764ba2;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --info-color: #3498db;
+    --light-color: #f8f9fa;
+    --dark-color: #2c3e50;
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-success: linear-gradient(45deg, #27ae60, #229954);
+    --gradient-danger: linear-gradient(45deg, #e74c3c, #c0392b);
+    --gradient-warning: linear-gradient(45deg, #f39c12, #e67e22);
+    --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.15);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.2);
+    --shadow-3d: 0 15px 35px rgba(0,0,0,0.2), 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* ========================================
+   Global Styles & Reset
+   ======================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    overflow-x: hidden;
+    background: #f8f9fa;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.bg-gradient-primary {
+    background: var(--gradient-primary);
+}
+
+/* ========================================
+   3D Card Effects
+   ======================================== */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+}
+
+.card-3d:hover {
+    transform: translateY(-15px) rotateX(5deg);
+    box-shadow: var(--shadow-3d);
+}
+
+.card-3d::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-3d:hover::before {
+    opacity: 1;
+}
+
+/* ========================================
+   Navigation with Glass Effect
+   ======================================== */
+.navbar {
+    backdrop-filter: blur(10px);
+    background: rgba(102, 126, 234, 0.95) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+}
+
+.navbar-brand::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: #ffc107;
+    transition: width 0.3s ease;
+}
+
+.navbar-brand:hover::after {
+    width: 100%;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    position: relative;
+    padding: 0.5rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background: #ffc107;
+    transition: width 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::before {
+    width: 80%;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107 !important;
+    transform: translateY(-2px);
+}
+
+/* ========================================
+   Animated Buttons
+   ======================================== */
+.btn {
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 12px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-warning {
+    background: var(--gradient-warning);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.4);
+}
+
+.btn-success {
+    background: var(--gradient-success);
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+}
+
+/* ========================================
+   Hero Section with Particles
+   ======================================== */
+.hero-section {
+    background: var(--gradient-primary);
+    position: relative;
+    overflow: hidden;
+    min-height: 100vh;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    background-position: bottom;
+    opacity: 0.3;
+    animation: wave 15s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0%, 100% { transform: translateX(0) translateY(0); }
+    50% { transform: translateX(-25px) translateY(-10px); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.medical-icon-container {
+    position: relative;
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+.medical-icon {
+    font-size: 8rem;
+    color: rgba(255, 255, 255, 0.9);
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.3));
+}
+
+.pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.pulse-ring.delay-1 {
+    animation-delay: 0.5s;
+    width: 250px;
+    height: 250px;
+}
+
+.pulse-ring.delay-2 {
+    animation-delay: 1s;
+    width: 300px;
+    height: 300px;
+}
+
+@keyframes pulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   Prediction Cards with 3D Effect
+   ======================================== */
+.prediction-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    border: none;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.prediction-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.prediction-card:hover::before {
+    opacity: 1;
+}
+
+.prediction-card:hover {
+    transform: translateY(-20px) rotateX(5deg) rotateY(2deg);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2.5rem;
+    color: white;
+    position: relative;
+    animation: iconPulse 2s ease-in-out infinite;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.card-icon.diabetes {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.card-icon.cardiovascular {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.card-icon.kidney {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.card-icon.breast-cancer {
+    background: linear-gradient(135deg, #e91e63, #ad1457);
+}
+
+.card-icon.depression {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.card-icon.obesity {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.prediction-card h4 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--dark-color);
+    text-align: center;
+}
+
+.prediction-card p {
+    color: #666;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0;
+}
+
+.feature-list li {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.feature-list li:hover {
+    padding-left: 10px;
+    background: rgba(102, 126, 234, 0.05);
+}
+
+/* ========================================
+   Stats Grid with Animation
+   ======================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.stat-card:hover::before {
+    left: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px) scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card h3 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========================================
+   Form Styles with 3D Input
+   ======================================== */
+.form-control, .form-select {
+    border-radius: 12px;
+    border: 2px solid #e9ecef;
+    padding: 0.85rem 1.2rem;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    background-color: #ffffff !important;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    color: #212529 !important;
+    font-size: 1rem;
+}
+
+.form-control::placeholder {
+    color: #6c757d !important;
+}
+
+.form-select option {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.15), inset 0 2px 4px rgba(0,0,0,0.05);
+    transform: translateY(-2px);
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.prediction-form-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+    animation: slideInLeft 0.8s ease-out;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.form-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.form-icon.diabetes {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid #f8f9fa;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    color: #495057;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+}
+
+.section-title i {
+    margin-right: 0.5rem;
+    color: var(--primary-color);
+}
+
+/* ========================================
+   Results Card with Circular Progress
+   ======================================== */
+.results-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 100px;
+    animation: slideInRight 0.8s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.risk-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #27ae60 0deg 120deg,
+        #f39c12 120deg 240deg,
+        #e74c3c 240deg 360deg
+    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: rotateCircle 3s ease-in-out;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+@keyframes rotateCircle {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.risk-circle::before {
+    content: '';
+    width: 140px;
+    height: 140px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.risk-percentage {
+    text-align: center;
+    z-index: 2;
+    position: relative;
+}
+
+.risk-percentage .probability {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #495057;
+    display: block;
+    animation: countUp 2s ease-out;
+}
+
+@keyframes countUp {
+    from { opacity: 0; transform: scale(0.5); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.risk-badge {
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: inline-block;
+    animation: bounceIn 0.6s ease-out;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.risk-badge.low-risk {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+}
+
+.risk-badge.medium-risk {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+    box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+}
+
+.risk-badge.high-risk {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+}
+
+.recommendation-box {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-left: 4px solid var(--primary-color);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin: 1.5rem 0;
+    box-shadow: var(--shadow-sm);
+}
+
+.risk-factor-list {
+    list-style: none;
+    padding: 0;
+}
+
+.risk-factor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+}
+
+.risk-factor-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+    padding-left: 1.5rem;
+}
+
+.factor-status {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.factor-status.normal {
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+    color: #155724;
+}
+
+.factor-status.elevated {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
+.factor-status.high {
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+    color: #721c24;
+}
+
+/* ========================================
+   Notifications with Slide Animation
+   ======================================== */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1.2rem 1.5rem;
+    border-radius: 15px;
+    color: white;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 320px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    transform: translateX(400px);
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    backdrop-filter: blur(10px);
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    background: linear-gradient(135deg, rgba(39, 174, 96, 0.95), rgba(34, 153, 84, 0.95));
+}
+
+.notification.error {
+    background: linear-gradient(135deg, rgba(231, 76, 60, 0.95), rgba(192, 57, 43, 0.95));
+}
+
+.notification.warning {
+    background: linear-gradient(135deg, rgba(243, 156, 18, 0.95), rgba(230, 126, 34, 0.95));
+}
+
+.notification.info {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.95), rgba(41, 128, 185, 0.95));
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.notification-close:hover {
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   Loading States with Spinner
+   ======================================== */
+.loading {
+    position: relative;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.spinner-border {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   About & Contact Pages
+   ======================================== */
+.page-header {
+    position: relative;
+    overflow: hidden;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    background-position: bottom;
+    opacity: 0.3;
+}
+
+.about-content {
+    padding: 5rem 0;
+}
+
+.card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.contact-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 3rem;
+}
+
+.contact-info h2,
+.contact-form h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.contact-info p {
+    color: #6c757d;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+}
+
+.contact-method {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.contact-method:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.contact-method i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    min-width: 40px;
+}
+
+.contact-method h3 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.contact-method p {
+    color: #6c757d;
+    margin: 0;
+}
+
+.contact-form {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.contact-form .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    background: var(--gradient-primary);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.contact-form .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+}
+
+/* ========================================
+   Footer Styles
+   ======================================== */
+footer {
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.05)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>');
+    background-size: cover;
+    background-position: top;
+}
+
+/* ========================================
+   Scrollbar Styling
+   ======================================== */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-color);
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+@media (max-width: 1200px) {
+    .hero-section {
+        min-height: auto;
+        padding: 5rem 0;
+    }
+    
+    .medical-icon {
+        font-size: 6rem !important;
+    }
+}
+
+@media (max-width: 992px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .results-card {
+        position: relative;
+        top: 0;
+        margin-top: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .medical-icon {
+        font-size: 4rem !important;
+    }
+    
+    .pulse-ring {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .pulse-ring.delay-1 {
+        width: 180px !important;
+        height: 180px !important;
+    }
+    
+    .pulse-ring.delay-2 {
+        width: 210px !important;
+        height: 210px !important;
+    }
+    
+    .prediction-card {
+        margin-bottom: 2rem;
+    }
+    
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+    }
+    
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 2rem;
+    }
+    
+    .risk-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .risk-circle::before {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .risk-percentage .probability {
+        font-size: 2rem;
+    }
+    
+    .contact-form {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .btn {
+        padding: 10px 24px;
+        font-size: 0.9rem;
+    }
+    
+    .prediction-form-card,
+    .results-card {
+        padding: 1.5rem;
+    }
+    
+    .form-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+}
+
+/* ========================================
+   Accessibility
+   ======================================== */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 3px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* ========================================
+   High Contrast Mode
+   ======================================== */
+@media (prefers-contrast: high) {
+    .card,
+    .prediction-card,
+    .results-card {
+        border: 2px solid #000;
+    }
+    
+    .btn {
+        border: 2px solid #000;
+    }
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+@media print {
+    .navbar,
+    .btn,
+    .notification,
+    footer {
+        display: none !important;
+    }
+    
+    .card,
+    .prediction-card,
+    .results-card {
+        box-shadow: none;
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+    
+    body {
+        background: white;
+    }
+}
+
+/* ========================================
+   Additional 3D Effects
+   ======================================== */
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* ========================================
+   Particle Background Effect
+   ======================================== */
+.particles-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    animation: particleFloat 20s infinite;
+}
+
+@keyframes particleFloat {
+    0% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(100px);
+        opacity: 0;
+    }
+}
+
+/* ========================================
+   Main Content Spacing
+   ======================================== */
+.main-content {
+    margin-top: 76px;
+    min-height: calc(100vh - 76px);
+}
+
+/* ========================================
+   Feature Items with Icons
+   ======================================== */
+.feature-item {
+    transition: all 0.3s ease;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.feature-item:hover {
+    background: rgba(102, 126, 234, 0.05);
+    transform: translateX(10px);
+}
+
+.feature-icon {
+    font-size: 2rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gradient-primary);
+    border-radius: 50%;
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* ========================================
+   Hero Stats Animation
+   ======================================== */
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+    animation: fadeInUp 1s ease-out;
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffc107;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.stat-item small {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* ========================================
+   CTA Section
+   ======================================== */
+.cta-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,165.3C1248,149,1344,107,1392,85.3L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.3;
+}
+
+/* ========================================
+   Dropdown Menu Enhancement
+   ======================================== */
+.dropdown-menu {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    padding: 0.5rem;
+    animation: dropdownSlide 0.3s ease-out;
+}
+
+@keyframes dropdownSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-item {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background: var(--gradient-primary);
+    color: white !important;
+    transform: translateX(5px);
+}
+
+.dropdown-item i {
+    transition: transform 0.3s ease;
+}
+
+.dropdown-item:hover i {
+    transform: scale(1.2);
+}
+
+/* ========================================
+   Text Color Fixes for Readability
+   ======================================== */
+.prediction-form-card h2,
+.prediction-form-card h4,
+.results-card h4,
+.section-title,
+.form-label {
+    color: #2c3e50 !important;
+}
+
+.prediction-form-card p,
+.results-card p,
+small.text-muted,
+.text-secondary {
+    color: #6c757d !important;
+}
+
+.recommendation-box h6 {
+    color: #2c3e50 !important;
+}
+
+.recommendation-box p {
+    color: #495057 !important;
+}
+
+.risk-percentage .probability {
+    color: #2c3e50 !important;
+}
+
+.risk-percentage small {
+    color: #6c757d !important;
+}
+
+.result-placeholder p {
+    color: #adb5bd !important;
+}
+
+/* Form Icon Colors - Disease Specific */
+.form-icon.cardiovascular {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.form-icon.kidney {
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+}
+
+.form-icon.breast-cancer {
+    background: linear-gradient(135deg, #e91e63, #ad1457);
+}
+
+.form-icon.depression {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.form-icon.obesity {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+/* Enhanced Form Styling */
+.form-control,
+.form-select {
+    color: #2c3e50;
+    background-color: #ffffff;
+}
+
+.form-control::placeholder {
+    color: #adb5bd;
+}
+
+.form-control:focus,
+.form-select:focus {
+    color: #2c3e50;
+    background-color: #ffffff;
+}
+
+/* Invalid Feedback */
+.invalid-feedback {
+    color: #dc3545;
+    font-size: 0.875rem;
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+    border-color: #dc3545;
+}
+
+.form-control.is-valid,
+.form-select.is-valid {
+    border-color: #28a745;
+}
+
+/* Enhanced Button Contrast */
+.btn-primary {
+    color: #ffffff !important;
+}
+
+.btn-primary .btn-text {
+    color: #ffffff !important;
+}
+
+/* Risk Badge Enhanced Colors */
+.risk-badge {
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Dropdown Menu Text */
+.dropdown-item {
+    color: #2c3e50;
+}
+
+.dropdown-item:hover {
+    color: #ffffff !important;
+}
+
+/* Footer Text */
+footer h5 {
+    color: #ffffff !important;
+}
+
+footer p,
+footer small {
+    color: #adb5bd !important;
+}
+
+/* Navbar Text */
+.navbar-brand {
+    color: #ffffff !important;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107 !important;
+}
+
+/* Feature Items */
+.feature-item h5 {
+    color: #2c3e50;
+}
+
+.feature-item p {
+    color: #6c757d;
+}
+
+/* Stat Cards */
+.stat-card p {
+    color: #6c757d;
+}
+
+/* About & Contact Pages */
+.about-content h2,
+.about-content h3,
+.contact-section h2,
+.contact-section h5 {
+    color: #2c3e50 !important;
+}
+
+.about-content p,
+.contact-section p {
+    color: #6c757d !important;
+}
+
+/* Card Titles */
+.card-title {
+    color: #2c3e50 !important;
+}
+
+.card-text {
+    color: #6c757d !important;
+}
+
+/* Hero Section Text */
+.hero-section h1,
+.hero-section .display-4 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.hero-section p,
+.hero-section .lead {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+.hero-section small {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Page Header Text */
+.page-header h1,
+.page-header .display-4 {
+    color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.page-header p,
+.page-header .lead {
+    color: rgba(255, 255, 255, 0.95) !important;
+    text-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+/* Prediction Card Text */
+.prediction-card h4 {
+    color: #2c3e50 !important;
+}
+
+.prediction-card p {
+    color: #6c757d !important;
+}
+
+/* Feature List */
+.feature-list li {
+    color: #495057;
+}
+
+/* Risk Factor Items */
+.risk-factor-item .factor-name {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Form Section Borders */
+.form-section {
+    border-bottom-color: #e9ecef;
+}
+
+/* Enhanced Contrast for Accessibility */
+@media (prefers-contrast: high) {
+    .prediction-form-card h2,
+    .prediction-form-card h4,
+    .results-card h4,
+    .section-title,
+    .form-label {
+        color: #000000 !important;
+    }
+    
+    .form-control,
+    .form-select {
+        color: #000000 !important;
+        border-color: #000000 !important;
+    }
+}
+
+/* Dark Background Text Fixes */
+.bg-dark h5,
+.bg-dark p,
+.bg-dark small {
+    color: #f8f9fa !important;
+}
+
+/* Ensure all headings are readable */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+.prediction-form-card h2 {
+    font-weight: 700;
+}
+
+/* Small text readability */
+small {
+    font-size: 0.875rem;
+    line-height: 1.4;
+}
+
+/* Enhanced focus states for accessibility */
+.form-control:focus,
+.form-select:focus,
+.btn:focus {
+    box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+}
+
+/* Loading state text */
+.loading .btn-text {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Notification text */
+.notification {
+    color: #ffffff !important;
+}
+
+.notification-content {
+    color: #ffffff !important;
+}
+
+/* Modal text if used */
+.modal-title {
+    color: #2c3e50 !important;
+}
+
+.modal-body {
+    color: #495057 !important;
+}
+
+/* Ensure proper contrast ratios */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.text-dark {
+    color: #2c3e50 !important;
+}
+
+.text-secondary {
+    color: #6c757d !important;
+}
+
+/* Link colors */
+a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #764ba2;
+}
+
+/* Breadcrumb if used */
+.breadcrumb-item {
+    color: #6c757d;
+}
+
+.breadcrumb-item.active {
+    color: #2c3e50;
+}
+
+/* Alert text */
+.alert {
+    color: #2c3e50;
+}
+
+/* Badge text */
+.badge {
+    font-weight: 600;
+}
+
+/* List group items */
+.list-group-item {
+    color: #2c3e50;
+}
+
+/* Table text */
+.table {
+    color: #2c3e50;
+}
+
+.table thead th {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Tooltip text */
+.tooltip-inner {
+    color: #ffffff;
+    background-color: #2c3e50;
+}
+
+/* Popover text */
+.popover-header {
+    color: #2c3e50;
+    background-color: #f8f9fa;
+}
+
+.popover-body {
+    color: #495057;
+}
+
+
+/* ========================================
+   Learn More Section Styling
+   ======================================== */
+.learn-more-section {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.learn-more-section h6 {
+    color: #495057;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.learn-more-section .btn {
+    border-radius: 25px;
+    padding: 0.5rem 1.25rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    border-width: 2px;
+}
+
+.learn-more-section .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.learn-more-section .btn-outline-primary {
+    border-color: #667eea;
+    color: #667eea;
+}
+
+.learn-more-section .btn-outline-primary:hover {
+    background: #667eea;
+    color: white;
+}
+
+.learn-more-section .btn-outline-success {
+    border-color: #27ae60;
+    color: #27ae60;
+}
+
+.learn-more-section .btn-outline-success:hover {
+    background: #27ae60;
+    color: white;
+}
+
+.learn-more-section .btn-outline-danger {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.learn-more-section .btn-outline-danger:hover {
+    background: #e74c3c;
+    color: white;
+}
+
+/* ========================================
+   Form Input Styles - Light Theme (Default)
+   ======================================== */
+input.form-control,
+select.form-select,
+textarea.form-control {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    -webkit-text-fill-color: #212529 !important;
+    border: 2px solid #dee2e6 !important;
+}
+
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+    color: #6c757d !important;
+    -webkit-text-fill-color: #6c757d !important;
+    opacity: 0.8;
+}
+
+/* Ensure select options are visible */
+select.form-select option {
+    color: #212529 !important;
+    background: #ffffff !important;
+}
+
+/* Fix for readonly inputs - Light Theme */
+input.form-control[readonly] {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+    -webkit-text-fill-color: #495057 !important;
+}
+
+/* ========================================
+   Form Input Styles - Dark Theme
+   ======================================== */
+[data-theme="dark"] input.form-control,
+[data-theme="dark"] select.form-select,
+[data-theme="dark"] textarea.form-control,
+html[data-theme="dark"] input.form-control,
+html[data-theme="dark"] select.form-select,
+html[data-theme="dark"] textarea.form-control {
+    background-color: #1c2128 !important;
+    color: #e6edf3 !important;
+    -webkit-text-fill-color: #e6edf3 !important;
+    border: 2px solid #373e47 !important;
+}
+
+[data-theme="dark"] input.form-control::placeholder,
+[data-theme="dark"] textarea.form-control::placeholder,
+html[data-theme="dark"] input.form-control::placeholder,
+html[data-theme="dark"] textarea.form-control::placeholder {
+    color: #7d8590 !important;
+    -webkit-text-fill-color: #7d8590 !important;
+    opacity: 1;
+}
+
+[data-theme="dark"] select.form-select option,
+html[data-theme="dark"] select.form-select option {
+    background-color: #1c2128 !important;
+    color: #e6edf3 !important;
+}
+
+/* Dark Theme - Readonly inputs */
+[data-theme="dark"] input.form-control[readonly],
+html[data-theme="dark"] input.form-control[readonly] {
+    background-color: #0d1117 !important;
+    color: #8b949e !important;
+    -webkit-text-fill-color: #8b949e !important;
+    border-color: #30363d !important;
+}
+
+/* Dark Theme - Focus states */
+[data-theme="dark"] input.form-control:focus,
+[data-theme="dark"] select.form-select:focus,
+[data-theme="dark"] textarea.form-control:focus,
+html[data-theme="dark"] input.form-control:focus,
+html[data-theme="dark"] select.form-select:focus,
+html[data-theme="dark"] textarea.form-control:focus {
+    background-color: #21262d !important;
+    color: #f0f6fc !important;
+    -webkit-text-fill-color: #f0f6fc !important;
+    border-color: #58a6ff !important;
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.2) !important;
+}
+
+/* Dark Theme - Labels */
+[data-theme="dark"] .form-label,
+html[data-theme="dark"] .form-label {
+    color: #c9d1d9 !important;
+}
+
+/* Dark Theme - Small/Muted text */
+[data-theme="dark"] small,
+[data-theme="dark"] .text-muted,
+[data-theme="dark"] .form-text,
+html[data-theme="dark"] small,
+html[data-theme="dark"] .text-muted,
+html[data-theme="dark"] .form-text {
+    color: #8b949e !important;
+}

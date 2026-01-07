@@ -1,0 +1,135 @@
+<!-- Tier and Confidence Display Partial -->
+<!-- Include this in results section of prediction templates -->
+
+<!-- Assessment Tier Badge -->
+<div class="tier-badge-container mb-3" id="tierBadgeContainer" style="display: none;">
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <span class="tier-badge" id="tierBadge">
+                <i class="fas fa-layer-group me-1"></i>
+                <span id="tierText">Standard</span>
+            </span>
+        </div>
+        <div class="confidence-indicator">
+            <small class="text-muted">Confidence:</small>
+            <span class="confidence-value" id="confidenceValue">75%</span>
+        </div>
+    </div>
+    <div class="tier-description mt-2" id="tierDescription">
+        <small class="text-muted"></small>
+    </div>
+</div>
+
+<!-- Upgrade Suggestion (shown when not at confirmation tier) -->
+<div class="upgrade-suggestion alert alert-info py-2 mb-3" id="upgradeSuggestion" style="display: none;">
+    <small>
+        <i class="fas fa-arrow-up me-1"></i>
+        <strong>Improve accuracy:</strong>
+        <span id="missingFeatures">Add glucose and insulin values</span>
+    </small>
+</div>
+
+<!-- Validation Warnings -->
+<div class="validation-warnings alert alert-warning py-2 mb-3" id="validationWarnings" style="display: none;">
+    <small>
+        <i class="fas fa-exclamation-triangle me-1"></i>
+        <strong>Note:</strong>
+        <span id="warningText"></span>
+    </small>
+</div>
+
+<!-- Persistent Disclaimer (always visible in results) -->
+<div class="persistent-disclaimer mt-3" id="persistentDisclaimer" style="display: none;">
+    <div class="alert alert-secondary py-2 mb-0" style="font-size: 0.8rem;">
+        <i class="fas fa-info-circle me-1"></i>
+        <span id="disclaimerText">
+            This is a risk assessment, not a medical diagnosis. Please consult a healthcare provider for proper
+            evaluation.
+        </span>
+    </div>
+</div>
+
+<style>
+    .tier-badge-container {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 0.75rem;
+        border-left: 4px solid #6c757d;
+    }
+
+    .tier-badge-container.screening {
+        border-left-color: #ffc107;
+    }
+
+    .tier-badge-container.standard {
+        border-left-color: #17a2b8;
+    }
+
+    .tier-badge-container.confirmation {
+        border-left-color: #28a745;
+    }
+
+    .tier-badge {
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .tier-badge.screening {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .tier-badge.standard {
+        background: #d1ecf1;
+        color: #0c5460;
+    }
+
+    .tier-badge.confirmation {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .confidence-indicator {
+        font-size: 0.85rem;
+    }
+
+    .confidence-value {
+        font-weight: 600;
+        padding: 0.15rem 0.5rem;
+        border-radius: 10px;
+        background: #e9ecef;
+    }
+
+    .confidence-value.high {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .confidence-value.medium {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .confidence-value.low {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .upgrade-suggestion {
+        font-size: 0.85rem;
+        border-left: 3px solid #17a2b8;
+    }
+
+    .validation-warnings {
+        font-size: 0.85rem;
+        border-left: 3px solid #ffc107;
+    }
+
+    .persistent-disclaimer {
+        border-top: 1px solid #dee2e6;
+        padding-top: 0.75rem;
+    }
+</style>

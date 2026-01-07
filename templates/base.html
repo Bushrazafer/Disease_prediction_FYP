@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#667eea">
+    <title>{% block title %}MediCare AI - Health Predictions{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/theme.css' %}">
+    <link rel="stylesheet" href="{% static 'css/disease-forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Initialize theme before page renders to prevent flash -->
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('medicare-theme');
+            const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const theme = savedTheme || (systemDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">
+                <i class="fas fa-heartbeat me-2"></i>MediCare AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                            data-bs-toggle="dropdown">Predictions</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'diabetes' %}"><i
+                                        class="fas fa-tint text-danger me-2"></i>Diabetes</a></li>
+                            <li><a class="dropdown-item" href="{% url 'cardiovascular' %}"><i
+                                        class="fas fa-heart text-danger me-2"></i>Cardiovascular</a></li>
+                            <li><a class="dropdown-item" href="{% url 'kidney' %}"><i
+                                        class="fas fa-kidneys text-warning me-2"></i>Kidney Disease</a></li>
+                            <li><a class="dropdown-item" href="{% url 'breast_cancer' %}"><i
+                                        class="fas fa-ribbon text-pink me-2"></i>Breast Cancer</a></li>
+                            <li><a class="dropdown-item" href="{% url 'depression' %}"><i
+                                        class="fas fa-brain text-info me-2"></i>Depression</a></li>
+                            <li><a class="dropdown-item" href="{% url 'obesity' %}"><i
+                                        class="fas fa-weight text-success me-2"></i>Obesity</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Contact</a></li>
+
+                    <!-- Theme Toggle Button -->
+                    <li class="nav-item ms-2">
+                        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode"
+                            title="Toggle dark mode">
+                            <span class="theme-toggle-slider">
+                                <i class="fas fa-sun theme-toggle-icon sun-icon"></i>
+                                <i class="fas fa-moon theme-toggle-icon moon-icon"></i>
+                            </span>
+                        </button>
+                    </li>
+
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>{{ user.first_name|default:user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'logout' %}"><i
+                                        class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link btn btn-outline-light btn-sm ms-2 px-3"
+                            href="{% url 'login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-light btn-sm ms-2 px-3 text-primary"
+                            href="{% url 'signup' %}">Sign Up</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">{% block content %}{% endblock %}</main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h5><i class="fas fa-heartbeat me-2"></i>MediCare AI</h5>
+                    {% if site_settings and site_settings.footer_text %}
+                    <p class="text-muted">{{ site_settings.footer_text }}</p>
+                    {% else %}
+                    <p class="text-muted">Advanced AI-powered health predictions for better healthcare decisions.</p>
+                    {% endif %}
+                    {% if site_settings %}
+                    <div class="social-links mt-3">
+                        {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}"
+                            class="text-muted me-3" target="_blank"><i class="fab fa-facebook fa-lg"></i></a>{% endif %}
+                        {% if site_settings.twitter_url %}<a href="{{ site_settings.twitter_url }}"
+                            class="text-muted me-3" target="_blank"><i class="fab fa-twitter fa-lg"></i></a>{% endif %}
+                        {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}"
+                            class="text-muted me-3" target="_blank"><i class="fab fa-linkedin fa-lg"></i></a>{% endif %}
+                        {% if site_settings.instagram_url %}<a href="{{ site_settings.instagram_url }}"
+                            class="text-muted" target="_blank"><i class="fab fa-instagram fa-lg"></i></a>{% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 mb-3 mb-md-0">
+                    <h6 class="text-uppercase mb-3">Quick Links</h6>
+                    <ul class="list-unstyled footer-links">
+                        <li class="mb-2"><a href="{% url 'home' %}"><i
+                                    class="fas fa-chevron-right me-2 small"></i>Home</a></li>
+                        <li class="mb-2"><a href="{% url 'about' %}"><i
+                                    class="fas fa-chevron-right me-2 small"></i>About Us</a></li>
+                        <li class="mb-2"><a href="{% url 'contact' %}"><i
+                                    class="fas fa-chevron-right me-2 small"></i>Contact</a></li>
+                        <li class="mb-2"><a href="{% url 'diabetes' %}"><i
+                                    class="fas fa-chevron-right me-2 small"></i>Health Predictions</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="text-uppercase mb-3">Contact Info</h6>
+                    {% if site_settings and site_settings.contact_email %}
+                    <p class="text-muted mb-1"><i class="fas fa-envelope me-2"></i>{{ site_settings.contact_email }}</p>
+                    {% endif %}
+                    {% if site_settings and site_settings.contact_phone %}
+                    <p class="text-muted mb-1"><i class="fas fa-phone me-2"></i>{{ site_settings.contact_phone }}</p>
+                    {% endif %}
+                    {% if site_settings and site_settings.contact_address %}
+                    <p class="text-muted mb-1"><i class="fas fa-map-marker-alt me-2"></i>{{
+                        site_settings.contact_address }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <hr class="my-4 bg-secondary">
+            <div class="row">
+                <div class="col-md-6">
+                    {% if site_settings and site_settings.copyright_text %}
+                    <p class="text-muted mb-0">{{ site_settings.copyright_text }}</p>
+                    {% else %}
+                    <p class="text-muted mb-0">&copy; 2024 MediCare AI. All rights reserved.</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <small class="text-warning">
+                        <i class="fas fa-exclamation-triangle me-1"></i>
+                        {% if site_settings and site_settings.footer_disclaimer %}
+                        {{ site_settings.footer_disclaimer }}
+                        {% else %}
+                        For educational purposes only. Consult healthcare professionals for medical advice.
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

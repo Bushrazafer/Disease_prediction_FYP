@@ -1,0 +1,194 @@
+{
+    "disease_name": "breast_cancer",
+    "display_name": "Breast Cancer Cell Analysis",
+    "description": "Analysis of Fine Needle Aspiration (FNA) biopsy cell measurements for breast cancer risk assessment",
+    "clinician_only": true,
+    "clinician_warning": "⚠️ HEALTHCARE PROFESSIONAL USE ONLY\n\nThis tool analyzes Fine Needle Aspiration (FNA) biopsy cell measurements from pathology lab reports. These are imaging-derived features from professional cell analysis, NOT patient-providable values.\n\nRequirements:\n• FNA biopsy results from certified pathology lab\n• Cell nucleus measurements (mean, SE, and worst values)\n• Professional interpretation of results\n\nThis tool is intended for:\n• Oncologists and pathologists\n• Healthcare professionals with access to FNA reports\n• Clinical decision support (not standalone diagnosis)",
+    "features": {
+        "radius_mean": {
+            "display_name": "Radius Mean",
+            "description": "Mean of distances from center to points on the perimeter",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 5,
+            "max_value": 35,
+            "medical_min": 6,
+            "medical_max": 28,
+            "unit": "μm",
+            "high_signal": true,
+            "help_text": "From FNA report: mean radius of cell nuclei (typical range: 6-28)"
+        },
+        "texture_mean": {
+            "display_name": "Texture Mean",
+            "description": "Standard deviation of gray-scale values",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 5,
+            "max_value": 50,
+            "medical_min": 9,
+            "medical_max": 40,
+            "unit": "",
+            "high_signal": false,
+            "help_text": "From FNA report: texture measurement (typical range: 9-40)"
+        },
+        "perimeter_mean": {
+            "display_name": "Perimeter Mean",
+            "description": "Mean size of the core tumor",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 30,
+            "max_value": 250,
+            "medical_min": 43,
+            "medical_max": 189,
+            "unit": "μm",
+            "high_signal": true,
+            "help_text": "From FNA report: mean perimeter (typical range: 43-189)"
+        },
+        "area_mean": {
+            "display_name": "Area Mean",
+            "description": "Mean area of cell nuclei",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 100,
+            "max_value": 3000,
+            "medical_min": 143,
+            "medical_max": 2501,
+            "unit": "μm²",
+            "high_signal": true,
+            "help_text": "From FNA report: mean area (typical range: 143-2501)"
+        },
+        "concave_points_mean": {
+            "display_name": "Concave Points Mean",
+            "description": "Mean number of concave portions of the contour",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 0.3,
+            "medical_min": 0,
+            "medical_max": 0.20,
+            "unit": "",
+            "high_signal": true,
+            "help_text": "From FNA report: concave points (typical range: 0-0.20)"
+        },
+        "concavity_mean": {
+            "display_name": "Concavity Mean",
+            "description": "Severity of concave portions of the contour",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 0.6,
+            "medical_min": 0,
+            "medical_max": 0.43,
+            "unit": "",
+            "high_signal": true,
+            "help_text": "From FNA report: concavity severity (typical range: 0-0.43)"
+        },
+        "radius_worst": {
+            "display_name": "Radius Worst",
+            "description": "Largest mean value for radius",
+            "type": "numeric",
+            "required": true,
+            "tier": "confirmation",
+            "min_value": 7,
+            "max_value": 40,
+            "medical_min": 7,
+            "medical_max": 36,
+            "unit": "μm",
+            "high_signal": true,
+            "help_text": "From FNA report: worst (largest) radius value"
+        },
+        "concave_points_worst": {
+            "display_name": "Concave Points Worst",
+            "description": "Largest mean value for concave points",
+            "type": "numeric",
+            "required": true,
+            "tier": "confirmation",
+            "min_value": 0,
+            "max_value": 0.35,
+            "medical_min": 0,
+            "medical_max": 0.29,
+            "unit": "",
+            "high_signal": true,
+            "help_text": "From FNA report: worst concave points value"
+        }
+    },
+    "tiers": {
+        "screening": {
+            "required_features": [
+                "radius_mean",
+                "texture_mean",
+                "perimeter_mean",
+                "area_mean"
+            ],
+            "optional_features": [
+                "smoothness_mean",
+                "compactness_mean"
+            ],
+            "min_confidence": 50,
+            "max_confidence": 70,
+            "description": "Preliminary FNA cell analysis",
+            "disclaimer": "Preliminary analysis based on basic cell measurements. Full cell panel strongly recommended for clinical decisions."
+        },
+        "standard": {
+            "required_features": [
+                "radius_mean",
+                "texture_mean",
+                "perimeter_mean",
+                "area_mean",
+                "smoothness_mean",
+                "compactness_mean",
+                "concavity_mean",
+                "concave_points_mean"
+            ],
+            "optional_features": [
+                "symmetry_mean",
+                "fractal_dimension_mean"
+            ],
+            "min_confidence": 70,
+            "max_confidence": 85,
+            "description": "Standard FNA cell analysis with mean values",
+            "disclaimer": "Standard analysis. Worst-value features significantly improve diagnostic accuracy."
+        },
+        "confirmation": {
+            "required_features": [
+                "radius_mean",
+                "texture_mean",
+                "perimeter_mean",
+                "area_mean",
+                "smoothness_mean",
+                "compactness_mean",
+                "concavity_mean",
+                "concave_points_mean",
+                "radius_worst",
+                "texture_worst",
+                "perimeter_worst",
+                "area_worst",
+                "concavity_worst",
+                "concave_points_worst"
+            ],
+            "optional_features": [
+                "symmetry_worst",
+                "fractal_dimension_worst"
+            ],
+            "min_confidence": 85,
+            "max_confidence": 97,
+            "description": "Comprehensive FNA analysis with mean and worst values",
+            "disclaimer": "High-confidence analysis. Results should be confirmed by pathologist review."
+        }
+    },
+    "thresholds": {
+        "low_max": 30,
+        "medium_max": 50,
+        "high_max": 75,
+        "screening_threshold": 0.3,
+        "confirmation_threshold": 0.5
+    },
+    "general_disclaimer": "⚠️ PROFESSIONAL USE ONLY\n\nThis tool analyzes Fine Needle Aspiration (FNA) biopsy cell measurements and is intended for healthcare professionals only. It is NOT for patient self-diagnosis.\n\nThe cell measurements required (radius, texture, perimeter, area, concavity, etc.) are derived from microscopic analysis of biopsy samples and can only be obtained from certified pathology laboratory reports.\n\nThis tool provides decision support only and does NOT replace:\n• Professional pathological examination\n• Clinical judgment of oncologists\n• Standard diagnostic protocols\n• Biopsy confirmation",
+    "result_disclaimer": "This analysis is based on FNA cell measurements and provides risk assessment only, NOT a diagnosis.\n\nResults must be:\n• Interpreted by a qualified oncologist or pathologist\n• Confirmed with additional diagnostic procedures as clinically indicated\n• Considered alongside patient history and clinical presentation\n\nBenign results do not rule out malignancy. Suspicious results require further investigation."
+}

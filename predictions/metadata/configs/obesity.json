@@ -1,0 +1,328 @@
+{
+    "disease_name": "obesity",
+    "display_name": "Obesity Level Classification",
+    "description": "Obesity level prediction based on physical measurements and lifestyle factors",
+    "clinician_only": false,
+    "output_classes": [
+        "Insufficient_Weight",
+        "Normal_Weight",
+        "Overweight_Level_I",
+        "Overweight_Level_II",
+        "Obesity_Type_I",
+        "Obesity_Type_II",
+        "Obesity_Type_III"
+    ],
+    "class_risk_map": {
+        "Insufficient_Weight": "low",
+        "Normal_Weight": "low",
+        "Overweight_Level_I": "medium",
+        "Overweight_Level_II": "medium",
+        "Obesity_Type_I": "high",
+        "Obesity_Type_II": "high",
+        "Obesity_Type_III": "critical"
+    },
+    "features": {
+        "age": {
+            "display_name": "Age",
+            "description": "Age in years",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 14,
+            "max_value": 80,
+            "unit": "years",
+            "high_signal": false
+        },
+        "gender": {
+            "display_name": "Gender",
+            "description": "Biological sex",
+            "type": "categorical",
+            "required": true,
+            "tier": "screening",
+            "options": [
+                {
+                    "value": "male",
+                    "label": "Male"
+                },
+                {
+                    "value": "female",
+                    "label": "Female"
+                }
+            ],
+            "high_signal": false
+        },
+        "height": {
+            "display_name": "Height",
+            "description": "Height in meters",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 1.0,
+            "max_value": 2.5,
+            "medical_min": 1.2,
+            "medical_max": 2.2,
+            "unit": "m",
+            "high_signal": true,
+            "help_text": "Enter height in meters (e.g., 1.75 for 175 cm)"
+        },
+        "weight": {
+            "display_name": "Weight",
+            "description": "Weight in kilograms",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 30,
+            "max_value": 200,
+            "medical_min": 35,
+            "medical_max": 180,
+            "unit": "kg",
+            "high_signal": true,
+            "help_text": "Enter weight in kilograms"
+        },
+        "family_history_with_overweight": {
+            "display_name": "Family History of Overweight",
+            "description": "Whether family members have history of overweight/obesity",
+            "type": "boolean",
+            "required": true,
+            "tier": "standard",
+            "high_signal": true,
+            "help_text": "Do close family members have a history of being overweight?"
+        },
+        "favc": {
+            "display_name": "Frequent High-Calorie Food",
+            "description": "Do you frequently eat high-calorie foods?",
+            "type": "boolean",
+            "required": true,
+            "tier": "standard",
+            "high_signal": true,
+            "help_text": "Do you often eat fast food, fried foods, or sweets?"
+        },
+        "fcvc": {
+            "display_name": "Vegetable Consumption",
+            "description": "Frequency of vegetable consumption (1-3 scale)",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 1,
+            "max_value": 3,
+            "high_signal": true,
+            "help_text": "1 = Rarely, 2 = Sometimes, 3 = Always with meals"
+        },
+        "ncp": {
+            "display_name": "Main Meals Per Day",
+            "description": "Number of main meals per day",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 1,
+            "max_value": 4,
+            "high_signal": false,
+            "help_text": "How many main meals do you eat daily?"
+        },
+        "faf": {
+            "display_name": "Physical Activity Frequency",
+            "description": "Days per week with physical activity",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 3,
+            "high_signal": true,
+            "help_text": "0 = None, 1 = 1-2 days, 2 = 3-4 days, 3 = 5+ days per week"
+        },
+        "tue": {
+            "display_name": "Screen Time",
+            "description": "Hours of technology use per day",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 0,
+            "max_value": 2,
+            "high_signal": false,
+            "help_text": "0 = 0-2 hours, 1 = 3-5 hours, 2 = 5+ hours daily"
+        },
+        "ch2o": {
+            "display_name": "Daily Water Intake",
+            "description": "Liters of water consumed daily",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 1,
+            "max_value": 3,
+            "high_signal": false,
+            "help_text": "1 = Less than 1L, 2 = 1-2L, 3 = More than 2L"
+        },
+        "caec": {
+            "display_name": "Snacking Between Meals",
+            "description": "Frequency of eating between meals",
+            "type": "categorical",
+            "required": true,
+            "tier": "confirmation",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Never"
+                },
+                {
+                    "value": 1,
+                    "label": "Sometimes"
+                },
+                {
+                    "value": 2,
+                    "label": "Frequently"
+                },
+                {
+                    "value": 3,
+                    "label": "Always"
+                }
+            ],
+            "high_signal": true
+        },
+        "calc": {
+            "display_name": "Alcohol Consumption",
+            "description": "Frequency of alcohol consumption",
+            "type": "categorical",
+            "required": true,
+            "tier": "confirmation",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Never"
+                },
+                {
+                    "value": 1,
+                    "label": "Sometimes"
+                },
+                {
+                    "value": 2,
+                    "label": "Frequently"
+                },
+                {
+                    "value": 3,
+                    "label": "Always"
+                }
+            ],
+            "high_signal": false
+        },
+        "mtrans": {
+            "display_name": "Main Transportation",
+            "description": "Primary mode of transportation",
+            "type": "categorical",
+            "required": true,
+            "tier": "confirmation",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "Walking"
+                },
+                {
+                    "value": 1,
+                    "label": "Bicycle"
+                },
+                {
+                    "value": 2,
+                    "label": "Motorbike"
+                },
+                {
+                    "value": 3,
+                    "label": "Public Transportation"
+                },
+                {
+                    "value": 4,
+                    "label": "Car/Automobile"
+                }
+            ],
+            "high_signal": false,
+            "help_text": "How do you usually get around?"
+        },
+        "smoke": {
+            "display_name": "Smoking",
+            "description": "Do you smoke?",
+            "type": "boolean",
+            "required": false,
+            "tier": "confirmation",
+            "high_signal": false
+        },
+        "scc": {
+            "display_name": "Calorie Monitoring",
+            "description": "Do you monitor your calorie intake?",
+            "type": "boolean",
+            "required": false,
+            "tier": "confirmation",
+            "high_signal": false,
+            "help_text": "Do you track or monitor how many calories you eat?"
+        }
+    },
+    "tiers": {
+        "screening": {
+            "required_features": [
+                "age",
+                "gender",
+                "height",
+                "weight"
+            ],
+            "optional_features": [],
+            "min_confidence": 50,
+            "max_confidence": 70,
+            "description": "Basic BMI-based assessment",
+            "disclaimer": "Basic assessment based on BMI only. Lifestyle factors significantly improve accuracy."
+        },
+        "standard": {
+            "required_features": [
+                "age",
+                "gender",
+                "height",
+                "weight",
+                "family_history_with_overweight",
+                "favc",
+                "fcvc",
+                "ncp",
+                "faf",
+                "tue",
+                "ch2o"
+            ],
+            "optional_features": [
+                "smoke"
+            ],
+            "min_confidence": 70,
+            "max_confidence": 85,
+            "description": "Standard lifestyle assessment",
+            "disclaimer": "Standard assessment including diet and activity factors."
+        },
+        "confirmation": {
+            "required_features": [
+                "age",
+                "gender",
+                "height",
+                "weight",
+                "family_history_with_overweight",
+                "favc",
+                "fcvc",
+                "ncp",
+                "faf",
+                "tue",
+                "ch2o",
+                "caec",
+                "calc",
+                "mtrans"
+            ],
+            "optional_features": [
+                "smoke",
+                "scc"
+            ],
+            "min_confidence": 85,
+            "max_confidence": 95,
+            "description": "Comprehensive lifestyle assessment",
+            "disclaimer": "High-confidence assessment based on complete lifestyle profile."
+        }
+    },
+    "thresholds": {
+        "low_max": 30,
+        "medium_max": 60,
+        "high_max": 85,
+        "screening_threshold": 0.3,
+        "confirmation_threshold": 0.5
+    },
+    "general_disclaimer": "This tool classifies obesity levels based on BMI and lifestyle factors. It is NOT a medical diagnosis.\n\nObesity classification:\n• Insufficient Weight: BMI < 18.5\n• Normal Weight: BMI 18.5-24.9\n• Overweight Level I: BMI 25-27.4\n• Overweight Level II: BMI 27.5-29.9\n• Obesity Type I: BMI 30-34.9\n• Obesity Type II: BMI 35-39.9\n• Obesity Type III: BMI ≥ 40",
+    "result_disclaimer": "This classification is based on the information you provided. For personalized weight management advice, please consult:\n• Your primary care physician\n• A registered dietitian\n• An endocrinologist (for metabolic concerns)\n\nHealthy weight management involves balanced nutrition, regular physical activity, and sustainable lifestyle changes."
+}

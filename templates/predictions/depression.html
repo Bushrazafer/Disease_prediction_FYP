@@ -1,0 +1,984 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Depression Risk Assessment - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="prediction-form-card depression-form">
+                <div class="form-header">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="form-icon depression me-3">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1 text-dark">Depression Risk Assessment</h2>
+                            <p class="text-secondary mb-0">Mental health evaluation using validated indicators</p>
+                        </div>
+                    </div>
+
+                    <!-- Learn More Links -->
+                    <div class="learn-more-section depression-info alert alert-info border-0 shadow-sm">
+                        <h6 class="mb-3"><i class="fas fa-book-medical me-2"></i>Learn More About Depression:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'depression_info' %}" class="btn btn-sm btn-outline-primary"
+                                target="_blank">
+                                <i class="fas fa-info-circle me-1"></i>Disease Information
+                            </a>
+                            <a href="{% url 'depression_prevention' %}" class="btn btn-sm btn-outline-success"
+                                target="_blank">
+                                <i class="fas fa-shield-alt me-1"></i>Prevention Guidelines
+                            </a>
+                            <a href="{% url 'depression_treatment' %}" class="btn btn-sm btn-outline-danger"
+                                target="_blank">
+                                <i class="fas fa-pills me-1"></i>Treatment Options
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Progress Tracker -->
+                {% include 'predictions/partials/input_progress.html' %}
+
+                <form id="depressionForm" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-user me-2"></i>Personal Information
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age *</label>
+                                <input type="number" class="form-control" id="age" name="age" min="15" max="80"
+                                    required>
+                                <small class="text-muted">Age in years (15-80)</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender *</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-graduation-cap me-2"></i>Academic/Work Information
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="academic_pressure" class="form-label">Academic Pressure (1-5) *</label>
+                                <input type="number" class="form-control" id="academic_pressure"
+                                    name="academic_pressure" min="1" max="5" required>
+                                <small class="text-muted">1 = Very Low, 5 = Very High</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="work_pressure" class="form-label">Work Pressure (0-5)</label>
+                                <input type="number" class="form-control" id="work_pressure" name="work_pressure"
+                                    min="0" max="5" value="0">
+                                <small class="text-muted">0 if not working, 1-5 otherwise</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cgpa" class="form-label">CGPA/GPA *</label>
+                                <input type="number" step="0.01" class="form-control" id="cgpa" name="cgpa" min="0"
+                                    max="10" required>
+                                <small class="text-muted">Academic performance (0-10 scale)</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="work_study_hours" class="form-label">Work/Study Hours per Day *</label>
+                                <input type="number" class="form-control" id="work_study_hours" name="work_study_hours"
+                                    min="0" max="16" required>
+                                <small class="text-muted">Hours spent working/studying daily</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="study_satisfaction" class="form-label">Study Satisfaction (1-5) *</label>
+                                <input type="number" class="form-control" id="study_satisfaction"
+                                    name="study_satisfaction" min="1" max="5" required>
+                                <small class="text-muted">1 = Very Unsatisfied, 5 = Very Satisfied</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="job_satisfaction" class="form-label">Job Satisfaction (0-5)</label>
+                                <input type="number" class="form-control" id="job_satisfaction" name="job_satisfaction"
+                                    min="0" max="5" value="0">
+                                <small class="text-muted">0 if not working, 1-5 otherwise</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-moon me-2"></i>Lifestyle & Health
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="sleep_duration" class="form-label">Sleep Duration *</label>
+                                <select class="form-select" id="sleep_duration" name="sleep_duration" required>
+                                    <option value="">Select Sleep Duration</option>
+                                    <option value="0">Less than 5 hours</option>
+                                    <option value="1">5-6 hours</option>
+                                    <option value="2">7-8 hours</option>
+                                    <option value="3">More than 8 hours</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="dietary_habits" class="form-label">Dietary Habits *</label>
+                                <select class="form-select" id="dietary_habits" name="dietary_habits" required>
+                                    <option value="">Select Dietary Habits</option>
+                                    <option value="0">Unhealthy</option>
+                                    <option value="1">Moderate</option>
+                                    <option value="2">Healthy</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="financial_stress" class="form-label">Financial Stress (1-5) *</label>
+                                <input type="number" class="form-control" id="financial_stress" name="financial_stress"
+                                    min="1" max="5" required>
+                                <small class="text-muted">1 = Very Low, 5 = Very High</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-heartbeat me-2"></i>Mental Health History
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="family_history" class="form-label">Family History of Mental Illness
+                                    *</label>
+                                <select class="form-select" id="family_history" name="family_history" required>
+                                    <option value="">Select</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="suicidal_thoughts" class="form-label">Have you ever had suicidal thoughts?
+                                    *</label>
+                                <select class="form-select" id="suicidal_thoughts" name="suicidal_thoughts" required>
+                                    <option value="">Select</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                                <small class="text-danger">If yes, please seek professional help immediately</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning mt-4">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Important:</strong> This assessment is for informational purposes only and is not a
+                        substitute for professional mental health evaluation.
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg px-5" id="predictBtn">
+                            <i class="fas fa-chart-line me-2"></i>
+                            <span class="btn-text">Analyze Risk</span>
+                            <span class="spinner-border spinner-border-sm ms-2 d-none"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="results-card sticky-top">
+                <h4 class="mb-4 text-dark">
+                    <i class="fas fa-chart-pie me-2"></i>Assessment Results
+                </h4>
+                <div class="result-placeholder text-center py-5">
+                    <i class="fas fa-brain fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Complete the form to see your depression risk assessment</p>
+                </div>
+                <div class="result-content d-none">
+                    <!-- Tier and Confidence Display -->
+                    {% include 'predictions/partials/tier_confidence_display.html' %}
+
+                    <div class="risk-meter mb-4">
+                        <div class="risk-circle">
+                            <div class="risk-percentage">
+                                <span class="probability text-dark">0%</span>
+                                <small class="text-secondary">Risk Level</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="risk-details">
+                        <div class="risk-badge-container text-center mb-3">
+                            <span class="risk-badge">Low Risk</span>
+                        </div>
+                        <div class="recommendation-box">
+                            <h6 class="text-dark"><i class="fas fa-lightbulb me-2"></i>Recommendation</h6>
+                            <p class="recommendation text-secondary">Maintain healthy mental wellness practices.</p>
+                        </div>
+
+                        <div class="risk-factors mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Key Risk Factors</h6>
+                            <ul class="risk-factor-list">
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Sleep Quality</span>
+                                    <span class="factor-status normal" id="sleep-status">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Stress Level</span>
+                                    <span class="factor-status normal" id="stress-status">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Support System</span>
+                                    <span class="factor-status normal" id="support-status">Normal</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Feature Importance (SHAP-like) -->
+                        {% include 'predictions/partials/shap_explanation.html' %}
+
+                        <!-- Health Insights -->
+                        {% include 'predictions/partials/health_insights.html' %}
+
+                        <!-- Next Steps with Download & Consult -->
+                        <div class="next-steps mt-4">
+                            <h6><i class="fas fa-clipboard-check me-2"></i>Next Steps</h6>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" id="downloadReportBtn"
+                                    onclick="downloadDepressionReport()">
+                                    <i class="fas fa-download me-2"></i>Download Report
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#doctorModal">
+                                    <i class="fas fa-user-md me-2"></i>Consult Specialist
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Doctor Consultation Links -->
+                        <div class="doctor-links mt-4">
+                            <h6><i class="fas fa-stethoscope me-2"></i>Consult Mental Health Specialists</h6>
+                            <div class="doctor-list">
+                                <a href="https://www.practo.com/consult/psychiatrist-702?utm_source=consult_widget"
+                                    target="_blank" class="doctor-link">
+                                    <i class="fas fa-video me-2"></i>Practo - Online Psychiatrist Consult
+                                </a>
+                                <a href="https://www.apollo247.com/specialties/psychiatry" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-hospital me-2"></i>Apollo 247 - Book Psychiatrist
+                                </a>
+                                <a href="https://oladoc.com/pakistan/lahore/psychiatrist" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-user-md me-2"></i>Oladoc - Psychiatrists (Pakistan)
+                                </a>
+                                <a href="https://www.talkspace.com/" target="_blank" class="doctor-link">
+                                    <i class="fas fa-comments me-2"></i>Talkspace - Online Therapy
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Crisis Resources -->
+            <div class="card mt-4 border-danger">
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-phone-alt me-2"></i>Crisis Resources
+                </div>
+                <div class="card-body">
+                    <p class="small mb-2">If you're in crisis, please reach out:</p>
+                    <ul class="list-unstyled small">
+                        <li><i class="fas fa-phone me-2"></i>National Helpline: 1800-599-0019</li>
+                        <li><i class="fas fa-phone me-2"></i>iCall: 9152987821</li>
+                        <li><i class="fas fa-phone me-2"></i>Vandrevala Foundation: 1860-2662-345</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doctor Consultation Modal -->
+<div class="modal fade" id="doctorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-md me-2"></i>Consult Mental Health Specialists
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4">Connect with certified psychiatrists and mental health professionals for support:</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-stethoscope text-primary"></i>
+                                <h6>Practo</h6>
+                            </div>
+                            <p class="small text-muted">India's largest healthcare platform - Video consult available
+                            </p>
+                            <a href="https://www.practo.com/consult/psychiatrist-702?utm_source=consult_widget"
+                                target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                                <i class="fas fa-video me-1"></i>Consult Psychiatrist
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-hospital text-danger"></i>
+                                <h6>Apollo 247</h6>
+                            </div>
+                            <p class="small text-muted">24/7 doctor consultations - Trusted hospital network</p>
+                            <a href="https://www.apollo247.com/specialties/psychiatry" target="_blank"
+                                class="btn btn-sm btn-outline-primary w-100">
+                                <i class="fas fa-calendar-check me-1"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-user-md text-success"></i>
+                                <h6>Oladoc (Pakistan)</h6>
+                            </div>
+                            <p class="small text-muted">Pakistan's top healthcare platform - Online & In-clinic</p>
+                            <a href="https://oladoc.com/pakistan/lahore/psychiatrist" target="_blank"
+                                class="btn btn-sm btn-outline-success w-100">
+                                <i class="fas fa-search me-1"></i>Find Psychiatrists
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-comments text-info"></i>
+                                <h6>Talkspace</h6>
+                            </div>
+                            <p class="small text-muted">Online therapy - Text, audio & video sessions</p>
+                            <a href="https://www.talkspace.com/" target="_blank"
+                                class="btn btn-sm btn-outline-info w-100">
+                                <i class="fas fa-mobile-alt me-1"></i>Start Therapy
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-brain text-purple"></i>
+                                <h6>BetterHelp</h6>
+                            </div>
+                            <p class="small text-muted">World's largest online counseling platform</p>
+                            <a href="https://www.betterhelp.com/" target="_blank"
+                                class="btn btn-sm btn-outline-secondary w-100">
+                                <i class="fas fa-hand-holding-heart me-1"></i>Get Matched
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-heart text-danger"></i>
+                                <h6>MindPeers</h6>
+                            </div>
+                            <p class="small text-muted">India-based mental wellness platform</p>
+                            <a href="https://www.mindpeers.co/" target="_blank"
+                                class="btn btn-sm btn-outline-danger w-100">
+                                <i class="fas fa-user-friends me-1"></i>Connect Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-4 mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Tip:</strong> For high-risk results, we strongly recommend consulting a mental health
+                    professional within 1 week.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medical Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Important Disclaimer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Important:</strong> This assessment tool is for educational purposes only and should not
+                    replace professional mental health evaluation.</p>
+                <ul>
+                    <li>Results are based on statistical models and may not reflect your actual mental health status
+                    </li>
+                    <li>Always consult with mental health professionals for proper diagnosis</li>
+                    <li>If you're experiencing severe symptoms or suicidal thoughts, please seek immediate help</li>
+                </ul>
+                <div class="alert alert-danger">
+                    <strong>Crisis?</strong> Call National Helpline: 1800-599-0019 or iCall: 9152987821
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prediction-form-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .form-icon.depression {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .section-title {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .results-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        top: 100px;
+    }
+
+    .risk-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(#27ae60 0deg, #f39c12 120deg, #e74c3c 240deg, #27ae60 360deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .risk-circle::before {
+        content: '';
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .risk-percentage {
+        text-align: center;
+        z-index: 2;
+        position: relative;
+    }
+
+    .risk-percentage .probability {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .risk-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .risk-badge.low-risk {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .risk-badge.medium-risk {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .risk-badge.high-risk {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .recommendation-box {
+        background: #f8f9fa;
+        border-left: 4px solid #9b59b6;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+
+    .risk-factor-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .risk-factor-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .factor-status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .factor-status.normal {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .factor-status.elevated {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .factor-status.high {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(45deg, #8e44ad, #9b59b6);
+        transform: translateY(-2px);
+    }
+
+    .doctor-links {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .doctor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .doctor-link {
+        display: block;
+        padding: 0.6rem 0.8rem;
+        background: white;
+        border-radius: 8px;
+        color: #495057;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-link:hover {
+        background: linear-gradient(45deg, #9b59b6, #8e44ad);
+        color: white;
+        transform: translateX(5px);
+        border-color: transparent;
+    }
+
+    .doctor-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .doctor-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Store prediction result globally for report download
+    let lastPredictionResult = null;
+    let lastFormData = null;
+
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize form progress tracker
+        if (typeof initFormProgressTracker === 'function') {
+            initFormProgressTracker('depressionForm', 'depression');
+        }
+
+        // Initialize real-time validation
+        if (typeof initRealTimeValidation === 'function') {
+            initRealTimeValidation('depressionForm');
+        }
+
+        // Show disclaimer modal on page load
+        const disclaimerModal = new bootstrap.Modal(document.getElementById('disclaimerModal'));
+        disclaimerModal.show();
+
+        // Form submission
+        document.getElementById('depressionForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            if (this.checkValidity()) {
+                submitPrediction();
+            } else {
+                this.classList.add('was-validated');
+            }
+        });
+    });
+
+    function submitPrediction() {
+        const form = document.getElementById('depressionForm');
+        const btn = document.getElementById('predictBtn');
+        const btnText = btn.querySelector('.btn-text');
+        const spinner = btn.querySelector('.spinner-border');
+
+        // Show loading state
+        btn.disabled = true;
+        btnText.textContent = 'Analyzing...';
+        spinner.classList.remove('d-none');
+
+        // Collect form data
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        lastFormData = data;
+
+        fetch('{% url "api_depression" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': MediCareAI.getCSRFToken()
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                lastPredictionResult = result;
+                if (result.success) {
+                    displayDepressionResult(result, data);
+
+                    // Display feature importance
+                    if (typeof displayFeatureImportance === 'function') {
+                        displayFeatureImportance(result, data, 'depression');
+                    }
+
+                    // Generate health insights
+                    if (typeof generateHealthInsights === 'function') {
+                        generateHealthInsights(data, result, 'depression');
+                    }
+
+                    showNotification('Risk assessment completed successfully!', 'success');
+                } else {
+                    showNotification(result.error || 'Prediction failed', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again.', 'error');
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btnText.textContent = 'Analyze Risk';
+                spinner.classList.add('d-none');
+            });
+    }
+
+    function displayDepressionResult(result, formData) {
+        // Hide placeholder, show results
+        document.querySelector('.result-placeholder').classList.add('d-none');
+        document.querySelector('.result-content').classList.remove('d-none');
+
+        // Update tier and confidence display (new feature)
+        if (typeof updateTierDisplay === 'function') {
+            updateTierDisplay(result);
+        }
+
+        // Update probability
+        const probability = result.probability || 0;
+        document.querySelector('.probability').textContent = probability.toFixed(1) + '%';
+
+        // Update risk badge
+        const riskBadge = document.querySelector('.risk-badge');
+        riskBadge.className = 'risk-badge';
+
+        if (result.risk_level === 'low') {
+            riskBadge.classList.add('low-risk');
+            riskBadge.textContent = 'Low Risk';
+        } else if (result.risk_level === 'medium') {
+            riskBadge.classList.add('medium-risk');
+            riskBadge.textContent = 'Medium Risk';
+        } else {
+            riskBadge.classList.add('high-risk');
+            riskBadge.textContent = 'High Risk';
+        }
+
+        // Update recommendation
+        const recommendation = document.querySelector('.recommendation');
+        if (result.risk_level === 'low') {
+            recommendation.textContent = 'Your mental health indicators are within normal range. Continue maintaining healthy habits, regular sleep, and social connections.';
+        } else if (result.risk_level === 'medium') {
+            recommendation.textContent = 'Some risk factors detected. Consider speaking with a counselor, improving sleep habits, and practicing stress management techniques.';
+        } else {
+            recommendation.textContent = 'Multiple risk factors detected. We strongly recommend consulting a mental health professional soon. Please reach out for support.';
+        }
+
+        // Update risk factors
+        updateRiskFactors(formData);
+    }
+
+    function updateRiskFactors(data) {
+        // Sleep status
+        const sleepStatus = document.getElementById('sleep-status');
+        const sleepVal = parseInt(data.sleep_duration);
+        if (sleepVal <= 1) {
+            sleepStatus.textContent = 'Poor';
+            sleepStatus.className = 'factor-status high';
+        } else if (sleepVal === 2) {
+            sleepStatus.textContent = 'Good';
+            sleepStatus.className = 'factor-status normal';
+        } else {
+            sleepStatus.textContent = 'Normal';
+            sleepStatus.className = 'factor-status normal';
+        }
+
+        // Stress status
+        const stressStatus = document.getElementById('stress-status');
+        const totalPressure = parseInt(data.academic_pressure || 0) + parseInt(data.work_pressure || 0);
+        const financialStress = parseInt(data.financial_stress || 0);
+        if (totalPressure >= 6 || financialStress >= 4) {
+            stressStatus.textContent = 'High';
+            stressStatus.className = 'factor-status high';
+        } else if (totalPressure >= 4 || financialStress >= 3) {
+            stressStatus.textContent = 'Elevated';
+            stressStatus.className = 'factor-status elevated';
+        } else {
+            stressStatus.textContent = 'Normal';
+            stressStatus.className = 'factor-status normal';
+        }
+
+        // Support status
+        const supportStatus = document.getElementById('support-status');
+        const familyHistory = parseInt(data.family_history || 0);
+        const suicidalThoughts = parseInt(data.suicidal_thoughts || 0);
+        if (suicidalThoughts === 1) {
+            supportStatus.textContent = 'Needs Support';
+            supportStatus.className = 'factor-status high';
+        } else if (familyHistory === 1) {
+            supportStatus.textContent = 'At Risk';
+            supportStatus.className = 'factor-status elevated';
+        } else {
+            supportStatus.textContent = 'Stable';
+            supportStatus.className = 'factor-status normal';
+        }
+    }
+
+    function showNotification(message, type) {
+        // Use MediCareAI notification if available
+        if (typeof MediCareAI !== 'undefined' && MediCareAI.showNotification) {
+            MediCareAI.showNotification(message, type);
+        } else {
+            alert(message);
+        }
+    }
+
+    function downloadDepressionReport() {
+        if (!lastPredictionResult || !lastFormData) {
+            showNotification('Please complete the assessment first', 'warning');
+            return;
+        }
+
+        const result = lastPredictionResult;
+        const data = lastFormData;
+        const date = new Date().toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        // Sleep duration mapping
+        const sleepMap = {
+            '0': 'Less than 5 hours',
+            '1': '5-6 hours',
+            '2': '7-8 hours',
+            '3': 'More than 8 hours'
+        };
+
+        // Dietary habits mapping
+        const dietMap = {
+            '0': 'Unhealthy',
+            '1': 'Moderate',
+            '2': 'Healthy'
+        };
+
+        // Generate PDF-like HTML report
+        const reportContent = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Depression Risk Assessment Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .header { text-align: center; border-bottom: 2px solid #9b59b6; padding-bottom: 20px; margin-bottom: 20px; }
+        .header h1 { color: #9b59b6; margin-bottom: 5px; }
+        .header p { color: #666; margin: 5px 0; }
+        .section { margin-bottom: 25px; }
+        .section h2 { color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px; font-size: 18px; }
+        .risk-box { padding: 20px; border-radius: 10px; text-align: center; margin: 20px 0; }
+        .risk-low { background: #d4edda; border: 2px solid #28a745; }
+        .risk-medium { background: #fff3cd; border: 2px solid #ffc107; }
+        .risk-high { background: #f8d7da; border: 2px solid #dc3545; }
+        .risk-box h3 { margin: 0 0 10px 0; font-size: 24px; }
+        .risk-box p { margin: 0; font-size: 36px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; width: 40%; }
+        .recommendation { background: #e8f4fd; padding: 15px; border-radius: 8px; border-left: 4px solid #9b59b6; }
+        .crisis-box { background: #f8d7da; padding: 15px; border-radius: 8px; margin-top: 20px; }
+        .crisis-box h3 { color: #721c24; margin-top: 0; }
+        .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px; }
+        @media print { body { padding: 0; } }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🧠 Depression Risk Assessment Report</h1>
+        <p><strong>MediCare AI</strong> - Mental Health Screening</p>
+        <p>Generated on: ${date}</p>
+    </div>
+
+    <div class="section">
+        <div class="risk-box risk-${result.risk_level}">
+            <h3>Risk Level: ${result.risk_level.toUpperCase()}</h3>
+            <p>${result.probability.toFixed(1)}%</p>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>📋 Personal Information</h2>
+        <table>
+            <tr><th>Age</th><td>${data.age} years</td></tr>
+            <tr><th>Gender</th><td>${data.gender === 'male' ? 'Male' : 'Female'}</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>📚 Academic/Work Information</h2>
+        <table>
+            <tr><th>Academic Pressure</th><td>${data.academic_pressure}/5</td></tr>
+            <tr><th>Work Pressure</th><td>${data.work_pressure}/5</td></tr>
+            <tr><th>CGPA/GPA</th><td>${data.cgpa}</td></tr>
+            <tr><th>Work/Study Hours</th><td>${data.work_study_hours} hours/day</td></tr>
+            <tr><th>Study Satisfaction</th><td>${data.study_satisfaction}/5</td></tr>
+            <tr><th>Job Satisfaction</th><td>${data.job_satisfaction}/5</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>🌙 Lifestyle Factors</h2>
+        <table>
+            <tr><th>Sleep Duration</th><td>${sleepMap[data.sleep_duration] || data.sleep_duration}</td></tr>
+            <tr><th>Dietary Habits</th><td>${dietMap[data.dietary_habits] || data.dietary_habits}</td></tr>
+            <tr><th>Financial Stress</th><td>${data.financial_stress}/5</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>🏥 Mental Health History</h2>
+        <table>
+            <tr><th>Family History of Mental Illness</th><td>${data.family_history === '1' ? 'Yes' : 'No'}</td></tr>
+            <tr><th>History of Suicidal Thoughts</th><td>${data.suicidal_thoughts === '1' ? 'Yes' : 'No'}</td></tr>
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>💡 Recommendations</h2>
+        <div class="recommendation">
+            ${result.risk_level === 'low' ?
+                '<p>Your mental health indicators are within normal range. Continue maintaining healthy habits:</p><ul><li>Maintain regular sleep schedule (7-8 hours)</li><li>Stay physically active</li><li>Keep social connections strong</li><li>Practice stress management techniques</li></ul>' :
+                result.risk_level === 'medium' ?
+                    '<p>Some risk factors have been identified. Consider the following:</p><ul><li>Speak with a counselor or therapist</li><li>Improve sleep habits</li><li>Practice mindfulness and relaxation</li><li>Reduce academic/work pressure where possible</li><li>Build a support network</li></ul>' :
+                    '<p><strong>Important:</strong> Multiple risk factors detected. Please take action:</p><ul><li>Consult a mental health professional within 1 week</li><li>Reach out to trusted friends or family</li><li>Contact crisis helplines if needed</li><li>Avoid isolation - stay connected</li><li>Consider professional therapy</li></ul>'
+            }
+        </div>
+    </div>
+
+    ${data.suicidal_thoughts === '1' ? `
+    <div class="crisis-box">
+        <h3>⚠️ Important Crisis Resources</h3>
+        <p>If you're experiencing suicidal thoughts, please reach out for help immediately:</p>
+        <ul>
+            <li><strong>National Helpline:</strong> 1800-599-0019</li>
+            <li><strong>iCall:</strong> 9152987821</li>
+            <li><strong>Vandrevala Foundation:</strong> 1860-2662-345</li>
+        </ul>
+        <p>You are not alone. Help is available 24/7.</p>
+    </div>
+    ` : ''}
+
+    <div class="footer">
+        <p><strong>Disclaimer:</strong> This report is for informational purposes only and should not replace professional medical advice.</p>
+        <p>Always consult with qualified mental health professionals for proper diagnosis and treatment.</p>
+        <p>© ${new Date().getFullYear()} MediCare AI - Mental Health Assessment</p>
+    </div>
+</body>
+</html>`;
+
+        // Create and download the report
+        const blob = new Blob([reportContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Depression_Risk_Report_${new Date().toISOString().split('T')[0]}.html`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showNotification('Report downloaded successfully!', 'success');
+    }
+</script>
+{% endblock %}

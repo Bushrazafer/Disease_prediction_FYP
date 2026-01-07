@@ -1,0 +1,401 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us - MediCare AI{% endblock %}
+
+{% block content %}
+<!-- Hero Header -->
+<section class="page-header bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-3 fw-bold mb-3">About MediCare AI</h1>
+        <p class="lead mb-0">Revolutionizing Healthcare Through Artificial Intelligence</p>
+    </div>
+</section>
+
+<!-- Dynamic About Sections from CMS -->
+{% if about_sections %}
+{% for section in about_sections %}
+<section class="py-5 {% if forloop.counter|divisibleby:2 %}bg-light{% endif %}">
+    <div class="container">
+        <div class="row align-items-center {% if forloop.counter|divisibleby:2 %}flex-row-reverse{% endif %}">
+            {% if section.image %}
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="about-image-container">
+                    <img src="{{ section.image.url }}" alt="{{ section.title }}"
+                        class="img-fluid rounded shadow hover-lift">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                {% else %}
+                <div class="col-12">
+                    {% endif %}
+                    <div class="about-content-box">
+                        <h2 class="display-6 fw-bold mb-4">
+                            {% if section.icon %}<i class="{{ section.icon }} text-primary me-3"></i>{% endif %}
+                            {{ section.title }}
+                        </h2>
+                        <div class="content-text">
+                            {{ section.content|safe|linebreaks }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>
+{% endfor %}
+{% else %}
+<!-- Fallback Static Content -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="about-image-container">
+                    <img src="{% static 'images/about-ai.svg' %}" alt="AI in Healthcare" class="img-fluid hover-lift">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content-box">
+                    <h2 class="display-6 fw-bold mb-4">
+                        <i class="fas fa-bullseye text-primary me-3"></i>Our Mission
+                    </h2>
+                    <p class="lead text-muted mb-4">Content will be updated soon.</p>
+                    <p class="text-muted">Please check back later for detailed information about our mission and
+                        services.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Team Section (CMS-Driven) -->
+{% if team_members %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Our Team</h2>
+            <p class="lead text-muted">Meet the experts behind MediCare AI</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for member in team_members %}
+            <div class="col-lg-3 col-md-6">
+                <div class="team-card text-center">
+                    {% if member.image %}
+                    <img src="{{ member.image.url }}" alt="{{ member.name }}" class="team-image rounded-circle mb-3">
+                    {% else %}
+                    <div class="team-placeholder rounded-circle mb-3">
+                        <i class="fas fa-user fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <h5 class="mb-1">{{ member.name }}</h5>
+                    <p class="text-primary mb-2">{{ member.role }}</p>
+                    {% if member.bio %}
+                    <p class="text-muted small">{{ member.bio|truncatewords:20 }}</p>
+                    {% endif %}
+                    <div class="team-social">
+                        {% if member.email %}
+                        <a href="mailto:{{ member.email }}" class="text-muted me-2"><i class="fas fa-envelope"></i></a>
+                        {% endif %}
+                        {% if member.linkedin_url %}
+                        <a href="{{ member.linkedin_url }}" target="_blank" class="text-muted"><i
+                                class="fab fa-linkedin"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- How It Works Section -->
+<section class="py-5 {% if team_members %}bg-light{% endif %}">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">How It Works</h2>
+            <p class="lead text-muted">Advanced machine learning algorithms for accurate health predictions</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">1</div>
+                    <div class="process-icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h4>Input Health Data</h4>
+                    <p class="text-muted">Enter your health metrics through our secure forms</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">2</div>
+                    <div class="process-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>AI Analysis</h4>
+                    <p class="text-muted">Our ML models analyze your data using validated algorithms</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">3</div>
+                    <div class="process-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <h4>Risk Assessment</h4>
+                    <p class="text-muted">Receive instant, accurate risk predictions</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="process-card text-center">
+                    <div class="process-number">4</div>
+                    <div class="process-icon">
+                        <i class="fas fa-user-md"></i>
+                    </div>
+                    <h4>Take Action</h4>
+                    <p class="text-muted">Get recommendations and consult professionals</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section (CMS-Driven) -->
+{% if faqs %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Frequently Asked Questions</h2>
+            <p class="lead text-muted">Find answers to common questions</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    {% for faq in faqs %}
+                    <div class="accordion-item border-0 mb-3 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}"
+                                type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ forloop.counter }}">
+                                {{ faq.question }}
+                            </button>
+                        </h2>
+                        <div id="faq{{ forloop.counter }}"
+                            class="accordion-collapse collapse {% if forloop.first %}show{% endif %}"
+                            data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                {{ faq.answer|safe|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Disclaimer Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="disclaimer-box">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center mb-3 mb-md-0">
+                    <i class="fas fa-exclamation-triangle fa-4x text-warning"></i>
+                </div>
+                <div class="col-md-10">
+                    <h4 class="fw-bold mb-3">Important Medical Disclaimer</h4>
+                    <p class="mb-0">
+                        {% if site_settings and site_settings.footer_disclaimer %}
+                        {{ site_settings.footer_disclaimer }}
+                        {% else %}
+                        MediCare AI is a health risk assessment tool and should not replace professional medical
+                        advice, diagnosis, or treatment. Always consult with qualified healthcare professionals for
+                        medical decisions.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5">
+    <div class="container text-center">
+        <h2 class="display-6 fw-bold mb-4">Ready to Assess Your Health?</h2>
+        <p class="lead text-muted mb-4">Take the first step towards proactive healthcare</p>
+        <div class="d-flex gap-3 justify-content-center">
+            <a href="{% url 'home' %}#predictions" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-chart-line me-2"></i>Start Assessment
+            </a>
+            <a href="{% url 'contact' %}" class="btn btn-outline-primary btn-lg px-5">
+                <i class="fas fa-envelope me-2"></i>Contact Us
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .about-image-container {
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .about-content-box {
+        padding: 2rem;
+    }
+
+    .content-text {
+        line-height: 1.8;
+        color: var(--theme-text-secondary, #495057);
+    }
+
+    .team-card {
+        background: var(--theme-bg-card, white);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--theme-shadow-card, 0 5px 20px rgba(0, 0, 0, 0.1));
+        transition: all 0.3s ease;
+        border: 1px solid var(--theme-border-light, transparent);
+    }
+
+    .team-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .team-card h5 {
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .team-placeholder {
+        width: 120px;
+        height: 120px;
+        background: var(--theme-bg-tertiary, #f8f9fa);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+    }
+
+    .team-image {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+    }
+
+    .process-card {
+        background: var(--theme-bg-card, white);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: var(--theme-shadow-card, 0 5px 20px rgba(0, 0, 0, 0.1));
+        transition: all 0.3s ease;
+        position: relative;
+        height: 100%;
+        border: 1px solid var(--theme-border-light, transparent);
+    }
+
+    .process-card:hover {
+        transform: translateY(-10px);
+    }
+
+    .process-card h4 {
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .process-card p {
+        color: var(--theme-text-muted, #6c757d);
+    }
+
+    .process-number {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+    }
+
+    .process-icon {
+        width: 80px;
+        height: 80px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        color: white;
+        font-size: 2rem;
+    }
+
+    .disclaimer-box {
+        background: var(--theme-bg-card, white);
+        padding: 2.5rem;
+        border-radius: 15px;
+        border-left: 5px solid #ffc107;
+        box-shadow: var(--theme-shadow-card, 0 5px 20px rgba(0, 0, 0, 0.1));
+    }
+
+    .disclaimer-box h4 {
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .disclaimer-box p {
+        color: var(--theme-text-secondary, #495057);
+    }
+
+    .accordion-button:not(.collapsed) {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+    }
+
+    .accordion-item {
+        background: var(--theme-bg-card, white);
+        border: 1px solid var(--theme-border-light, #dee2e6) !important;
+    }
+
+    .accordion-button {
+        background: var(--theme-bg-card, white);
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .accordion-button.collapsed {
+        background: var(--theme-bg-card, white);
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .accordion-body {
+        background: var(--theme-bg-card, white);
+        color: var(--theme-text-secondary, #495057);
+    }
+
+    /* Dark Theme - bg-light sections */
+    [data-theme="dark"] .bg-light {
+        background-color: var(--theme-bg-tertiary, #21262d) !important;
+    }
+
+    [data-theme="dark"] .about-content-box h2 {
+        color: var(--theme-text-primary, #f0f6fc);
+    }
+
+    [data-theme="dark"] .text-muted {
+        color: var(--theme-text-muted, #8b949e) !important;
+    }
+
+    [data-theme="dark"] .lead {
+        color: var(--theme-text-secondary, #c9d1d9);
+    }
+</style>
+{% endblock %}

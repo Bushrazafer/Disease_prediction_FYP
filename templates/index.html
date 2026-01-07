@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MediCare AI - Advanced Health Predictions{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-4">
+                        {% if hero %}{{ hero.title }} <span class="text-warning">{{ hero.highlight_text }}</span>{% else %}AI-Powered Health <span class="text-warning">Predictions</span>{% endif %}
+                    </h1>
+                    <p class="lead mb-4">
+                        {% if hero %}{{ hero.subtitle }}{% else %}Get instant health risk assessments using advanced machine learning algorithms. Early detection saves lives.{% endif %}
+                    </p>
+                    <div class="d-flex gap-3 mb-4">
+                        <a href="{% if hero %}{{ hero.primary_button_url }}{% else %}#predictions{% endif %}" class="btn btn-warning btn-lg px-4">
+                            <i class="fas fa-chart-line me-2"></i>{% if hero %}{{ hero.primary_button_text }}{% else %}Start Prediction{% endif %}
+                        </a>
+                        <a href="{% if hero %}{{ hero.secondary_button_url }}{% else %}{% url 'about' %}{% endif %}" class="btn btn-outline-light btn-lg px-4">
+                            {% if hero %}{{ hero.secondary_button_text }}{% else %}Learn More{% endif %}
+                        </a>
+                    </div>
+                    <div class="hero-stats d-flex gap-4">
+                        {% if hero_stats %}
+                            {% for stat in hero_stats %}
+                            <div class="stat-item">
+                                <h3 class="h4 mb-0">{{ stat.value }}</h3>
+                                <small class="text-light">{{ stat.label }}</small>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="stat-item"><h3 class="h4 mb-0">6</h3><small class="text-light">Disease Models</small></div>
+                            <div class="stat-item"><h3 class="h4 mb-0">95%</h3><small class="text-light">Accuracy Rate</small></div>
+                            <div class="stat-item"><h3 class="h4 mb-0">24/7</h3><small class="text-light">Available</small></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image text-center">
+                    <div class="medical-icon-container">
+                        <i class="fas fa-user-md medical-icon"></i>
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring delay-1"></div>
+                        <div class="pulse-ring delay-2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Predictions Section -->
+<section id="predictions" class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold">Health Prediction Models</h2>
+            <p class="lead text-muted">Choose a prediction model to assess your health risks</p>
+        </div>
+        <div class="row g-4">
+            {% if prediction_cards %}
+                {% for card in prediction_cards %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon {{ card.color_class }}">
+                            <i class="{{ card.icon_class }}"></i>
+                        </div>
+                        <h4>{{ card.title }}</h4>
+                        <p class="text-muted">{{ card.description }}</p>
+                        <ul class="feature-list">
+                            {% for feature in card.get_features %}
+                            <li><i class="fas fa-check text-success me-2"></i>{{ feature }}</li>
+                            {% endfor %}
+                        </ul>
+                        <a href="{% url card.disease_name %}" class="btn btn-primary w-100 mt-auto">
+                            Start Assessment <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback static cards -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon diabetes"><i class="fas fa-tint"></i></div>
+                        <h4>Diabetes Risk</h4>
+                        <p class="text-muted">Assess your risk of developing Type 2 diabetes based on lifestyle and health factors.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>BMI Analysis</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Glucose Levels</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Family History</li>
+                        </ul>
+                        <a href="{% url 'diabetes' %}" class="btn btn-primary w-100 mt-auto">Start Assessment <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon cardiovascular"><i class="fas fa-heart"></i></div>
+                        <h4>Heart Disease</h4>
+                        <p class="text-muted">Evaluate cardiovascular disease risk using advanced cardiac health indicators.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>Blood Pressure</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Cholesterol</li>
+                            <li><i class="fas fa-check text-success me-2"></i>ECG Results</li>
+                        </ul>
+                        <a href="{% url 'cardiovascular' %}" class="btn btn-primary w-100 mt-auto">Start Assessment <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon kidney"><i class="fas fa-kidneys"></i></div>
+                        <h4>Kidney Disease</h4>
+                        <p class="text-muted">Early detection of chronic kidney disease through comprehensive analysis.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>Creatinine Levels</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Blood Urea</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Protein Analysis</li>
+                        </ul>
+                        <a href="{% url 'kidney' %}" class="btn btn-primary w-100 mt-auto">Start Assessment <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon breast-cancer"><i class="fas fa-ribbon"></i></div>
+                        <h4>Breast Cancer</h4>
+                        <p class="text-muted">Advanced screening for breast cancer risk assessment and early detection.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>Cell Analysis</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Tumor Markers</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Genetic Factors</li>
+                        </ul>
+                        <a href="{% url 'breast_cancer' %}" class="btn btn-primary w-100 mt-auto">Start Assessment <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon depression"><i class="fas fa-brain"></i></div>
+                        <h4>Depression Risk</h4>
+                        <p class="text-muted">Mental health assessment using validated psychological indicators.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>Mood Analysis</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Sleep Patterns</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Social Factors</li>
+                        </ul>
+                        <a href="{% url 'depression' %}" class="btn btn-primary w-100 mt-auto">Start Assessment <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="prediction-card h-100">
+                        <div class="card-icon obesity"><i class="fas fa-weight"></i></div>
+                        <h4>Obesity Risk</h4>
+                        <p class="text-muted">Comprehensive body composition and metabolic health analysis.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check text-success me-2"></i>BMI Calculator</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Body Fat %</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Metabolic Rate</li>
+                        </ul>
+                        <a href="{% url 'obesity' %}" class="btn btn-primary w-100 mt-auto">Start Assessment <i class="fas fa-arrow-right ms-2"></i></a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-6 fw-bold mb-4">Why Choose MediCare AI?</h2>
+                {% if why_choose_us %}
+                    {% for feature in why_choose_us %}
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon me-3"><i class="{{ feature.icon_class }} text-primary"></i></div>
+                        <div>
+                            <h5>{{ feature.title }}</h5>
+                            <p class="text-muted mb-0">{{ feature.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon me-3"><i class="fas fa-shield-alt text-primary"></i></div>
+                        <div><h5>Clinically Validated</h5><p class="text-muted mb-0">Our models are trained on extensive medical datasets and validated by healthcare professionals.</p></div>
+                    </div>
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon me-3"><i class="fas fa-lock text-primary"></i></div>
+                        <div><h5>Privacy Protected</h5><p class="text-muted mb-0">Your health data is encrypted and never shared with third parties.</p></div>
+                    </div>
+                    <div class="feature-item d-flex mb-3">
+                        <div class="feature-icon me-3"><i class="fas fa-clock text-primary"></i></div>
+                        <div><h5>Instant Results</h5><p class="text-muted mb-0">Get immediate risk assessments and personalized recommendations.</p></div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="stats-grid">
+                    {% if homepage_stats %}
+                        {% for stat in homepage_stats %}
+                        <div class="stat-card">
+                            <h3 class="text-{{ stat.color_class }}">{{ stat.value }}</h3>
+                            <p>{{ stat.label }}</p>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="stat-card"><h3 class="text-primary">10,000+</h3><p>Predictions Made</p></div>
+                        <div class="stat-card"><h3 class="text-success">95%</h3><p>Accuracy Rate</p></div>
+                        <div class="stat-card"><h3 class="text-warning">24/7</h3><p>Available</p></div>
+                        <div class="stat-card"><h3 class="text-info">6</h3><p>Disease Models</p></div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-6 fw-bold mb-3">{% if cta %}{{ cta.title }}{% else %}Ready to Check Your Health?{% endif %}</h2>
+        <p class="lead mb-4">{% if cta %}{{ cta.subtitle }}{% else %}Take the first step towards better health with our AI-powered predictions.{% endif %}</p>
+        <a href="{% if cta %}{{ cta.button_url }}{% else %}#predictions{% endif %}" class="btn btn-warning btn-lg px-5">
+            <i class="fas fa-heartbeat me-2"></i>{% if cta %}{{ cta.button_text }}{% else %}Start Now{% endif %}
+        </a>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.hero-section{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);position:relative;overflow:hidden}
+.medical-icon-container{position:relative;display:inline-block}
+.medical-icon{font-size:8rem;color:rgba(255,255,255,0.9);position:relative;z-index:2}
+.pulse-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:200px;height:200px;border:3px solid rgba(255,255,255,0.3);border-radius:50%;animation:pulse 2s infinite}
+.pulse-ring.delay-1{animation-delay:0.5s;width:250px;height:250px}
+.pulse-ring.delay-2{animation-delay:1s;width:300px;height:300px}
+@keyframes pulse{0%{transform:translate(-50%,-50%) scale(0.8);opacity:1}100%{transform:translate(-50%,-50%) scale(1.2);opacity:0}}
+.prediction-card{background:white;border-radius:15px;padding:2rem;box-shadow:0 10px 30px rgba(0,0,0,0.1);transition:transform 0.3s ease,box-shadow 0.3s ease;border:none;display:flex;flex-direction:column}
+.prediction-card:hover{transform:translateY(-10px);box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.card-icon{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;font-size:2rem;color:white}
+.card-icon.diabetes{background:linear-gradient(45deg,#ff6b6b,#ee5a24)}
+.card-icon.cardiovascular{background:linear-gradient(45deg,#e74c3c,#c0392b)}
+.card-icon.kidney{background:linear-gradient(45deg,#f39c12,#e67e22)}
+.card-icon.breast-cancer{background:linear-gradient(45deg,#e91e63,#ad1457)}
+.card-icon.depression{background:linear-gradient(45deg,#3498db,#2980b9)}
+.card-icon.obesity{background:linear-gradient(45deg,#27ae60,#229954)}
+.feature-list{list-style:none;padding:0;margin:1rem 0}
+.feature-list li{padding:0.5rem 0;border-bottom:1px solid #f8f9fa}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.stat-card{background:white;padding:2rem;border-radius:10px;text-align:center;box-shadow:0 5px 15px rgba(0,0,0,0.1)}
+.stat-card h3{font-size:2.5rem;font-weight:bold;margin-bottom:0.5rem}
+.main-content{margin-top:76px}
+</style>
+{% endblock %}

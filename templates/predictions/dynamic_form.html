@@ -1,0 +1,64 @@
+{% comment %}
+Dynamic Form Template - Generates form fields based on ML model feature schema
+Include this in prediction templates with: {% include 'predictions/dynamic_form.html' %}
+{% endcomment %}
+
+{% if has_model and feature_schema %}
+<div class="dynamic-form-section" id="dynamicFormFields">
+    <h4 class="section-title mb-4">
+        <i class="fas fa-sliders-h me-2"></i>Model Input Features
+        <small class="text-muted ms-2">(v{{ model_version }})</small>
+    </h4>
+
+    <div class="row g-3">
+        {% for feature in feature_schema %}
+        <div class="col-md-6">
+            <div class="form-group">
+                {% with feature_type=feature_types|default_if_none:"{}"|dictsort:feature %}
+                {% with ftype=feature_types|default:"numeric" %}
+
+                <label for="{{ feature }}" class="form-label">
+                    {{ feature|title|cut:"_" }} *
+                </label>
+
+                {% if feature in feature_options %}
+                <!-- Categorical/Dropdown Field -->
+                <select class="form-select" id="{{ feature }}" name="{{ feature }}" required>
+                    <option value="">Select {{ feature|title|cut:"_" }}</option>
+                    {% for option in feature_options|get_item:feature %}
+                    <option value="{{ option }}">{{ option|title }}</option>
+                    {% endfor %}
+                </select>
+                {% elif ftype == 'boolean' %}
+                <!-- Boolean/Yes-No Field -->
+                <select class="form-select" id="{{ feature }}" name="{{ feature }}" required>
+                    <option value="">Select</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+                {% else %}
+                <!-- Numeric Field (default) -->
+                <input type="number" class="form-control" id="{{ feature }}" name="{{ feature }}" step="any" required>
+                {% endif %}
+
+                <div class="invalid-feedback">Please enter {{ feature|title|cut:"_" }}</div>
+                {% endwith %}
+                {% endwith %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% else %}
+<!-- No Model Configured - Show Default Form Message -->
+<div class="alert alert-warning border-0 shadow-sm">
+    <div class="d-flex align-items-center">
+        <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+        <div>
+            <h6 class="alert-heading mb-1">Demo Mode</h6>
+            <p class="mb-0">No ML model is currently configured. Using default form fields with mock predictions.</p>
+        </div>
+    </div>
+</div>
+{% endif %}

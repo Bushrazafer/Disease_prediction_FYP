@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact - MediCare AI{% endblock %}
+
+{% block content %}
+<section class="page-header bg-primary text-white py-5">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Contact Us</h1>
+        <p class="lead">Get in touch with our team</p>
+    </div>
+</section>
+
+<section class="contact-section py-5">
+    <div class="container">
+        <!-- Success/Error Messages -->
+        {% if success_message %}
+        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-check-circle me-2"></i>{{ success_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>{{ error_message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endif %}
+
+        <div class="row g-5">
+            <!-- Contact Info (CMS-Driven) -->
+            <div class="col-lg-5">
+                <div class="contact-info-card">
+                    <h2 class="mb-4">Get In Touch</h2>
+                    <p class="text-muted mb-4">Have questions about our disease prediction models or need support? Reach
+                        out to us.</p>
+
+                    <div class="contact-method d-flex align-items-start mb-4">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">Email</h5>
+                            <p class="text-muted mb-0">
+                                {% if site_settings and site_settings.contact_email %}
+                                <a href="mailto:{{ site_settings.contact_email }}">{{ site_settings.contact_email }}</a>
+                                {% else %}
+                                info@medicare.com
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-method d-flex align-items-start mb-4">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">Phone</h5>
+                            <p class="text-muted mb-0">
+                                {% if site_settings and site_settings.contact_phone %}
+                                {{ site_settings.contact_phone }}
+                                {% else %}
+                                +1 (555) 123-4567
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-method d-flex align-items-start mb-4">
+                        <div class="contact-icon me-3">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">Address</h5>
+                            <p class="text-muted mb-0">
+                                {% if site_settings and site_settings.contact_address %}
+                                {{ site_settings.contact_address|linebreaks }}
+                                {% else %}
+                                123 Healthcare Ave, Medical City, MC 12345
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Social Links -->
+                    {% if site_settings %}
+                    <div class="social-links mt-4 pt-4 border-top">
+                        <h5 class="mb-3">Follow Us</h5>
+                        <div class="d-flex gap-3">
+                            {% if site_settings.facebook_url %}
+                            <a href="{{ site_settings.facebook_url }}" target="_blank" class="social-link">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            {% endif %}
+                            {% if site_settings.twitter_url %}
+                            <a href="{{ site_settings.twitter_url }}" target="_blank" class="social-link">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            {% endif %}
+                            {% if site_settings.linkedin_url %}
+                            <a href="{{ site_settings.linkedin_url }}" target="_blank" class="social-link">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            {% endif %}
+                            {% if site_settings.instagram_url %}
+                            <a href="{{ site_settings.instagram_url }}" target="_blank" class="social-link">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Contact Form (Saves to Database) -->
+            <div class="col-lg-7">
+                <div class="contact-form-card">
+                    <h2 class="mb-4">Send Message</h2>
+                    <form method="POST" action="{% url 'contact' %}" id="contactForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="subject" class="form-label">Subject *</label>
+                                <input type="text" class="form-control" id="subject" name="subject" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="message" class="form-label">Message *</label>
+                                <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-paper-plane me-2"></i>Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-info-card,
+    .contact-form-card {
+        background: var(--theme-bg-card, white);
+        padding: 2.5rem;
+        border-radius: 15px;
+        box-shadow: var(--theme-shadow-card, 0 10px 30px rgba(0, 0, 0, 0.1));
+        height: 100%;
+        border: 1px solid var(--theme-border-light, transparent);
+    }
+
+    .contact-info-card h2,
+    .contact-form-card h2 {
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .contact-info-card h5,
+    .contact-method h5 {
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .contact-info-card p,
+    .contact-method p {
+        color: var(--theme-text-muted, #6c757d);
+    }
+
+    .contact-info-card a {
+        color: var(--primary-color, #667eea);
+    }
+
+    .contact-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .social-link {
+        width: 45px;
+        height: 45px;
+        background: var(--theme-bg-tertiary, #f8f9fa);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--theme-text-secondary, #495057);
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .social-link:hover {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        transform: translateY(-3px);
+    }
+
+    .social-links h5 {
+        color: var(--theme-text-primary, #212529);
+    }
+
+    .social-links.border-top {
+        border-color: var(--theme-border-color, #dee2e6) !important;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #764ba2, #667eea);
+        transform: translateY(-2px);
+    }
+
+    /* Dark Theme - Contact Section Background */
+    [data-theme="dark"] .contact-section {
+        background-color: var(--theme-bg-secondary, #161b22);
+    }
+</style>
+{% endblock %}

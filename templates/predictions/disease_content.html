@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ display_name }} {{ content_type_title }} - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url disease_name %}">{{ display_name }}</a></li>
+            <li class="breadcrumb-item active">{{ content_type_title }}</li>
+        </ol>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="content-header mb-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold text-primary mb-3">
+                    <i
+                        class="fas fa-{% if content_type == 'info' %}info-circle{% elif content_type == 'prevention' %}shield-alt{% else %}pills{% endif %} me-3"></i>
+                    {{ display_name }} {{ content_type_title }}
+                </h1>
+                <p class="lead text-muted">
+                    {% if content_type == 'info' %}
+                    Learn about {{ display_name|lower }}, its causes, symptoms, and risk factors.
+                    {% elif content_type == 'prevention' %}
+                    Discover effective strategies to prevent {{ display_name|lower }} and maintain good health.
+                    {% else %}
+                    Explore treatment options and management strategies for {{ display_name|lower }}.
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-lg-4 text-end">
+                <a href="{% url disease_name %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-chart-line me-2"></i>Take Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="content-nav mb-4">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a class="nav-link {% if content_type == 'info' %}active{% endif %}"
+                    href="{% url disease_name|add:'_info' %}">
+                    <i class="fas fa-info-circle me-1"></i> Information
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if content_type == 'prevention' %}active{% endif %}"
+                    href="{% url disease_name|add:'_prevention' %}">
+                    <i class="fas fa-shield-alt me-1"></i> Prevention
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if content_type == 'treatment' %}active{% endif %}"
+                    href="{% url disease_name|add:'_treatment' %}">
+                    <i class="fas fa-pills me-1"></i> Treatment
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content-section">
+        {% if has_content %}
+        {% for item in content_items %}
+        <div class="content-card mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+                    {% if item.image %}
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-md-0">
+                            <img src="{{ item.image.url }}" alt="{{ item.title }}" class="img-fluid rounded shadow-sm">
+                        </div>
+                        <div class="col-md-8">
+                            <h3 class="card-title text-primary mb-3">{{ item.title }}</h3>
+                            <div class="card-text content-body">
+                                {{ item.content|safe|linebreaks }}
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <h3 class="card-title text-primary mb-3">{{ item.title }}</h3>
+                    <div class="card-text content-body">
+                        {{ item.content|safe|linebreaks }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <!-- Fallback Message -->
+        <div class="alert alert-info border-0 shadow-sm">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-clock fa-2x me-3 text-info"></i>
+                <div>
+                    <h5 class="alert-heading mb-1">Coming Soon</h5>
+                    <p class="mb-0">{{ fallback_message }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placeholder Content -->
+        <div class="placeholder-content mt-4">
+            <div class="card bg-light border-0">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-file-medical fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">Content Being Prepared</h4>
+                    <p class="text-muted mb-4">
+                        Our medical team is preparing comprehensive {{ content_type_title|lower }}
+                        for {{ display_name|lower }}. Check back soon!
+                    </p>
+                    <a href="{% url disease_name %}" class="btn btn-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Assessment
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Related Links -->
+    <div class="related-links mt-5">
+        <h4 class="mb-4"><i class="fas fa-link me-2"></i>Related Resources</h4>
+        <div class="row g-3">
+            {% if content_type != 'info' %}
+            <div class="col-md-4">
+                <a href="{% url disease_name|add:'_info' %}"
+                    class="card text-decoration-none h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-info-circle fa-2x text-primary mb-2"></i>
+                        <h6 class="mb-0">Disease Information</h6>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% if content_type != 'prevention' %}
+            <div class="col-md-4">
+                <a href="{% url disease_name|add:'_prevention' %}"
+                    class="card text-decoration-none h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                        <h6 class="mb-0">Prevention Guidelines</h6>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            {% if content_type != 'treatment' %}
+            <div class="col-md-4">
+                <a href="{% url disease_name|add:'_treatment' %}"
+                    class="card text-decoration-none h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-pills fa-2x text-danger mb-2"></i>
+                        <h6 class="mb-0">Treatment Options</h6>
+                    </div>
+                </a>
+            </div>
+            {% endif %}
+            <div class="col-md-4">
+                <a href="{% url disease_name %}" class="card text-decoration-none h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                        <h6 class="mb-0">Risk Assessment</h6>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .content-header {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        padding: 2rem;
+        border-radius: 15px;
+    }
+
+    .content-nav .nav-pills .nav-link {
+        border-radius: 25px;
+        padding: 0.75rem 1.5rem;
+        margin-right: 0.5rem;
+        color: #495057;
+        transition: all 0.3s ease;
+    }
+
+    .content-nav .nav-pills .nav-link:hover {
+        background: #e9ecef;
+    }
+
+    .content-nav .nav-pills .nav-link.active {
+        background: linear-gradient(45deg, #007bff, #0056b3);
+    }
+
+    .content-card .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .content-card .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .content-body {
+        line-height: 1.8;
+        color: #495057;
+    }
+
+    .content-body p {
+        margin-bottom: 1rem;
+    }
+
+    .hover-card {
+        transition: all 0.3s ease;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .hover-card:hover i {
+        transform: scale(1.1);
+    }
+
+    .hover-card i {
+        transition: transform 0.3s ease;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,267 @@
+{
+    "disease_name": "kidney",
+    "display_name": "Chronic Kidney Disease (CKD)",
+    "description": "CKD risk assessment based on renal function indicators and lab results",
+    "clinician_only": false,
+    "features": {
+        "age": {
+            "display_name": "Age",
+            "description": "Age in years",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 2,
+            "max_value": 90,
+            "unit": "years",
+            "high_signal": false
+        },
+        "bp": {
+            "display_name": "Blood Pressure (Diastolic)",
+            "description": "Diastolic blood pressure",
+            "type": "numeric",
+            "required": true,
+            "tier": "screening",
+            "min_value": 50,
+            "max_value": 180,
+            "medical_min": 60,
+            "medical_max": 150,
+            "unit": "mmHg",
+            "high_signal": false,
+            "help_text": "Normal diastolic: 60-80 mmHg"
+        },
+        "sg": {
+            "display_name": "Specific Gravity",
+            "description": "Urine specific gravity - measures kidney's ability to concentrate urine",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 1.005,
+            "max_value": 1.025,
+            "medical_min": 1.005,
+            "medical_max": 1.030,
+            "unit": "",
+            "high_signal": true,
+            "help_text": "Normal: 1.010-1.025. Low values may indicate kidney problems."
+        },
+        "al": {
+            "display_name": "Albumin Level (Urine)",
+            "description": "Albumin in urine (0-5 scale)",
+            "type": "categorical",
+            "required": true,
+            "tier": "standard",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "0 - None"
+                },
+                {
+                    "value": 1,
+                    "label": "1 - Trace"
+                },
+                {
+                    "value": 2,
+                    "label": "2 - Mild"
+                },
+                {
+                    "value": 3,
+                    "label": "3 - Moderate"
+                },
+                {
+                    "value": 4,
+                    "label": "4 - High"
+                },
+                {
+                    "value": 5,
+                    "label": "5 - Very High"
+                }
+            ],
+            "high_signal": true,
+            "help_text": "Protein in urine. Higher levels indicate kidney damage."
+        },
+        "su": {
+            "display_name": "Sugar Level (Urine)",
+            "description": "Sugar in urine (0-5 scale)",
+            "type": "categorical",
+            "required": true,
+            "tier": "standard",
+            "options": [
+                {
+                    "value": 0,
+                    "label": "0 - None"
+                },
+                {
+                    "value": 1,
+                    "label": "1 - Trace"
+                },
+                {
+                    "value": 2,
+                    "label": "2 - Mild"
+                },
+                {
+                    "value": 3,
+                    "label": "3 - Moderate"
+                },
+                {
+                    "value": 4,
+                    "label": "4 - High"
+                },
+                {
+                    "value": 5,
+                    "label": "5 - Very High"
+                }
+            ],
+            "high_signal": false,
+            "help_text": "Sugar in urine. May indicate diabetes affecting kidneys."
+        },
+        "sc": {
+            "display_name": "Serum Creatinine",
+            "description": "Creatinine level in blood - key kidney function marker",
+            "type": "numeric",
+            "required": true,
+            "tier": "confirmation",
+            "min_value": 0.4,
+            "max_value": 76,
+            "medical_min": 0.5,
+            "medical_max": 15,
+            "unit": "mg/dL",
+            "high_signal": true,
+            "help_text": "Normal: 0.7-1.3 mg/dL. High values indicate reduced kidney function."
+        },
+        "bu": {
+            "display_name": "Blood Urea",
+            "description": "Urea nitrogen in blood",
+            "type": "numeric",
+            "required": true,
+            "tier": "confirmation",
+            "min_value": 1,
+            "max_value": 400,
+            "medical_min": 5,
+            "medical_max": 200,
+            "unit": "mg/dL",
+            "high_signal": true,
+            "help_text": "Normal: 7-20 mg/dL. High values indicate kidney problems."
+        },
+        "bgr": {
+            "display_name": "Blood Glucose (Random)",
+            "description": "Random blood glucose level",
+            "type": "numeric",
+            "required": true,
+            "tier": "standard",
+            "min_value": 22,
+            "max_value": 490,
+            "medical_min": 50,
+            "medical_max": 400,
+            "unit": "mg/dL",
+            "high_signal": false,
+            "help_text": "Normal: 70-140 mg/dL (random)"
+        },
+        "hemo": {
+            "display_name": "Hemoglobin",
+            "description": "Hemoglobin level in blood",
+            "type": "numeric",
+            "required": true,
+            "tier": "confirmation",
+            "min_value": 3,
+            "max_value": 18,
+            "medical_min": 7,
+            "medical_max": 18,
+            "unit": "g/dL",
+            "high_signal": true,
+            "help_text": "Normal: 12-17 g/dL. Low values (anemia) common in CKD."
+        },
+        "htn": {
+            "display_name": "Hypertension",
+            "description": "History of high blood pressure",
+            "type": "boolean",
+            "required": true,
+            "tier": "screening",
+            "high_signal": true,
+            "help_text": "Do you have high blood pressure or take BP medication?"
+        },
+        "dm": {
+            "display_name": "Diabetes Mellitus",
+            "description": "History of diabetes",
+            "type": "boolean",
+            "required": true,
+            "tier": "screening",
+            "high_signal": true,
+            "help_text": "Do you have diabetes?"
+        }
+    },
+    "tiers": {
+        "screening": {
+            "required_features": [
+                "age",
+                "bp",
+                "htn",
+                "dm"
+            ],
+            "optional_features": [],
+            "min_confidence": 35,
+            "max_confidence": 55,
+            "description": "Basic CKD risk screening",
+            "disclaimer": "Basic screening only. Blood and urine tests are required for accurate CKD assessment."
+        },
+        "standard": {
+            "required_features": [
+                "age",
+                "bp",
+                "htn",
+                "dm",
+                "sg",
+                "al",
+                "su",
+                "bgr"
+            ],
+            "optional_features": [
+                "rbc",
+                "pc",
+                "pcc",
+                "ba"
+            ],
+            "min_confidence": 55,
+            "max_confidence": 75,
+            "description": "Standard renal assessment with urinalysis",
+            "disclaimer": "Standard assessment. Complete renal panel recommended for confirmation."
+        },
+        "confirmation": {
+            "required_features": [
+                "age",
+                "bp",
+                "htn",
+                "dm",
+                "sg",
+                "al",
+                "su",
+                "bgr",
+                "sc",
+                "bu",
+                "hemo",
+                "sod",
+                "pot"
+            ],
+            "optional_features": [
+                "pcv",
+                "wc",
+                "rc",
+                "cad",
+                "appet",
+                "pe",
+                "ane"
+            ],
+            "min_confidence": 75,
+            "max_confidence": 92,
+            "description": "Comprehensive renal panel assessment",
+            "disclaimer": "High-confidence assessment. Consult nephrologist for diagnosis and staging."
+        }
+    },
+    "thresholds": {
+        "low_max": 25,
+        "medium_max": 55,
+        "high_max": 80,
+        "screening_threshold": 0.25,
+        "confirmation_threshold": 0.5
+    },
+    "general_disclaimer": "This tool provides CKD risk estimates only and is NOT a medical diagnosis.\n\nMany inputs require laboratory test results (blood and urine tests). If you don't have these values, please consult your doctor for proper testing.\n\nCKD is often asymptomatic in early stages. Regular screening is important, especially if you have diabetes or hypertension.",
+    "result_disclaimer": "This is a risk assessment, not a diagnosis. CKD diagnosis requires:\n• eGFR calculation from serum creatinine\n• Urine albumin-to-creatinine ratio (UACR)\n• Kidney imaging if indicated\n\nPlease consult a nephrologist for proper evaluation and CKD staging."
+}

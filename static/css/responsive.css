@@ -1,0 +1,623 @@
+/* ========================================
+   MediCare AI - Advanced Responsive Styles
+   ======================================== */
+
+/* ========================================
+   Mobile Navigation Fixes
+   ======================================== */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: rgba(102, 126, 234, 0.98);
+        padding: 1rem;
+        border-radius: 10px;
+        margin-top: 0.5rem;
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    
+    .navbar-nav {
+        padding: 0.5rem 0;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px;
+        margin: 0.25rem 0;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .navbar-nav .dropdown-menu {
+        background: rgba(255, 255, 255, 0.95);
+        border: none;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        margin: 0.5rem 0;
+    }
+    
+    .navbar-nav .btn {
+        width: 100%;
+        margin: 0.5rem 0 !important;
+        text-align: center;
+    }
+    
+    .theme-toggle {
+        margin: 0.5rem auto;
+    }
+}
+
+/* Extra Large Devices (1400px and up) */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1320px;
+    }
+    
+    .hero-section {
+        min-height: 100vh;
+    }
+    
+    .prediction-card {
+        padding: 3rem;
+    }
+}
+
+/* Large Devices (1200px and up) */
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .container {
+        max-width: 1140px;
+    }
+    
+    .medical-icon {
+        font-size: 7rem !important;
+    }
+}
+
+/* Medium Devices (992px and up) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .container {
+        max-width: 960px;
+    }
+    
+    .hero-section {
+        min-height: 80vh;
+    }
+    
+    .medical-icon {
+        font-size: 6rem !important;
+    }
+    
+    .prediction-card {
+        padding: 2rem;
+    }
+    
+    .card-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 2.2rem;
+    }
+}
+
+/* Tablets (768px to 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .container {
+        max-width: 720px;
+    }
+    
+    .hero-section {
+        min-height: auto;
+        padding: 4rem 0;
+    }
+    
+    .medical-icon {
+        font-size: 5rem !important;
+    }
+    
+    .pulse-ring {
+        width: 180px !important;
+        height: 180px !important;
+    }
+    
+    .pulse-ring.delay-1 {
+        width: 220px !important;
+        height: 220px !important;
+    }
+    
+    .pulse-ring.delay-2 {
+        width: 260px !important;
+        height: 260px !important;
+    }
+    
+    .prediction-card {
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-icon {
+        width: 75px;
+        height: 75px;
+        font-size: 2rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 2.5rem;
+    }
+    
+    .results-card {
+        position: relative;
+        top: 0;
+        margin-top: 2rem;
+    }
+    
+    .risk-circle {
+        width: 160px;
+        height: 160px;
+    }
+    
+    .risk-circle::before {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .hero-stats {
+        gap: 2rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 2rem;
+    }
+}
+
+/* Mobile Landscape (576px to 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .container {
+        max-width: 540px;
+    }
+    
+    .hero-section {
+        padding: 3rem 0;
+    }
+    
+    .medical-icon {
+        font-size: 4.5rem !important;
+    }
+    
+    .pulse-ring {
+        width: 160px !important;
+        height: 160px !important;
+    }
+    
+    .pulse-ring.delay-1 {
+        width: 190px !important;
+        height: 190px !important;
+    }
+    
+    .pulse-ring.delay-2 {
+        width: 220px !important;
+        height: 220px !important;
+    }
+    
+    .prediction-card {
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-icon {
+        width: 70px;
+        height: 70px;
+        font-size: 1.8rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 2.2rem;
+    }
+    
+    .risk-circle {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .risk-circle::before {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .risk-percentage .probability {
+        font-size: 2rem;
+    }
+    
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        padding: 1rem;
+    }
+    
+    .hero-stats {
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        justify-content: center;
+    }
+    
+    .stat-item {
+        flex: 0 0 calc(50% - 0.75rem);
+    }
+    
+    .stat-item h3 {
+        font-size: 1.8rem;
+    }
+}
+
+/* Mobile Portrait (up to 575px) */
+@media (max-width: 575px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .hero-section {
+        padding: 2.5rem 0;
+    }
+    
+    .hero-content h1 {
+        font-size: 2rem !important;
+    }
+    
+    .hero-content .lead {
+        font-size: 1rem;
+    }
+    
+    .medical-icon {
+        font-size: 4rem !important;
+    }
+    
+    .pulse-ring {
+        width: 140px !important;
+        height: 140px !important;
+    }
+    
+    .pulse-ring.delay-1 {
+        width: 170px !important;
+        height: 170px !important;
+    }
+    
+    .pulse-ring.delay-2 {
+        width: 200px !important;
+        height: 200px !important;
+    }
+    
+    .prediction-card {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-radius: 15px;
+    }
+    
+    .prediction-card h4 {
+        font-size: 1.3rem;
+    }
+    
+    .card-icon {
+        width: 65px;
+        height: 65px;
+        font-size: 1.6rem;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .btn-lg {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .stat-card {
+        padding: 1.25rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 2rem;
+    }
+    
+    .prediction-form-card,
+    .results-card {
+        padding: 1.25rem;
+        border-radius: 15px;
+    }
+    
+    .form-section {
+        margin-bottom: 1.25rem;
+        padding-bottom: 1.25rem;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .form-control,
+    .form-select {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+    
+    .risk-circle {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .risk-circle::before {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .risk-percentage .probability {
+        font-size: 1.8rem;
+    }
+    
+    .risk-badge {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+    }
+    
+    .notification {
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .stat-item {
+        width: 100%;
+    }
+    
+    .stat-item h3 {
+        font-size: 1.6rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+    
+    .form-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.8rem;
+    }
+}
+
+/* Extra Small Devices (up to 375px) */
+@media (max-width: 375px) {
+    .hero-content h1 {
+        font-size: 1.75rem !important;
+    }
+    
+    .medical-icon {
+        font-size: 3.5rem !important;
+    }
+    
+    .pulse-ring {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    
+    .pulse-ring.delay-1 {
+        width: 150px !important;
+        height: 150px !important;
+    }
+    
+    .pulse-ring.delay-2 {
+        width: 180px !important;
+        height: 180px !important;
+    }
+    
+    .prediction-card {
+        padding: 1.25rem;
+    }
+    
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.8rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 1.8rem;
+    }
+    
+    .risk-circle {
+        width: 130px;
+        height: 130px;
+    }
+    
+    .risk-circle::before {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .risk-percentage .probability {
+        font-size: 1.6rem;
+    }
+    
+    /* Footer fixes for very small screens */
+    footer .row > div {
+        text-align: center;
+    }
+    
+    footer .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    footer .footer-links li {
+        flex: 0 0 auto;
+    }
+}
+
+/* Landscape Orientation */
+@media (max-height: 600px) and (orientation: landscape) {
+    .hero-section {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+    
+    .medical-icon {
+        font-size: 3rem !important;
+    }
+    
+    .pulse-ring {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .pulse-ring.delay-1 {
+        width: 130px !important;
+        height: 130px !important;
+    }
+    
+    .pulse-ring.delay-2 {
+        width: 160px !important;
+        height: 160px !important;
+    }
+    
+    .hero-stats {
+        flex-direction: row;
+        gap: 1rem;
+    }
+    
+    .stat-item h3 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .form-control,
+    .form-select {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 1rem;
+    }
+    
+    .dropdown-item {
+        padding: 1rem;
+    }
+}
+
+/* High DPI Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .card-icon,
+    .form-icon,
+    .feature-icon {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #1a1a1a;
+        color: #f0f0f0;
+    }
+    
+    .card,
+    .prediction-card,
+    .results-card,
+    .prediction-form-card {
+        background: #2d2d2d;
+        color: #f0f0f0;
+    }
+    
+    .form-control,
+    .form-select {
+        background: #3d3d3d;
+        color: #f0f0f0;
+        border-color: #4d4d4d;
+    }
+    
+    .form-label {
+        color: #e0e0e0;
+    }
+    
+    .text-muted {
+        color: #b0b0b0 !important;
+    }
+}
+
+/* Print Optimizations */
+@media print {
+    .hero-section,
+    .navbar,
+    .btn,
+    .notification,
+    footer {
+        display: none !important;
+    }
+    
+    .prediction-card,
+    .results-card {
+        box-shadow: none !important;
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .main-content {
+        margin-top: 0 !important;
+    }
+}

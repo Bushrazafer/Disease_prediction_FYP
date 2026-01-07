@@ -1,0 +1,734 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Diabetes Risk Prediction - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Form Section -->
+        <div class="col-lg-8">
+            <div class="prediction-form-card diabetes-form">
+                <div class="form-header">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="form-icon diabetes me-3">
+                            <i class="fas fa-tint"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1">Diabetes Risk Assessment</h2>
+                            <p class="text-muted mb-0">Complete the form below to assess your Type 2 diabetes risk</p>
+                        </div>
+                    </div>
+
+                    <!-- Learn More Links -->
+                    <div class="learn-more-section diabetes-info alert alert-info border-0 shadow-sm">
+                        <h6 class="mb-3"><i class="fas fa-book-medical me-2"></i>Learn More About Diabetes:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'diabetes_info' %}" class="btn btn-sm btn-outline-primary" target="_blank">
+                                <i class="fas fa-info-circle me-1"></i>Disease Information
+                            </a>
+                            <a href="{% url 'diabetes_prevention' %}" class="btn btn-sm btn-outline-success"
+                                target="_blank">
+                                <i class="fas fa-shield-alt me-1"></i>Prevention Guidelines
+                            </a>
+                            <a href="{% url 'diabetes_treatment' %}" class="btn btn-sm btn-outline-danger"
+                                target="_blank">
+                                <i class="fas fa-pills me-1"></i>Treatment Options
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Progress Tracker -->
+                {% include 'predictions/partials/input_progress.html' %}
+
+                <form id="diabetesForm" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-user me-2"></i>Personal Information
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="age" class="form-label">Age *</label>
+                                <input type="number" class="form-control" id="age" name="age" min="18" max="120"
+                                    required>
+                                <div class="invalid-feedback">Please enter a valid age (18-120)</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="gender" class="form-label">Gender *</label>
+                                <select class="form-select" id="gender" name="gender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                                <div class="invalid-feedback">Please select your gender</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Physical Measurements -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-weight me-2"></i>Physical Measurements
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="height" class="form-label">Height (cm) *</label>
+                                <input type="number" class="form-control" id="height" name="height" min="100" max="250"
+                                    required>
+                                <div class="invalid-feedback">Please enter height in cm</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="weight" class="form-label">Weight (kg) *</label>
+                                <input type="number" class="form-control" id="weight" name="weight" min="30" max="300"
+                                    required>
+                                <div class="invalid-feedback">Please enter weight in kg</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bmi" class="form-label">BMI</label>
+                                <input type="text" class="form-control" id="bmi-display" readonly>
+                                <small class="text-muted">Calculated automatically</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Health Indicators -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-heartbeat me-2"></i>Health Indicators
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="glucose" class="form-label">Fasting Glucose (mg/dL) *</label>
+                                <input type="number" class="form-control" id="glucose" name="glucose" min="50" max="400"
+                                    required>
+                                <small class="text-muted">Normal: 70-100 mg/dL</small>
+                                <div class="invalid-feedback">Please enter glucose level</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="blood_pressure" class="form-label">Blood Pressure (Systolic) *</label>
+                                <input type="number" class="form-control" id="blood_pressure" name="blood_pressure"
+                                    min="80" max="200" required>
+                                <small class="text-muted">Normal: 90-120 mmHg</small>
+                                <div class="invalid-feedback">Please enter systolic blood pressure</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="insulin" class="form-label">Insulin Level (μU/mL)</label>
+                                <input type="number" class="form-control" id="insulin" name="insulin" min="0" max="100">
+                                <small class="text-muted">Normal: 2.6-24.9 μU/mL</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="skin_thickness" class="form-label">Skin Thickness (mm)</label>
+                                <input type="number" class="form-control" id="skin_thickness" name="skin_thickness"
+                                    min="0" max="100">
+                                <small class="text-muted">Triceps skinfold thickness</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle Factors -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-running me-2"></i>Lifestyle & Family History
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="pregnancies" class="form-label">Number of Pregnancies</label>
+                                <input type="number" class="form-control" id="pregnancies" name="pregnancies" min="0"
+                                    max="20">
+                                <small class="text-muted">For females only</small>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="diabetes_pedigree" class="form-label">Family History Score</label>
+                                <input type="number" class="form-control" id="diabetes_pedigree"
+                                    name="diabetes_pedigree" min="0" max="3" step="0.1">
+                                <small class="text-muted">0 = No family history, 3 = Strong family history</small>
+                            </div>
+                        </div>
+
+                        <div class="row g-3 mt-2">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="physical_activity"
+                                        name="physical_activity">
+                                    <label class="form-check-label" for="physical_activity">
+                                        Regular Physical Activity (150+ min/week)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="smoking" name="smoking">
+                                    <label class="form-check-label" for="smoking">
+                                        Current Smoker
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-diabetes btn-lg px-5 text-white" id="predictBtn">
+                            <i class="fas fa-chart-line me-2"></i>
+                            <span class="btn-text">Analyze Risk</span>
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="col-lg-4">
+            <div class="results-card diabetes-results sticky-top">
+                <h4 class="mb-4">
+                    <i class="fas fa-chart-pie me-2"></i>Risk Assessment Results
+                </h4>
+
+                <!-- Placeholder -->
+                <div class="result-placeholder text-center py-5">
+                    <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Complete the form to see your diabetes risk assessment</p>
+                </div>
+
+                <!-- Results Content (Hidden initially) -->
+                <div class="result-content d-none">
+                    <!-- Tier and Confidence Display -->
+                    {% include 'predictions/partials/tier_confidence_display.html' %}
+
+                    <div class="risk-meter mb-4">
+                        <div class="risk-circle">
+                            <div class="risk-percentage">
+                                <span class="probability">0%</span>
+                                <small>Risk Level</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="risk-details">
+                        <div class="risk-badge-container text-center mb-3">
+                            <span class="risk-badge">Low Risk</span>
+                        </div>
+
+                        <div class="recommendation-box">
+                            <h6><i class="fas fa-lightbulb me-2"></i>Recommendation</h6>
+                            <p class="recommendation text-sm">
+                                Maintain healthy lifestyle with regular exercise and balanced diet.
+                            </p>
+                        </div>
+
+                        <div class="risk-factors mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Key Risk Factors</h6>
+                            <ul class="risk-factor-list">
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">BMI</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Glucose</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Blood Pressure</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Feature Importance (SHAP-like) -->
+                        {% include 'predictions/partials/shap_explanation.html' %}
+
+                        <!-- Health Insights -->
+                        {% include 'predictions/partials/health_insights.html' %}
+
+                        <div class="next-steps mt-4">
+                            <h6><i class="fas fa-clipboard-check me-2"></i>Next Steps</h6>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-primary btn-sm" id="downloadReportBtn"
+                                    onclick="downloadDiabetesReport()">
+                                    <i class="fas fa-download me-2"></i>Download Report
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#doctorModal">
+                                    <i class="fas fa-user-md me-2"></i>Consult Doctor
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Doctor Consultation Links -->
+                        <div class="doctor-links mt-4">
+                            <h6><i class="fas fa-stethoscope me-2"></i>Consult Diabetes Specialists</h6>
+                            <div class="doctor-list">
+                                <a href="https://www.practo.com/consult/diabetologist-702?utm_source=consult_widget"
+                                    target="_blank" class="doctor-link">
+                                    <i class="fas fa-video me-2"></i>Practo - Online Diabetologist Consult
+                                </a>
+                                <a href="https://www.apollo247.com/specialties/diabetology" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-hospital me-2"></i>Apollo 247 - Book Diabetologist
+                                </a>
+                                <a href="https://oladoc.com/pakistan/lahore/diabetologist" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-user-md me-2"></i>Oladoc - Diabetologists (Pakistan)
+                                </a>
+                                <a href="https://www.beatoapp.com/" target="_blank" class="doctor-link">
+                                    <i class="fas fa-heartbeat me-2"></i>BeatO - Diabetes Care Program
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doctor Consultation Modal -->
+<div class="modal fade" id="doctorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-md me-2"></i>Consult Diabetes Specialists
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4">Connect with certified diabetes specialists and endocrinologists for professional
+                    medical advice:</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-stethoscope text-primary"></i>
+                                <h6>Practo</h6>
+                            </div>
+                            <p class="small text-muted">India's largest healthcare platform - Video consult available
+                            </p>
+                            <a href="https://www.practo.com/consult/diabetologist-702?utm_source=consult_widget"
+                                target="_blank" class="btn btn-sm btn-outline-primary w-100">
+                                <i class="fas fa-video me-1"></i>Consult Diabetologist
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-hospital text-danger"></i>
+                                <h6>Apollo 247</h6>
+                            </div>
+                            <p class="small text-muted">24/7 doctor consultations - Trusted hospital network</p>
+                            <a href="https://www.apollo247.com/specialties/diabetology" target="_blank"
+                                class="btn btn-sm btn-outline-primary w-100">
+                                <i class="fas fa-calendar-check me-1"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-user-md text-success"></i>
+                                <h6>Oladoc (Pakistan)</h6>
+                            </div>
+                            <p class="small text-muted">Pakistan's top healthcare platform - Online & In-clinic</p>
+                            <a href="https://oladoc.com/pakistan/lahore/diabetologist" target="_blank"
+                                class="btn btn-sm btn-outline-success w-100">
+                                <i class="fas fa-search me-1"></i>Find Diabetologists
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-heartbeat text-warning"></i>
+                                <h6>BeatO</h6>
+                            </div>
+                            <p class="small text-muted">Complete diabetes care - Monitoring + Doctor consult</p>
+                            <a href="https://www.beatoapp.com/" target="_blank"
+                                class="btn btn-sm btn-outline-warning w-100">
+                                <i class="fas fa-mobile-alt me-1"></i>Get Started
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mt-4 mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Tip:</strong> For high-risk results, we recommend consulting an endocrinologist or
+                    diabetologist within 1-2 weeks.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medical Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Medical Disclaimer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Important:</strong> This prediction tool is for educational purposes only and should not
+                    replace professional medical advice.</p>
+                <ul>
+                    <li>Results are based on statistical models and may not reflect your actual health status</li>
+                    <li>Always consult with healthcare professionals for proper diagnosis</li>
+                    <li>Regular medical check-ups are recommended regardless of prediction results</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* These styles now inherit from theme.css for dark/light mode support */
+    .prediction-form-card {
+        background: var(--theme-bg-card, white);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--theme-shadow-card, 0 10px 30px rgba(0, 0, 0, 0.1));
+        margin-bottom: 2rem;
+    }
+
+    .form-icon.diabetes {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--theme-border-light, #f8f9fa);
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+    }
+
+    .section-title {
+        color: var(--theme-text-primary, #495057);
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .results-card {
+        background: var(--theme-bg-card, white);
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: var(--theme-shadow-card, 0 10px 30px rgba(0, 0, 0, 0.1));
+        top: 100px;
+    }
+
+    .risk-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(#27ae60 0deg, #f39c12 120deg, #e74c3c 240deg, #27ae60 360deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .risk-circle::before {
+        content: '';
+        width: 120px;
+        height: 120px;
+        background: var(--theme-bg-card, white);
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .risk-percentage {
+        text-align: center;
+        z-index: 2;
+        position: relative;
+    }
+
+    .risk-percentage .probability {
+        font-size: 2rem;
+        font-weight: bold;
+        color: var(--theme-text-primary, #495057);
+    }
+
+    .risk-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .risk-badge.low-risk {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .risk-badge.medium-risk {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .risk-badge.high-risk {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .recommendation-box {
+        background: var(--theme-bg-tertiary, #f8f9fa);
+        border-left: 4px solid #007bff;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+
+    .risk-factor-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .risk-factor-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--theme-border-light, #f8f9fa);
+    }
+
+    .factor-status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .factor-status.normal {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .factor-status.elevated {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .factor-status.high {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .form-control:focus {
+        border-color: #ff6b6b;
+        box-shadow: 0 0 0 0.2rem rgba(255, 107, 107, 0.25);
+    }
+
+    .btn-primary {
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(45deg, #ee5a24, #ff6b6b);
+        transform: translateY(-2px);
+    }
+
+    /* Doctor Links Styles */
+    .doctor-links {
+        background: var(--theme-bg-tertiary, #f8f9fa);
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .doctor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .doctor-link {
+        display: block;
+        padding: 0.6rem 0.8rem;
+        background: var(--theme-bg-card, white);
+        border-radius: 8px;
+        color: var(--theme-text-secondary, #495057);
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: 1px solid var(--theme-border-color, #e9ecef);
+    }
+
+    .doctor-link:hover {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        transform: translateX(5px);
+        border-color: transparent;
+    }
+
+    .doctor-link i {
+        color: #667eea;
+        transition: color 0.3s ease;
+    }
+
+    .doctor-link:hover i {
+        color: white;
+    }
+
+    /* Doctor Card Modal Styles */
+    .doctor-card {
+        background: var(--theme-bg-tertiary, #f8f9fa);
+        border-radius: 12px;
+        padding: 1.2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .doctor-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .doctor-logo {
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+    }
+
+    .doctor-card h6 {
+        margin: 0;
+        color: #495057;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize BMI calculator
+        initBMICalculator();
+
+        // Initialize form progress tracker
+        if (typeof initFormProgressTracker === 'function') {
+            initFormProgressTracker('diabetesForm', 'diabetes');
+        }
+
+        // Initialize real-time validation
+        if (typeof initRealTimeValidation === 'function') {
+            initRealTimeValidation('diabetesForm');
+        }
+
+        // Show disclaimer modal on page load
+        const disclaimerModal = new bootstrap.Modal(document.getElementById('disclaimerModal'));
+        disclaimerModal.show();
+
+        // Form submission
+        document.getElementById('diabetesForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (this.checkValidity()) {
+                submitPrediction();
+            } else {
+                this.classList.add('was-validated');
+            }
+        });
+    });
+
+    function submitPrediction() {
+        const form = document.getElementById('diabetesForm');
+        const btn = document.getElementById('predictBtn');
+        const btnText = btn.querySelector('.btn-text');
+        const spinner = btn.querySelector('.spinner-border');
+
+        // Show loading state
+        btn.disabled = true;
+        btnText.textContent = 'Analyzing...';
+        spinner.classList.remove('d-none');
+
+        // Collect form data with correct field names
+        const data = {
+            pregnancies: parseInt(document.getElementById('pregnancies').value) || 0,
+            glucose: parseFloat(document.getElementById('glucose').value),
+            blood_pressure: parseFloat(document.getElementById('blood_pressure').value),
+            skin_thickness: parseFloat(document.getElementById('skin_thickness').value) || 0,
+            insulin: parseFloat(document.getElementById('insulin').value) || 0,
+            bmi: parseFloat(document.getElementById('bmi-display').value),
+            diabetes_pedigree: parseFloat(document.getElementById('diabetes_pedigree').value) || 0.5,
+            age: parseInt(document.getElementById('age').value)
+        };
+
+        console.log('Sending data:', data);
+
+        // Make API call
+        fetch('{% url "api_diabetes" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Received result:', result);
+                if (result.success) {
+                    displayDiabetesResult(result);
+
+                    // Display feature importance
+                    if (typeof displayFeatureImportance === 'function') {
+                        displayFeatureImportance(result, data, 'diabetes');
+                    }
+
+                    // Generate health insights
+                    if (typeof generateHealthInsights === 'function') {
+                        generateHealthInsights(data, result, 'diabetes');
+                    }
+
+                    showNotification('Risk assessment completed successfully!', 'success');
+                } else {
+                    showNotification(result.error || 'Prediction failed', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again.', 'error');
+            })
+            .finally(() => {
+                // Reset button state
+                btn.disabled = false;
+                btnText.textContent = 'Analyze Risk';
+                spinner.classList.add('d-none');
+            });
+    }
+</script>
+{% endblock %}

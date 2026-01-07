@@ -1,0 +1,85 @@
+<!-- SHAP Feature Importance Explanation Partial -->
+<!-- Shows which factors contributed most to the prediction -->
+
+<div class="shap-explanation mt-4" id="shapExplanation" style="display: none;">
+    <h6 class="mb-3">
+        <i class="fas fa-chart-bar me-2"></i>What Influenced Your Result?
+    </h6>
+
+    <div class="feature-importance-chart" id="featureImportanceChart">
+        <!-- Feature bars will be dynamically inserted here -->
+    </div>
+
+    <div class="explanation-note mt-3">
+        <small class="text-muted">
+            <i class="fas fa-info-circle me-1"></i>
+            Green bars indicate factors reducing risk, red bars indicate factors increasing risk.
+        </small>
+    </div>
+</div>
+
+<style>
+    .shap-explanation {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+        border: 1px solid #e9ecef;
+    }
+
+    .feature-bar-container {
+        margin-bottom: 0.75rem;
+    }
+
+    .feature-bar-label {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.85rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .feature-bar-name {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .feature-bar-value {
+        color: #6c757d;
+    }
+
+    .feature-bar-wrapper {
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .feature-bar {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.8s ease-out;
+    }
+
+    .feature-bar.positive {
+        background: linear-gradient(90deg, #dc3545, #ff6b6b);
+    }
+
+    .feature-bar.negative {
+        background: linear-gradient(90deg, #28a745, #51cf66);
+    }
+
+    .feature-bar.neutral {
+        background: linear-gradient(90deg, #6c757d, #adb5bd);
+    }
+
+    /* Animation for bars */
+    @keyframes growBar {
+        from {
+            width: 0;
+        }
+    }
+
+    .feature-bar.animate {
+        animation: growBar 0.8s ease-out;
+    }
+</style>

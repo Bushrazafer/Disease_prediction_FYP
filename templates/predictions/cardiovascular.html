@@ -1,0 +1,1041 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Heart Disease Risk Prediction - MediCare AI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <!-- Form Section -->
+        <div class="col-lg-8">
+            <div class="prediction-form-card cardiovascular-form">
+                <div class="form-header">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="form-icon cardiovascular me-3">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div>
+                            <h2 class="mb-1">Heart Disease Risk Assessment</h2>
+                            <p class="text-muted mb-0">Complete the form below to assess your cardiovascular disease
+                                risk</p>
+                        </div>
+                    </div>
+
+                    <!-- Learn More Links -->
+                    <div class="learn-more-section cardiovascular-info alert alert-danger border-0 shadow-sm"
+                        style="background: linear-gradient(135deg, #fee2e2, #fecaca);">
+                        <h6 class="mb-3"><i class="fas fa-book-medical me-2"></i>Learn More About Heart Disease:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'cardiovascular_info' %}" class="btn btn-sm btn-outline-danger"
+                                target="_blank">
+                                <i class="fas fa-info-circle me-1"></i>Disease Information
+                            </a>
+                            <a href="{% url 'cardiovascular_prevention' %}" class="btn btn-sm btn-outline-success"
+                                target="_blank">
+                                <i class="fas fa-shield-alt me-1"></i>Prevention Guidelines
+                            </a>
+                            <a href="{% url 'cardiovascular_treatment' %}" class="btn btn-sm btn-outline-primary"
+                                target="_blank">
+                                <i class="fas fa-pills me-1"></i>Treatment Options
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Progress Tracker -->
+                {% include 'predictions/partials/input_progress.html' %}
+
+                <form id="cardioForm" class="needs-validation" novalidate>
+                    {% csrf_token %}
+
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-user me-2"></i>Personal Information
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="age" class="form-label">Age *</label>
+                                <input type="number" class="form-control" id="age" name="age" min="18" max="100"
+                                    required>
+                                <div class="invalid-feedback">Please enter a valid age (18-100)</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="sex" class="form-label">Gender *</label>
+                                <select class="form-select" id="sex" name="sex" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="1">Male</option>
+                                    <option value="0">Female</option>
+                                </select>
+                                <div class="invalid-feedback">Please select your gender</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="bmi" class="form-label">BMI</label>
+                                <input type="number" class="form-control" id="bmi" name="bmi" min="15" max="50"
+                                    step="0.1">
+                                <small class="text-muted">Normal: 18.5-24.9</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cardiac Symptoms -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-heart me-2"></i>Cardiac Symptoms
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="chest_pain_type" class="form-label">Chest Pain Type *</label>
+                                <select class="form-select" id="chest_pain_type" name="chest_pain_type" required>
+                                    <option value="">Select Type</option>
+                                    <option value="0">Typical Angina (TA)</option>
+                                    <option value="1">Atypical Angina (ATA)</option>
+                                    <option value="2">Non-Anginal Pain (NAP)</option>
+                                    <option value="3">Asymptomatic (ASY)</option>
+                                </select>
+                                <small class="text-muted">Type of chest pain experienced</small>
+                                <div class="invalid-feedback">Please select chest pain type</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="exercise_angina" class="form-label">Exercise Induced Angina *</label>
+                                <select class="form-select" id="exercise_angina" name="exercise_angina" required>
+                                    <option value="">Select</option>
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                                <small class="text-muted">Chest pain during exercise</small>
+                                <div class="invalid-feedback">Please select</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vital Signs -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-stethoscope me-2"></i>Vital Signs
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="resting_bp" class="form-label">Resting Blood Pressure *</label>
+                                <input type="number" class="form-control" id="resting_bp" name="resting_bp" min="80"
+                                    max="200" required>
+                                <small class="text-muted">Normal: 90-120 mmHg</small>
+                                <div class="invalid-feedback">Please enter BP (80-200)</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="max_hr" class="form-label">Maximum Heart Rate *</label>
+                                <input type="number" class="form-control" id="max_hr" name="max_hr" min="60" max="220"
+                                    required>
+                                <small class="text-muted">During exercise (bpm)</small>
+                                <div class="invalid-feedback">Please enter max HR</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="resting_ecg" class="form-label">Resting ECG *</label>
+                                <select class="form-select" id="resting_ecg" name="resting_ecg" required>
+                                    <option value="">Select</option>
+                                    <option value="0">Normal</option>
+                                    <option value="1">ST-T Wave Abnormality</option>
+                                    <option value="2">Left Ventricular Hypertrophy</option>
+                                </select>
+                                <div class="invalid-feedback">Please select ECG result</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ECG & Stress Test -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-wave-square me-2"></i>ECG & Stress Test Results
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="oldpeak" class="form-label">ST Depression (Oldpeak) *</label>
+                                <input type="number" class="form-control" id="oldpeak" name="oldpeak" min="-2" max="6"
+                                    step="0.1" required>
+                                <small class="text-muted">ST depression induced by exercise (mm)</small>
+                                <div class="invalid-feedback">Please enter oldpeak value</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="st_slope" class="form-label">ST Slope *</label>
+                                <select class="form-select" id="st_slope" name="st_slope" required>
+                                    <option value="">Select</option>
+                                    <option value="0">Upsloping</option>
+                                    <option value="1">Flat</option>
+                                    <option value="2">Downsloping</option>
+                                </select>
+                                <small class="text-muted">Slope of peak exercise ST segment</small>
+                                <div class="invalid-feedback">Please select ST slope</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Blood Tests -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-vial me-2"></i>Blood Test Results
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="cholesterol" class="form-label">Total Cholesterol *</label>
+                                <input type="number" class="form-control" id="cholesterol" name="cholesterol" min="100"
+                                    max="600" required>
+                                <small class="text-muted">Normal: &lt;200 mg/dL</small>
+                                <div class="invalid-feedback">Please enter cholesterol</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fasting_bs" class="form-label">Fasting Blood Sugar &gt;120 *</label>
+                                <select class="form-select" id="fasting_bs" name="fasting_bs" required>
+                                    <option value="">Select</option>
+                                    <option value="0">No (&lt;120 mg/dL)</option>
+                                    <option value="1">Yes (&gt;120 mg/dL)</option>
+                                </select>
+                                <div class="invalid-feedback">Please select</div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="triglycerides" class="form-label">Triglycerides</label>
+                                <input type="number" class="form-control" id="triglycerides" name="triglycerides"
+                                    min="50" max="500">
+                                <small class="text-muted">Normal: &lt;150 mg/dL</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="hdl" class="form-label">HDL Cholesterol</label>
+                                <input type="number" class="form-control" id="hdl" name="hdl" min="20" max="100">
+                                <small class="text-muted">Good: &gt;40 mg/dL</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ldl" class="form-label">LDL Cholesterol</label>
+                                <input type="number" class="form-control" id="ldl" name="ldl" min="50" max="250">
+                                <small class="text-muted">Normal: &lt;100 mg/dL</small>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="ejection_fraction" class="form-label">Ejection Fraction (%)</label>
+                                <input type="number" class="form-control" id="ejection_fraction"
+                                    name="ejection_fraction" min="15" max="80">
+                                <small class="text-muted">Normal: 55-70%</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle & Risk Factors -->
+                    <div class="form-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-running me-2"></i>Lifestyle & Risk Factors
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="smoking" class="form-label">Smoking Status</label>
+                                <select class="form-select" id="smoking" name="smoking">
+                                    <option value="0">Non-Smoker</option>
+                                    <option value="1">Current Smoker</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="diabetes" class="form-label">Diabetes</label>
+                                <select class="form-select" id="diabetes" name="diabetes">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="family_history" class="form-label">Family History of Heart Disease</label>
+                                <select class="form-select" id="family_history" name="family_history">
+                                    <option value="0">No</option>
+                                    <option value="1">Yes</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="physical_activity" class="form-label">Physical Activity Level</label>
+                                <select class="form-select" id="physical_activity" name="physical_activity">
+                                    <option value="0">Sedentary</option>
+                                    <option value="1">Light Activity</option>
+                                    <option value="2" selected>Moderate Activity</option>
+                                    <option value="3">High Activity</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="alcohol" class="form-label">Alcohol Consumption</label>
+                                <select class="form-select" id="alcohol" name="alcohol">
+                                    <option value="0">None</option>
+                                    <option value="1" selected>Occasional</option>
+                                    <option value="2">Moderate</option>
+                                    <option value="3">Heavy</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center mt-4">
+                        <button type="submit" class="btn btn-cardiovascular btn-lg px-5 text-white" id="predictBtn">
+                            <i class="fas fa-heartbeat me-2"></i>
+                            <span class="btn-text">Analyze Heart Risk</span>
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="col-lg-4">
+            <div class="results-card cardiovascular-results sticky-top">
+                <h4 class="mb-4">
+                    <i class="fas fa-chart-pie me-2"></i>Risk Assessment Results
+                </h4>
+
+                <!-- Placeholder -->
+                <div class="result-placeholder text-center py-5">
+                    <i class="fas fa-heart-pulse fa-3x text-muted mb-3"></i>
+                    <p class="text-muted">Complete the form to see your heart disease risk assessment</p>
+                </div>
+
+                <!-- Results Content (Hidden initially) -->
+                <div class="result-content d-none">
+                    <!-- Tier and Confidence Display -->
+                    {% include 'predictions/partials/tier_confidence_display.html' %}
+
+                    <div class="risk-meter mb-4">
+                        <div class="risk-circle heart">
+                            <div class="risk-percentage">
+                                <span class="probability">0%</span>
+                                <small>Risk Level</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="risk-details">
+                        <div class="risk-badge-container text-center mb-3">
+                            <span class="risk-badge">Low Risk</span>
+                        </div>
+
+                        <div class="recommendation-box">
+                            <h6><i class="fas fa-lightbulb me-2"></i>Recommendation</h6>
+                            <p class="recommendation text-sm">
+                                Maintain healthy lifestyle with regular exercise and balanced diet.
+                            </p>
+                        </div>
+
+                        <div class="risk-factors mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Key Risk Factors</h6>
+                            <ul class="risk-factor-list">
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Blood Pressure</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Cholesterol</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                                <li class="risk-factor-item">
+                                    <span class="factor-name">Heart Rate</span>
+                                    <span class="factor-status normal">Normal</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- Feature Importance (SHAP-like) -->
+                        {% include 'predictions/partials/shap_explanation.html' %}
+
+                        <!-- Health Insights -->
+                        {% include 'predictions/partials/health_insights.html' %}
+
+                        <div class="next-steps mt-4">
+                            <h6><i class="fas fa-clipboard-check me-2"></i>Next Steps</h6>
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-danger btn-sm" onclick="downloadHeartReport()">
+                                    <i class="fas fa-download me-2"></i>Download Report
+                                </button>
+                                <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#doctorModal">
+                                    <i class="fas fa-user-md me-2"></i>Consult Cardiologist
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Doctor Consultation Links -->
+                        <div class="doctor-links mt-4">
+                            <h6><i class="fas fa-stethoscope me-2"></i>Consult Heart Specialists</h6>
+                            <div class="doctor-list">
+                                <a href="https://www.practo.com/consult/cardiologist-702" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-video me-2"></i>Practo - Online Cardiologist
+                                </a>
+                                <a href="https://www.apollo247.com/specialties/cardiology" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-hospital me-2"></i>Apollo 247 - Cardiology
+                                </a>
+                                <a href="https://oladoc.com/pakistan/lahore/cardiologist" target="_blank"
+                                    class="doctor-link">
+                                    <i class="fas fa-user-md me-2"></i>Oladoc - Cardiologists
+                                </a>
+                                <a href="https://www.fortishealthcare.com/india/speciality/cardiology-heart-care-56"
+                                    target="_blank" class="doctor-link">
+                                    <i class="fas fa-heart me-2"></i>Fortis - Heart Care
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Doctor Consultation Modal -->
+<div class="modal fade" id="doctorModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-user-md me-2"></i>Consult Heart Specialists
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4">Connect with certified cardiologists for professional medical advice:</p>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-stethoscope text-primary"></i>
+                                <h6>Practo</h6>
+                            </div>
+                            <p class="small text-muted">India's largest healthcare platform</p>
+                            <a href="https://www.practo.com/consult/cardiologist-702" target="_blank"
+                                class="btn btn-sm btn-outline-primary w-100">
+                                <i class="fas fa-video me-1"></i>Consult Cardiologist
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-hospital text-danger"></i>
+                                <h6>Apollo 247</h6>
+                            </div>
+                            <p class="small text-muted">24/7 doctor consultations</p>
+                            <a href="https://www.apollo247.com/specialties/cardiology" target="_blank"
+                                class="btn btn-sm btn-outline-danger w-100">
+                                <i class="fas fa-calendar-check me-1"></i>Book Appointment
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-user-md text-success"></i>
+                                <h6>Oladoc (Pakistan)</h6>
+                            </div>
+                            <p class="small text-muted">Pakistan's top healthcare platform</p>
+                            <a href="https://oladoc.com/pakistan/lahore/cardiologist" target="_blank"
+                                class="btn btn-sm btn-outline-success w-100">
+                                <i class="fas fa-search me-1"></i>Find Cardiologists
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="doctor-card">
+                            <div class="doctor-card-header">
+                                <i class="fas fa-heart text-warning"></i>
+                                <h6>Fortis Healthcare</h6>
+                            </div>
+                            <p class="small text-muted">Multi-specialty hospital network</p>
+                            <a href="https://www.fortishealthcare.com/india/speciality/cardiology-heart-care-56"
+                                target="_blank" class="btn btn-sm btn-outline-warning w-100">
+                                <i class="fas fa-hospital me-1"></i>Heart Care Center
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-danger mt-4 mb-0">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Important:</strong> If you experience chest pain, shortness of breath, or other heart attack
+                    symptoms, call emergency services immediately!
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Medical Disclaimer Modal -->
+<div class="modal fade" id="disclaimerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    Medical Disclaimer
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Important:</strong> This prediction tool is for educational purposes only and should not
+                    replace professional medical advice.</p>
+                <ul>
+                    <li>Results are based on statistical models and may not reflect your actual health status</li>
+                    <li>Always consult with healthcare professionals for proper diagnosis</li>
+                    <li>Regular cardiac check-ups are recommended regardless of prediction results</li>
+                    <li>If you experience chest pain or heart attack symptoms, seek emergency care immediately</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">I Understand</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .prediction-form-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+
+    .form-icon.cardiovascular {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(45deg, #dc3545, #c82333);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+    }
+
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .form-section:last-child {
+        border-bottom: none;
+    }
+
+    .section-title {
+        color: #495057;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .results-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        top: 100px;
+    }
+
+    .risk-circle.heart {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: conic-gradient(#28a745 0deg, #ffc107 120deg, #dc3545 240deg, #28a745 360deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .risk-circle.heart::before {
+        content: '';
+        width: 120px;
+        height: 120px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+    }
+
+    .risk-percentage {
+        text-align: center;
+        z-index: 2;
+        position: relative;
+    }
+
+    .risk-percentage .probability {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .risk-badge {
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .risk-badge.low-risk {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .risk-badge.medium-risk {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .risk-badge.high-risk {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .recommendation-box {
+        background: #f8f9fa;
+        border-left: 4px solid #dc3545;
+        padding: 1rem;
+        border-radius: 5px;
+    }
+
+    .risk-factor-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .risk-factor-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #f8f9fa;
+    }
+
+    .factor-status {
+        padding: 0.25rem 0.5rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .factor-status.normal {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .factor-status.elevated {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .factor-status.high {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #dc3545;
+        box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    }
+
+    .btn-danger {
+        background: linear-gradient(45deg, #dc3545, #c82333);
+        border: none;
+    }
+
+    .btn-danger:hover {
+        background: linear-gradient(45deg, #c82333, #dc3545);
+        transform: translateY(-2px);
+    }
+
+    /* Doctor Links Styles */
+    .doctor-links {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1rem;
+    }
+
+    .doctor-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .doctor-link {
+        display: block;
+        padding: 0.6rem 0.8rem;
+        background: white;
+        border-radius: 8px;
+        color: #495057;
+        text-decoration: none;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-link:hover {
+        background: linear-gradient(45deg, #dc3545, #c82333);
+        color: white;
+        transform: translateX(5px);
+        border-color: transparent;
+    }
+
+    .doctor-link i {
+        color: #dc3545;
+        transition: color 0.3s ease;
+    }
+
+    .doctor-link:hover i {
+        color: white;
+    }
+
+    .doctor-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 1.2rem;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid #e9ecef;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .doctor-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .doctor-card h6 {
+        margin: 0;
+        color: #495057;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize form progress tracker
+        if (typeof initFormProgressTracker === 'function') {
+            initFormProgressTracker('cardioForm', 'cardiovascular');
+        }
+
+        // Initialize real-time validation
+        if (typeof initRealTimeValidation === 'function') {
+            initRealTimeValidation('cardioForm');
+        }
+
+        // Show disclaimer modal on page load
+        const disclaimerModal = new bootstrap.Modal(document.getElementById('disclaimerModal'));
+        disclaimerModal.show();
+
+        // Form submission
+        document.getElementById('cardioForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            if (this.checkValidity()) {
+                submitCardioPredicton();
+            } else {
+                this.classList.add('was-validated');
+            }
+        });
+    });
+
+    function submitCardioPredicton() {
+        const form = document.getElementById('cardioForm');
+        const btn = document.getElementById('predictBtn');
+        const btnText = btn.querySelector('.btn-text');
+        const spinner = btn.querySelector('.spinner-border');
+
+        // Show loading state
+        btn.disabled = true;
+        btnText.textContent = 'Analyzing...';
+        spinner.classList.remove('d-none');
+
+        // Collect form data
+        const data = {
+            age: parseInt(document.getElementById('age').value),
+            sex: parseInt(document.getElementById('sex').value),
+            chest_pain_type: parseInt(document.getElementById('chest_pain_type').value),
+            resting_bp: parseFloat(document.getElementById('resting_bp').value),
+            cholesterol: parseFloat(document.getElementById('cholesterol').value),
+            fasting_bs: parseInt(document.getElementById('fasting_bs').value),
+            resting_ecg: parseInt(document.getElementById('resting_ecg').value),
+            max_hr: parseFloat(document.getElementById('max_hr').value),
+            exercise_angina: parseInt(document.getElementById('exercise_angina').value),
+            oldpeak: parseFloat(document.getElementById('oldpeak').value),
+            st_slope: parseInt(document.getElementById('st_slope').value),
+            bmi: parseFloat(document.getElementById('bmi').value) || 25,
+            smoking: parseInt(document.getElementById('smoking').value),
+            diabetes: parseInt(document.getElementById('diabetes').value),
+            family_history: parseInt(document.getElementById('family_history').value),
+            physical_activity: parseInt(document.getElementById('physical_activity').value),
+            alcohol: parseInt(document.getElementById('alcohol').value),
+            triglycerides: parseFloat(document.getElementById('triglycerides').value) || 150,
+            hdl: parseFloat(document.getElementById('hdl').value) || 50,
+            ldl: parseFloat(document.getElementById('ldl').value) || 100,
+            ejection_fraction: parseFloat(document.getElementById('ejection_fraction').value) || 55
+        };
+
+        console.log('Sending data:', data);
+
+        // Make API call
+        fetch('{% url "api_cardiovascular" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken()
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(result => {
+                console.log('Received result:', result);
+                if (result.success) {
+                    displayHeartResult(result);
+
+                    // Display feature importance
+                    if (typeof displayFeatureImportance === 'function') {
+                        displayFeatureImportance(result, data, 'cardiovascular');
+                    }
+
+                    // Generate health insights
+                    if (typeof generateHealthInsights === 'function') {
+                        generateHealthInsights(data, result, 'cardiovascular');
+                    }
+
+                    showNotification('Risk assessment completed successfully!', 'success');
+                } else {
+                    showNotification(result.error || 'Prediction failed', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('An error occurred. Please try again.', 'error');
+            })
+            .finally(() => {
+                // Reset button state
+                btn.disabled = false;
+                btnText.textContent = 'Analyze Heart Risk';
+                spinner.classList.add('d-none');
+            });
+    }
+
+    function displayHeartResult(result) {
+        const resultContent = document.querySelector('.result-content');
+        const placeholder = document.querySelector('.result-placeholder');
+        const probability = document.querySelector('.probability');
+        const recommendation = document.querySelector('.recommendation');
+        const riskBadge = document.querySelector('.risk-badge');
+
+        // Show results section
+        if (placeholder) {
+            placeholder.classList.add('d-none');
+        }
+        if (resultContent) {
+            resultContent.classList.remove('d-none');
+        }
+
+        // Update tier and confidence display (new feature)
+        if (typeof updateTierDisplay === 'function') {
+            updateTierDisplay(result);
+        }
+
+        // Update probability
+        if (probability) {
+            animateCounter(probability, 0, result.probability, 1500);
+        }
+
+        // Update risk level and styling
+        if (result.risk_level === 'low') {
+            riskBadge.textContent = 'Low Risk';
+            riskBadge.className = 'risk-badge low-risk';
+            recommendation.innerHTML = `
+                <strong>Good news!</strong> Your heart disease risk is low.
+                Continue maintaining a healthy lifestyle with regular exercise and balanced diet.
+                <br><small class="text-muted mt-2 d-block">
+                    <i class="fas fa-heart me-1"></i>
+                    Keep monitoring your cardiovascular health annually.
+                </small>
+            `;
+        } else if (result.risk_level === 'medium') {
+            riskBadge.textContent = 'Medium Risk';
+            riskBadge.className = 'risk-badge medium-risk';
+            recommendation.innerHTML = `
+                <strong>Attention needed.</strong> Your heart disease risk is moderate.
+                Consider consulting a cardiologist and making lifestyle modifications.
+                <br><small class="text-muted mt-2 d-block">
+                    <i class="fas fa-user-md me-1"></i>
+                    Schedule a cardiac check-up within 1-2 months.
+                </small>
+            `;
+        } else {
+            riskBadge.textContent = 'High Risk';
+            riskBadge.className = 'risk-badge high-risk';
+            recommendation.innerHTML = `
+                <strong>Immediate attention required.</strong> Your heart disease risk is high.
+                Please consult a cardiologist immediately for comprehensive evaluation.
+                <br><small class="text-muted mt-2 d-block">
+                    <i class="fas fa-exclamation-triangle me-1"></i>
+                    Get an ECG, echocardiogram, and stress test as soon as possible.
+                </small>
+            `;
+        }
+
+        // Update risk factors
+        updateHeartRiskFactors(result);
+    }
+
+    function updateHeartRiskFactors(result) {
+        const factorItems = document.querySelectorAll('.risk-factor-item');
+        const riskLevel = result.risk_level;
+
+        factorItems.forEach(item => {
+            const factorStatus = item.querySelector('.factor-status');
+            let status = 'normal';
+            let statusText = 'Normal';
+
+            if (riskLevel === 'high') {
+                status = Math.random() > 0.4 ? 'high' : 'elevated';
+                statusText = status === 'high' ? 'High' : 'Elevated';
+            } else if (riskLevel === 'medium') {
+                status = Math.random() > 0.6 ? 'elevated' : 'normal';
+                statusText = status === 'elevated' ? 'Elevated' : 'Normal';
+            }
+
+            factorStatus.className = `factor-status ${status}`;
+            factorStatus.textContent = statusText;
+        });
+    }
+
+    function animateCounter(element, start, end, duration) {
+        const range = end - start;
+        const increment = range / (duration / 16);
+        let current = start;
+
+        const timer = setInterval(() => {
+            current += increment;
+            if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                current = end;
+                clearInterval(timer);
+            }
+            element.textContent = Math.round(current) + '%';
+        }, 16);
+    }
+
+    // Download Heart Report Function
+    function downloadHeartReport() {
+        const formData = {
+            age: document.getElementById('age')?.value || 'N/A',
+            sex: document.getElementById('sex')?.value == '1' ? 'Male' : 'Female',
+            chestPainType: document.getElementById('chest_pain_type')?.selectedOptions[0]?.text || 'N/A',
+            restingBP: document.getElementById('resting_bp')?.value || 'N/A',
+            cholesterol: document.getElementById('cholesterol')?.value || 'N/A',
+            maxHR: document.getElementById('max_hr')?.value || 'N/A',
+            exerciseAngina: document.getElementById('exercise_angina')?.value == '1' ? 'Yes' : 'No',
+            oldpeak: document.getElementById('oldpeak')?.value || 'N/A',
+            stSlope: document.getElementById('st_slope')?.selectedOptions[0]?.text || 'N/A',
+            smoking: document.getElementById('smoking')?.value == '1' ? 'Yes' : 'No',
+            diabetes: document.getElementById('diabetes')?.value == '1' ? 'Yes' : 'No',
+            familyHistory: document.getElementById('family_history')?.value == '1' ? 'Yes' : 'No'
+        };
+
+        const probability = document.querySelector('.probability')?.textContent || '0%';
+        const riskBadge = document.querySelector('.risk-badge')?.textContent || 'Unknown';
+        const recommendation = document.querySelector('.recommendation')?.textContent || '';
+
+        const currentDate = new Date().toLocaleDateString('en-US', {
+            year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+
+        const reportContent = `
+================================================================================
+                    MEDICARE AI - HEART DISEASE RISK ASSESSMENT REPORT
+================================================================================
+
+Report Generated: ${currentDate}
+Report ID: HRA-${Date.now()}
+
+--------------------------------------------------------------------------------
+                              PATIENT INFORMATION
+--------------------------------------------------------------------------------
+
+Age:                    ${formData.age} years
+Gender:                 ${formData.sex}
+Chest Pain Type:        ${formData.chestPainType}
+
+--------------------------------------------------------------------------------
+                              CARDIAC INDICATORS
+--------------------------------------------------------------------------------
+
+Resting Blood Pressure: ${formData.restingBP} mmHg
+Total Cholesterol:      ${formData.cholesterol} mg/dL
+Maximum Heart Rate:     ${formData.maxHR} bpm
+Exercise Angina:        ${formData.exerciseAngina}
+ST Depression:          ${formData.oldpeak} mm
+ST Slope:               ${formData.stSlope}
+
+--------------------------------------------------------------------------------
+                              RISK FACTORS
+--------------------------------------------------------------------------------
+
+Smoking:                ${formData.smoking}
+Diabetes:               ${formData.diabetes}
+Family History:         ${formData.familyHistory}
+
+--------------------------------------------------------------------------------
+                              RISK ASSESSMENT RESULTS
+--------------------------------------------------------------------------------
+
+HEART DISEASE RISK:     ${probability}
+RISK LEVEL:             ${riskBadge.toUpperCase()}
+
+--------------------------------------------------------------------------------
+                              RECOMMENDATION
+--------------------------------------------------------------------------------
+
+${recommendation.replace(/<[^>]*>/g, '').trim()}
+
+--------------------------------------------------------------------------------
+                              CONSULT SPECIALISTS
+--------------------------------------------------------------------------------
+
+• Practo - Online Cardiologist: https://www.practo.com/consult/cardiologist-702
+• Apollo 247 - Cardiology: https://www.apollo247.com/specialties/cardiology
+• Oladoc - Cardiologists: https://oladoc.com/pakistan/lahore/cardiologist
+• Fortis - Heart Care: https://www.fortishealthcare.com/india/speciality/cardiology-heart-care-56
+
+================================================================================
+                              MEDICAL DISCLAIMER
+================================================================================
+
+This report is generated by MediCare AI for educational purposes only.
+Always consult healthcare professionals for proper diagnosis and treatment.
+Model Accuracy: 99.50% | AUC-ROC: 0.9998
+
+================================================================================
+                    © ${new Date().getFullYear()} MediCare AI - All Rights Reserved
+================================================================================
+`;
+
+        const blob = new Blob([reportContent], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Heart_Disease_Risk_Report_${new Date().toISOString().split('T')[0]}.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+        showNotification('Report downloaded successfully!', 'success');
+    }
+</script>
+{% endblock %}

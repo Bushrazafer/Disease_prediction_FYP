@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#E3F2FD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#BBDEFB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="coatGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F5F5F5;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="skinGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFCC80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFB74D;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="deskGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#90CAF9;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#64B5F6;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow2" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#2196F3" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  
+  <!-- Background Circle -->
+  <circle cx="200" cy="225" r="180" fill="url(#bgGrad2)" opacity="0.5"/>
+  
+  <!-- Desk -->
+  <rect x="50" y="340" width="300" height="20" rx="5" fill="url(#deskGrad)" filter="url(#shadow2)"/>
+  <rect x="60" y="360" width="280" height="60" rx="5" fill="#42A5F5" opacity="0.3"/>
+  
+  <!-- Chair back -->
+  <rect x="100" y="200" width="80" height="120" rx="10" fill="#1976D2" opacity="0.3"/>
+  
+  <!-- Body/Lab Coat - Seated -->
+  <path d="M130 260 Q130 240 150 230 L165 225 Q185 220 205 225 L220 230 Q240 240 240 260 L245 340 L125 340 Z" fill="url(#coatGrad2)" filter="url(#shadow2)"/>
+  
+  <!-- Coat Details -->
+  <path d="M175 225 L175 300" stroke="#E0E0E0" stroke-width="2" fill="none"/>
+  <path d="M195 225 L195 300" stroke="#E0E0E0" stroke-width="2" fill="none"/>
+  
+  <!-- Coat Buttons -->
+  <circle cx="185" cy="255" r="4" fill="#2196F3"/>
+  <circle cx="185" cy="280" r="4" fill="#2196F3"/>
+  
+  <!-- Collar -->
+  <path d="M155 225 L170 250 L185 235 L200 250 L215 225" fill="none" stroke="#E0E0E0" stroke-width="3"/>
+  
+  <!-- Tie -->
+  <path d="M180 235 L185 240 L190 235 L195 275 L185 285 L175 275 Z" fill="#2196F3"/>
+  
+  <!-- Neck -->
+  <ellipse cx="185" cy="215" rx="22" ry="12" fill="url(#skinGrad2)"/>
+  
+  <!-- Head -->
+  <ellipse cx="185" cy="160" rx="50" ry="58" fill="url(#skinGrad2)"/>
+  
+  <!-- Hair - Professional style -->
+  <path d="M135 140 Q135 95 185 90 Q235 95 235 140 Q235 120 220 115 Q185 105 150 115 Q135 120 135 140" fill="#3E2723"/>
+  <path d="M140 135 Q145 125 160 120 Q185 112 210 120 Q225 125 230 135" fill="#3E2723"/>
+  
+  <!-- Ears -->
+  <ellipse cx="135" cy="165" rx="8" ry="12" fill="url(#skinGrad2)"/>
+  <ellipse cx="235" cy="165" rx="8" ry="12" fill="url(#skinGrad2)"/>
+  
+  <!-- Glasses -->
+  <rect x="150" y="150" width="30" height="22" rx="4" fill="none" stroke="#37474F" stroke-width="2.5"/>
+  <rect x="190" y="150" width="30" height="22" rx="4" fill="none" stroke="#37474F" stroke-width="2.5"/>
+  <path d="M180 161 L190 161" stroke="#37474F" stroke-width="2.5"/>
+  <path d="M150 161 L135 158" stroke="#37474F" stroke-width="2"/>
+  <path d="M220 161 L235 158" stroke="#37474F" stroke-width="2"/>
+  
+  <!-- Eyes -->
+  <ellipse cx="165" cy="161" rx="7" ry="7" fill="#FFFFFF"/>
+  <ellipse cx="205" cy="161" rx="7" ry="7" fill="#FFFFFF"/>
+  <circle cx="167" cy="161" r="4" fill="#5D4037"/>
+  <circle cx="207" cy="161" r="4" fill="#5D4037"/>
+  <circle cx="168" cy="159" r="1.5" fill="#FFFFFF"/>
+  <circle cx="208" cy="159" r="1.5" fill="#FFFFFF"/>
+  
+  <!-- Eyebrows -->
+  <path d="M152 145 Q165 140 178 145" stroke="#3E2723" stroke-width="2.5" fill="none"/>
+  <path d="M192 145 Q205 140 218 145" stroke="#3E2723" stroke-width="2.5" fill="none"/>
+  
+  <!-- Nose -->
+  <path d="M185 165 Q190 178 185 182 Q180 182 180 178" fill="none" stroke="#E0A060" stroke-width="2"/>
+  
+  <!-- Smile -->
+  <path d="M168 192 Q185 205 202 192" fill="none" stroke="#D84315" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Stethoscope around neck -->
+  <path d="M155 230 Q145 250 150 280" stroke="#37474F" stroke-width="3" fill="none"/>
+  <path d="M215 230 Q225 250 220 280" stroke="#37474F" stroke-width="3" fill="none"/>
+  <circle cx="185" cy="310" r="10" fill="#37474F"/>
+  <circle cx="185" cy="310" r="6" fill="#78909C"/>
+  <path d="M150 280 Q165 320 185 320 Q205 320 220 280" stroke="#37474F" stroke-width="3" fill="none"/>
+  
+  <!-- Arms on desk -->
+  <path d="M130 260 Q100 280 90 320 L90 340" fill="url(#coatGrad2)" stroke="#E0E0E0" stroke-width="1"/>
+  <path d="M240 260 Q270 280 280 320 L280 340" fill="url(#coatGrad2)" stroke="#E0E0E0" stroke-width="1"/>
+  
+  <!-- Hands on desk -->
+  <ellipse cx="95" cy="335" rx="20" ry="10" fill="url(#skinGrad2)"/>
+  <ellipse cx="275" cy="335" rx="20" ry="10" fill="url(#skinGrad2)"/>
+  
+  <!-- Laptop on desk -->
+  <g transform="translate(150, 290)">
+    <!-- Laptop base -->
+    <rect x="0" y="40" width="70" height="5" rx="2" fill="#78909C"/>
+    <!-- Laptop screen -->
+    <rect x="5" y="0" width="60" height="40" rx="3" fill="#37474F"/>
+    <rect x="8" y="3" width="54" height="34" rx="2" fill="#1976D2"/>
+    <!-- Screen content -->
+    <rect x="12" y="8" width="30" height="4" rx="1" fill="#BBDEFB"/>
+    <rect x="12" y="15" width="25" height="3" rx="1" fill="#90CAF9"/>
+    <rect x="12" y="21" width="35" height="3" rx="1" fill="#90CAF9"/>
+    <rect x="12" y="27" width="20" height="3" rx="1" fill="#90CAF9"/>
+    <!-- Medical cross on screen -->
+    <g transform="translate(45, 15)">
+      <rect x="0" y="3" width="12" height="4" rx="1" fill="#4CAF50"/>
+      <rect x="4" y="0" width="4" height="10" rx="1" fill="#4CAF50"/>
+    </g>
+  </g>
+  
+  <!-- Coffee mug -->
+  <g transform="translate(280, 310)">
+    <rect x="0" y="5" width="25" height="25" rx="3" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+    <path d="M25 12 Q35 12 35 20 Q35 28 25 28" fill="none" stroke="#E0E0E0" stroke-width="2"/>
+    <!-- Steam -->
+    <path d="M8 0 Q10 -5 8 -10" stroke="#BDBDBD" stroke-width="1.5" fill="none" opacity="0.6"/>
+    <path d="M15 2 Q17 -3 15 -8" stroke="#BDBDBD" stroke-width="1.5" fill="none" opacity="0.6"/>
+  </g>
+  
+  <!-- Pen holder -->
+  <g transform="translate(60, 305)">
+    <rect x="0" y="10" width="20" height="25" rx="2" fill="#64B5F6"/>
+    <rect x="5" y="0" width="3" height="20" fill="#EF5350"/>
+    <rect x="10" y="2" width="3" height="18" fill="#2196F3"/>
+    <rect x="15" y="4" width="2" height="16" fill="#4CAF50"/>
+  </g>
+  
+  <!-- ID Badge -->
+  <rect x="125" y="255" width="25" height="35" rx="2" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+  <rect x="129" y="259" width="17" height="12" rx="1" fill="#E3F2FD"/>
+  <rect x="129" y="275" width="17" height="2" rx="1" fill="#BDBDBD"/>
+  <rect x="129" y="280" width="12" height="2" rx="1" fill="#BDBDBD"/>
+  
+  <!-- Medical Cross on pocket -->
+  <g transform="translate(210, 265)">
+    <rect x="0" y="4" width="16" height="6" rx="1" fill="#EF5350"/>
+    <rect x="5" y="0" width="6" height="14" rx="1" fill="#EF5350"/>
+  </g>
+  
+  <!-- Floating medical icons -->
+  <g opacity="0.3">
+    <!-- Heart -->
+    <path d="M320 100 Q320 85 335 85 Q350 85 350 100 Q350 115 335 130 Q320 115 320 100" fill="#EF5350"/>
+    <!-- Plus -->
+    <g transform="translate(80, 120)">
+      <rect x="0" y="8" width="24" height="8" rx="2" fill="#4CAF50"/>
+      <rect x="8" y="0" width="8" height="24" rx="2" fill="#4CAF50"/>
+    </g>
+    <!-- Pill -->
+    <ellipse cx="330" cy="200" rx="8" ry="15" fill="#2196F3" transform="rotate(30, 330, 200)"/>
+  </g>
+</svg>
