@@ -185,9 +185,6 @@ SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 # Google OAuth Provider Settings
 # =========================================================
-# Get credentials from: https://console.cloud.google.com/apis/credentials
-# Add redirect URI: http://127.0.0.1:8000/accounts/google/login/callback/
-# =========================================================
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': [
@@ -198,12 +195,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'access_type': 'online',
         },
         'OAUTH_PKCE_ENABLED': True,
+        'APP': {
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID', ''),
+            'secret': os.environ.get('GOOGLE_CLIENT_SECRET', ''),
+            'key': ''
+        }
     }
 }
-
-# Google OAuth Credentials from environment variables
-GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID', '')
-GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET', '')
 
 # Custom settings for MediCare
 # ML_MODELS = {
