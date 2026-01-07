@@ -30,19 +30,6 @@ local_settings.py
 staticfiles/
 media/
 
-# ML Models (large files)
-ml_models/**/*.pkl
-ml_models/**/*.joblib
-ml_models/**/*.h5
-ml_models/**/*.onnx
-ml_models/**/*.pt
-
-# Large CSV datasets (keep only essential ones)
-ml_models/Depression/condition_*.csv
-ml_models/Depression/control_*.csv
-ml_models/**/heart_disease_expanded.csv
-ml_models/**/diabetes_expanded.csv
-
 # OS
 .DS_Store
 Thumbs.db
